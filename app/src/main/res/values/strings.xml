@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WaterThePlantApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_button">Add plant button</string>
+    <string name="search">Search</string>
+    <string name="sorting_plants_alphabetically">Sorting plants alphabetically</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_plant">New plant</string>
+</resources>
