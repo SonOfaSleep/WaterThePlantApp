@@ -1,4 +1,4 @@
-package com.sonofasleep.watertheplantapp.adapter
+package com.sonofasleep.watertheplantapp.recycleViewsAdapters
 
 class PlantsAdapter {
    // TODO "Make the adapter for recyclerView"

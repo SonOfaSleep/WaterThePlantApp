@@ -1,4 +1,6 @@
 <resources>
+    <dimen name="eight_dp_margin">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sixteen_dp_margin">16dp</dimen>
+    <dimen name="left_margin">24dp</dimen>
 </resources>

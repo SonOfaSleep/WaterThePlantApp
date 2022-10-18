@@ -11,9 +11,25 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.WaterThePlantApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="InputTextField" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/sandy</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="hintTextColor">@color/black</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Theme.WaterThePlantApp.Slider" parent="Widget.MaterialComponents.Slider" >
+        <item name="labelStyle">@style/Widget.WaterThePlantApp.Tooltip</item>
+    </style>
+
+    <style name="Widget.WaterThePlantApp.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">@color/sandy</item>
+    </style>
+
 
 </resources>
