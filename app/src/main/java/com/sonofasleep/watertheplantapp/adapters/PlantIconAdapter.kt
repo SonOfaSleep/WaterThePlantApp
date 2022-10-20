@@ -7,12 +7,17 @@ import com.sonofasleep.watertheplantapp.databinding.PlantImageCardBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 
+/**
+ * This adapters handles onClick listener, allowing only one cardView to be checked at a time.
+ * Also it's holds reference to viewModel for storing selected image.
+ */
 class PlantIconAdapter(
     private val viewModel: PlantViewModel,
     private val plantIconsList: List<PlantIconItem>
 )
     : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
 
+    // For storing previous position
     private var checkedPosition = -1
 
     class PlantImageViewHolder(
@@ -41,6 +46,7 @@ class PlantIconAdapter(
         val item = plantIconsList[position]
         holder.bind(item)
 
+        // Single selection logic
         if (checkedPosition == position) {
             holder.setChecked()
         } else {
@@ -49,6 +55,8 @@ class PlantIconAdapter(
 
         holder.itemView.setOnClickListener {
             setSingleSelection(position)
+
+            // Changing viewModels icon
             viewModel.setPlantIcon(item)
         }
     }
@@ -57,6 +65,8 @@ class PlantIconAdapter(
         return plantIconsList.size
     }
 
+    // This function enables to set single checked card at a time.
+    // notifyItemChanged() function change first previous card to UnChecked than current to Checked
     private fun setSingleSelection(position: Int) {
         if (position == RecyclerView.NO_POSITION) return
 
