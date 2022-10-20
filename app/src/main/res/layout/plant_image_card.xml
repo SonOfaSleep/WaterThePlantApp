@@ -2,16 +2,24 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:layout_margin="8dp"
+    android:backgroundTint="@color/orange_50"
+    android:checkable="true"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:checkedIconTint="@color/red_300">
 
     <ImageView
         android:id="@+id/card_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
         tools:src="@drawable/plant1" />
 
 </com.google.android.material.card.MaterialCardView>

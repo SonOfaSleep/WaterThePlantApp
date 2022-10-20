@@ -8,9 +8,9 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/material_toolbar"
+        style="@style/myToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,24 +26,26 @@
 
     <TextView
         android:id="@+id/choose_image_text"
-        style="@style/TextAppearance.Material3.TitleSmall"
-        android:layout_width="wrap_content"
+        style="?attr/textAppearanceCaption"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/left_margin"
         android:layout_marginTop="@dimen/sixteen_dp_margin"
         android:gravity="start"
+        android:textSize="16sp"
+        android:textColor="@color/black"
         android:text="Choose plant icon:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/material_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sixteen_dp_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/sixteen_dp_margin"
+        android:layout_marginTop="@dimen/sixteen_dp_margin"
         android:orientation="horizontal"
+        android:paddingStart="@dimen/sixteen_dp_margin"
+        android:paddingEnd="@dimen/sixteen_dp_margin"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,11 +93,13 @@
 
     <TextView
         android:id="@+id/slider_hint"
-        style="@style/TextAppearance.Material3.TitleSmall"
+        style="?attr/textAppearanceCaption"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="@dimen/sixteen_dp_margin"
+        android:textColor="@color/black"
         android:text="Choose notification periodicity (days):"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filledNotes" />

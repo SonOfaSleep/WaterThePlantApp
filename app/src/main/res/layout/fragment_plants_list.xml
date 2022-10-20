@@ -17,7 +17,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        style="@style/myToolbarStyle"
         android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
