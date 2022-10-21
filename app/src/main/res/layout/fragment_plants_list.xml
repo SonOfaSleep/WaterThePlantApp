@@ -6,26 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".fragments.PlantsListFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:listitem="@layout/plant_item"/>
-
     <com.google.android.material.appbar.MaterialToolbar
+        style="@style/myToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/myToolbarStyle"
         android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/plant_list_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
-
     </com.google.android.material.appbar.MaterialToolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:listitem="@layout/plant_item" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

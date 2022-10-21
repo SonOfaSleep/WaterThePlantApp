@@ -3,7 +3,7 @@ package com.sonofasleep.watertheplantapp.data
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 
-object ImageSource {
+object IconSource {
     val imageList: List<PlantIconItem> = listOf(
         PlantIconItem(R.drawable.plant1),
         PlantIconItem(R.drawable.plant2),
