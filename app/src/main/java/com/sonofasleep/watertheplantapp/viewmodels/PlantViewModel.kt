@@ -6,16 +6,20 @@ import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
-class PlantViewModel(val dao: PlantDao) : ViewModel() {
+class PlantViewModel(private val dao: PlantDao) : ViewModel() {
 
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
+    // Getting a states of flow, witch returns new list of Plants every time we change SortType
     private val sortFlow = MutableStateFlow(SortType.NONE)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val plantListFlow = sortFlow
         .flatMapLatest {
             when(it) {
@@ -25,8 +29,10 @@ class PlantViewModel(val dao: PlantDao) : ViewModel() {
             }
         }
 
+    // List of all plants using flow
     val allPlants: LiveData<List<Plant>> = plantListFlow.asLiveData()
 
+    // Changing sortFlow's sortType will emit new flow, and change list of all plants
     fun changeSortType(sortType: SortType) {
         sortFlow.value = sortType
     }
