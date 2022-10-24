@@ -29,3 +29,7 @@ interface PlantDao {
     @Delete
     suspend fun delete(plant: Plant)
 }
+
+enum class SortType {
+    ASCENDING, DESCENDING, NONE
+}

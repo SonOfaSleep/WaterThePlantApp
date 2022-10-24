@@ -3,8 +3,11 @@ package com.sonofasleep.watertheplantapp.viewmodels
 import androidx.lifecycle.*
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
+import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class PlantViewModel(val dao: PlantDao) : ViewModel() {
@@ -12,7 +15,21 @@ class PlantViewModel(val dao: PlantDao) : ViewModel() {
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
-    val allPlants: LiveData<List<Plant>> = dao.getAllOrderedASC().asLiveData()
+    private val sortFlow = MutableStateFlow(SortType.NONE)
+    private val plantListFlow = sortFlow
+        .flatMapLatest {
+            when(it) {
+                SortType.NONE -> dao.getAllOrderedASC()
+                SortType.ASCENDING -> dao.getAllOrderedASC()
+                else -> dao.getAllOrderedDESC()
+            }
+        }
+
+    val allPlants: LiveData<List<Plant>> = plantListFlow.asLiveData()
+
+    fun changeSortType(sortType: SortType) {
+        sortFlow.value = sortType
+    }
 
     fun insertPlant(image: Int, name: String, reminderFrequency: Int) {
         val newPlant = Plant(image = image, name = name, reminderFrequency = reminderFrequency)

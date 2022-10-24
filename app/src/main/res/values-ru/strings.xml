@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Поливака</string>
+    <string name="action_settings">Настройки</string>
+    <string name="search">Поиск</string>
+    <string name="sorting_plants_alphabetically">Сортировать по имени</string>
+    <string name="new_plant">Новый цветок</string>
+    <string name="choose_plant_icon">Выберите иконку цветка:</string>
+    <string name="plant_name">Имя цветка</string>
+    <string name="notes">Заметки</string>
+    <string name="choose_notification_periodicity_days">Выберите частоту напоминаний (дней):</string>
+    <string name="save">Добавить</string>
+    <string name="choose_icon_and_name">Выберите иконку и имя цветка</string>
+    <string name="choose_plant_name">Выберите имя цветка</string>
+    <string name="choose_icon">Выберите иконку</string>
+    <string name="reminder_frequency_int_days">Частота напоминаний: %1$d %2$s</string>
+    <string name="image_of_plant">Изображение цветка</string>
+    <string name="search_hint">Поиск по имени цветка</string>
+
+    <plurals name="plural_day">
+        <item quantity="one" tools:ignore="ImpliedQuantity">день</item>
+        <item quantity="few">дня</item>
+        <item quantity="many">дней</item>
+        <item quantity="other">дней</item>
+    </plurals>
+</resources>
