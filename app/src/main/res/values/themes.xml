@@ -11,7 +11,8 @@
         <item name="colorSecondaryVariant">@color/red_300_darker</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/orange_50</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="myToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
@@ -36,5 +37,8 @@
         <item name="backgroundTint">@color/red_300</item>
     </style>
 
+    <style name="myCaptionTextStyle" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/black</item>
+    </style>
 
 </resources>

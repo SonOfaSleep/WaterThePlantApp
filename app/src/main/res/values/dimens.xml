@@ -3,4 +3,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="sixteen_dp_margin">16dp</dimen>
     <dimen name="left_margin">24dp</dimen>
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
 </resources>

@@ -22,4 +22,8 @@
         <item quantity="few">дні</item>
         <item quantity="many">днів</item>
     </plurals>
+
+    <string name="notes_sub_header">Примітки:</string>
+    <string name="delete_button_text">ВИДАЛИТИ</string>
+    <string name="edit_button_text">РЕДАГУВАТИ</string>
 </resources>

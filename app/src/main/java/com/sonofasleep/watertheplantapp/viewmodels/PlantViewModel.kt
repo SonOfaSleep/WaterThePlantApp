@@ -37,14 +37,32 @@ class PlantViewModel(private val dao: PlantDao) : ViewModel() {
         sortFlow.value = sortType
     }
 
-    fun insertPlant(image: Int, name: String, reminderFrequency: Int) {
-        val newPlant = Plant(image = image, name = name, reminderFrequency = reminderFrequency)
-
+    fun insertPlant(image: Int, name: String, reminderFrequency: Int, notes: String) {
+        val newPlant = if (notes.isBlank()) {
+            Plant(
+                image = image,
+                name = name,
+                reminderFrequency = reminderFrequency)
+        } else {
+            Plant(
+                image = image,
+                name = name,
+                reminderFrequency = reminderFrequency,
+                description = notes)
+        }
         // Launching coroutine to insert in database
         viewModelScope.launch(Dispatchers.IO) {
             dao.insertNewPlant(newPlant)
         }
     }
+
+    fun deletePlant(plant: Plant) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.delete(plant)
+        }
+    }
+
+    fun getPlant(id: Long): LiveData<Plant> = dao.getPlantById(id).asLiveData()
 
     fun setPlantIcon(item: PlantIconItem) {
         _icon.value = item

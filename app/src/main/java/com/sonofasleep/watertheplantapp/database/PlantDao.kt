@@ -20,6 +20,9 @@ interface PlantDao {
     @Query("SELECT * FROM PlantsTable WHERE name = :name")
     fun findByName(name: String): Flow<Plant>
 
+    @Query("SELECT * FROM PlantsTable WHERE id = :id")
+    fun getPlantById(id: Long): Flow<Plant>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewPlant(plant: Plant)
 

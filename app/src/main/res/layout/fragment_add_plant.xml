@@ -26,14 +26,13 @@
 
     <TextView
         android:id="@+id/choose_image_text"
-        style="?attr/textAppearanceCaption"
+        style="@style/myCaptionTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/left_margin"
         android:layout_marginTop="@dimen/sixteen_dp_margin"
         android:gravity="start"
         android:text="@string/choose_plant_icon"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/material_toolbar" />
@@ -87,19 +86,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:maxLines="3" />
+            android:maxLines="3"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/slider_hint"
-        style="?attr/textAppearanceCaption"
+        style="@style/myCaptionTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="@dimen/sixteen_dp_margin"
         android:text="@string/choose_notification_periodicity_days"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filledNotes" />

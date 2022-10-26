@@ -1,8 +1,19 @@
 package com.sonofasleep.watertheplantapp.fragments
 
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
+import androidx.core.graphics.toColor
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
+import com.sonofasleep.watertheplantapp.const.myTag
 import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.databinding.FragmentPlantsListBinding
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
@@ -20,9 +32,11 @@ import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 
 
 class PlantsListFragment : Fragment() {
+
     private var _binding: FragmentPlantsListBinding? = null
     private val binding get() = _binding!!
 
+    // For choosing SortType and sort icon for menu
     private var isOrderedAscIcon: Boolean = true
 
     private val viewModel: PlantViewModel by activityViewModels {
@@ -44,7 +58,7 @@ class PlantsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // Inflating toolbarMenuLayout
+        // Inflating toolbarMenuLayout and setting sort icon
         binding.plantListToolbar.inflateMenu(R.menu.menu_main)
         setIcon()
 
@@ -54,9 +68,13 @@ class PlantsListFragment : Fragment() {
         view.findViewById<Toolbar>(R.id.plant_list_toolbar)
             .setupWithNavController(navController, appBarConfiguration)
 
-        // RecyclerView
+        // RecyclerView binding and click action on item
         recyclerView = binding.recyclerView
-        val adapter = PlantsAdapter()
+        val adapter = PlantsAdapter {
+            val action = PlantsListFragmentDirections
+                .actionPlantsListFragmentToDetailPlantFragment(it.id)
+            findNavController().navigate(action)
+        }
 
         // Observing viewModel allPlants liveData
         // Showing helper addPlant image when list is empty
@@ -68,7 +86,7 @@ class PlantsListFragment : Fragment() {
 
         // Menu item clickListener
         binding.plantListToolbar.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.app_bar_sorting -> {
                     isOrderedAscIcon = !isOrderedAscIcon
                     setIcon()
@@ -96,6 +114,20 @@ class PlantsListFragment : Fragment() {
             else -> R.drawable.ic_sort_desc
         }
         sortItem.setIcon(icon)
+        changeDayNightSortIconColor()
+    }
+
+    private fun changeDayNightSortIconColor() {
+        // color is set by uiColorSchema (NightDay)
+        Log.d(myTag, "${context?.resources?.configuration?.uiMode}")
+
+        val color = when (context?.resources?.configuration?.uiMode?.minus(1)) {
+            Configuration.UI_MODE_NIGHT_NO -> Color.BLACK // Day
+            else -> Color.WHITE // Night
+        }
+        binding.plantListToolbar.menu.findItem(R.id.app_bar_sorting).icon?.colorFilter =
+            BlendModeColorFilterCompat
+                .createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
     }
 
     private fun sortPlantList() {

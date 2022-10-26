@@ -23,4 +23,8 @@
         <item quantity="many">дней</item>
         <item quantity="other">дней</item>
     </plurals>
+
+    <string name="notes_sub_header">Заметки:</string>
+    <string name="delete_button_text">УДАЛИТЬ</string>
+    <string name="edit_button_text">ИЗМЕНИТЬ</string>
 </resources>

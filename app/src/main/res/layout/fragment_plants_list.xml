@@ -21,6 +21,7 @@
             android:id="@+id/plant_list_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
+
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView

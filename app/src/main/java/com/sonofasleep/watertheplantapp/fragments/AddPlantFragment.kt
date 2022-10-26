@@ -66,7 +66,8 @@ class AddPlantFragment : Fragment() {
                 viewModel.insertPlant(
                     viewModel.icon.value!!.image,
                     binding.plantNameEditText.text.toString(),
-                    binding.wateringSlider.value.toInt()
+                    binding.wateringSlider.value.toInt(),
+                    binding.notesEditText.text.toString()
                 )
                 viewModel.resetIcon()
                 findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)

@@ -9,7 +9,7 @@ import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.databinding.PlantItemBinding
 import com.sonofasleep.watertheplantapp.database.Plant
 
-class PlantsAdapter()
+class PlantsAdapter(val onItemClicked: (Plant) -> Unit)
     : ListAdapter<Plant, PlantsAdapter.PlantsViewHolder>(DiffCallback){
 
     companion object DiffCallback : DiffUtil.ItemCallback<Plant>() {
@@ -57,7 +57,7 @@ class PlantsAdapter()
     override fun onBindViewHolder(holder: PlantsViewHolder, position: Int) {
         val currentPlant = getItem(position)
 
-//        holder.itemView.setOnClickListener { onItemClicked(currentPlant) }
+        holder.itemView.setOnClickListener { onItemClicked(currentPlant) }
         holder.bind(currentPlant)
     }
 }

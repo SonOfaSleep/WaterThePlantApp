@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_plantsListFragment_to_addPlantFragment"
             app:destination="@id/addPlantFragment" />
+        <action
+            android:id="@+id/action_plantsListFragment_to_detailPlantFragment"
+            app:destination="@id/detailPlantFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPlantFragment"
@@ -22,5 +25,23 @@
             android:id="@+id/action_addPlantFragment_to_plantsListFragment"
             app:destination="@id/plantsListFragment"
             app:popUpTo="@id/plantsListFragment" />
+        <argument
+            android:name="plant_id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailPlantFragment"
+        android:name="com.sonofasleep.watertheplantapp.fragments.DetailPlantFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_detail_plant">
+        <action
+            android:id="@+id/action_detailPlantFragment_to_addPlantFragment"
+            app:destination="@id/addPlantFragment" />
+        <argument
+            android:name="plant_id"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_detailPlantFragment_to_plantsListFragment"
+            app:destination="@id/plantsListFragment" />
     </fragment>
 </navigation>
