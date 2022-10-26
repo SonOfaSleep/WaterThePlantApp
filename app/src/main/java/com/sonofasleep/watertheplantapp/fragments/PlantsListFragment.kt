@@ -2,21 +2,16 @@ package com.sonofasleep.watertheplantapp.fragments
 
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import androidx.core.graphics.toColor
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -46,6 +41,7 @@ class PlantsListFragment : Fragment() {
     }
 
     private lateinit var recyclerView: RecyclerView
+    lateinit var isScrollable: LiveData<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,6 +79,29 @@ class PlantsListFragment : Fragment() {
             adapter.submitList(it)
         }
         recyclerView.adapter = adapter
+
+        /**
+         *  Handling scroll behavior
+         */
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // Showing elevation of toolbar when can scroll
+                if (recyclerView.canScrollVertically(-1)) {
+                    binding.materialToolbar.elevation = 50f
+                } else {
+                    binding.materialToolbar.elevation = 0f
+                }
+
+                // Hiding addButton when scrolling down
+                if (dy > 0) {
+                    binding.fab.hide()
+                } else {
+                    binding.fab.show()
+                }
+            }
+        })
 
         // Menu item clickListener
         binding.plantListToolbar.setOnMenuItemClickListener {
