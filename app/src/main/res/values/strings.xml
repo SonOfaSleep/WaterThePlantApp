@@ -24,4 +24,5 @@
     <string name="notes_sub_header">Notes:</string>
     <string name="delete_button_text">DELETE</string>
     <string name="edit_button_text">EDIT</string>
+    <string name="add_plant_button">Add plant button</string>
 </resources>

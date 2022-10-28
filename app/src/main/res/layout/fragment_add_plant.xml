@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.AddPlantFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -11,10 +12,7 @@
         style="@style/myToolbarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/plant_list_toolbar"
@@ -23,112 +21,121 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-
-    <TextView
-        android:id="@+id/choose_image_text"
-        style="@style/myCaptionTextStyle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/left_margin"
-        android:layout_marginTop="@dimen/sixteen_dp_margin"
-        android:gravity="start"
-        android:text="@string/choose_plant_icon"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/material_toolbar" />
+        android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/sixteen_dp_margin"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/sixteen_dp_margin"
-        android:paddingEnd="@dimen/sixteen_dp_margin"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/choose_image_text"
-        tools:listitem="@layout/plant_image_card" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filledPlantName"
-        style="@style/InputTextField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/sixteen_dp_margin"
-        android:hint="@string/plant_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler_view">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/plant_name_edit_text"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/choose_image_text"
+                style="@style/myCaptionTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/left_margin"
+                android:layout_marginTop="@dimen/sixteen_dp_margin"
+                android:gravity="start"
+                android:text="@string/choose_plant_icon"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filledNotes"
-        style="@style/InputTextField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/sixteen_dp_margin"
-        android:hint="@string/notes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filledPlantName">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/sixteen_dp_margin"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/sixteen_dp_margin"
+                android:paddingEnd="@dimen/sixteen_dp_margin"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/choose_image_text"
+                tools:listitem="@layout/plant_image_card" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/notes_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:maxLines="3"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filledPlantName"
+                style="@style/InputTextField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/sixteen_dp_margin"
+                android:hint="@string/plant_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recycler_view">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/plant_name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
 
-    <TextView
-        android:id="@+id/slider_hint"
-        style="@style/myCaptionTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="@dimen/sixteen_dp_margin"
-        android:text="@string/choose_notification_periodicity_days"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filledNotes" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filledNotes"
+                style="@style/InputTextField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/sixteen_dp_margin"
+                android:hint="@string/notes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filledPlantName">
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/watering_slider"
-        style="@style/Theme.WaterThePlantApp.Slider"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sixteen_dp_margin"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/sixteen_dp_margin"
-        android:stepSize="1"
-        android:valueFrom="1"
-        android:valueTo="30"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider_hint" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/notes_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3" />
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/sixteen_dp_margin"
-        android:layout_marginTop="@dimen/sixteen_dp_margin"
-        android:layout_marginEnd="@dimen/sixteen_dp_margin"
-        android:text="@string/save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/watering_slider" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/slider_hint"
+                style="@style/myCaptionTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="@dimen/sixteen_dp_margin"
+                android:text="@string/choose_notification_periodicity_days"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filledNotes" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.slider.Slider
+                android:id="@+id/watering_slider"
+                style="@style/Theme.WaterThePlantApp.Slider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/sixteen_dp_margin"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/sixteen_dp_margin"
+                android:stepSize="1"
+                android:valueFrom="1"
+                android:valueTo="30"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/slider_hint" />
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/sixteen_dp_margin"
+                android:layout_marginTop="@dimen/sixteen_dp_margin"
+                android:layout_marginEnd="@dimen/sixteen_dp_margin"
+                android:text="@string/save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/watering_slider" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>

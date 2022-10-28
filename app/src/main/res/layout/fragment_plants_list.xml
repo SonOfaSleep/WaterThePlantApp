@@ -29,6 +29,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
@@ -44,7 +46,8 @@
         android:scaleType="centerCrop"
         android:src="@drawable/testaddplant"
         app:layout_constraintBottom_toTopOf="@+id/fab"
-        app:layout_constraintEnd_toStartOf="@+id/fab" />
+        app:layout_constraintEnd_toStartOf="@+id/fab"
+        tools:ignore="ContentDescription" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -52,8 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/sixteen_dp_margin"
         android:src="@drawable/ic_baseline_add_24"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/add_plant_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
