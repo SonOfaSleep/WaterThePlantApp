@@ -9,7 +9,7 @@
     <string name="plant_name">Имя цветка</string>
     <string name="notes">Заметки</string>
     <string name="choose_notification_periodicity_days">Выберите частоту напоминаний (дней):</string>
-    <string name="save">Добавить</string>
+    <string name="save">Сохранить</string>
     <string name="choose_icon_and_name">Выберите иконку и имя цветка</string>
     <string name="choose_plant_name">Выберите имя цветка</string>
     <string name="choose_icon">Выберите иконку</string>

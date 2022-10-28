@@ -3,7 +3,6 @@ package com.sonofasleep.watertheplantapp.fragments
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -11,7 +10,6 @@ import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -19,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
-import com.sonofasleep.watertheplantapp.const.myTag
 import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.databinding.FragmentPlantsListBinding
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
@@ -31,23 +28,22 @@ class PlantsListFragment : Fragment() {
     private var _binding: FragmentPlantsListBinding? = null
     private val binding get() = _binding!!
 
-    // For choosing SortType and sort icon for menu
-    private var isOrderedAscIcon: Boolean = true
-
     private val viewModel: PlantViewModel by activityViewModels {
         PlantViewModelFactory(
             (activity?.application as PlantApplication).database.plantDao()
         )
     }
 
+    // For choosing SortType and sort icon for menu
+    private var isOrderedAscIcon: Boolean = true
+
     private lateinit var recyclerView: RecyclerView
-    lateinit var isScrollable: LiveData<Boolean>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPlantsListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -138,8 +134,6 @@ class PlantsListFragment : Fragment() {
 
     private fun changeDayNightSortIconColor() {
         // color is set by uiColorSchema (NightDay)
-        Log.d(myTag, "${context?.resources?.configuration?.uiMode}")
-
         val color = when (context?.resources?.configuration?.uiMode?.minus(1)) {
             Configuration.UI_MODE_NIGHT_NO -> Color.BLACK // Day
             else -> Color.WHITE // Night

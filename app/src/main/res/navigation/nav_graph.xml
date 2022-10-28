@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/addPlantFragment"
         android:name="com.sonofasleep.watertheplantapp.fragments.AddPlantFragment"
-        android:label="@string/new_plant"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_add_plant">
         <action
             android:id="@+id/action_addPlantFragment_to_plantsListFragment"
@@ -27,6 +27,7 @@
             app:popUpTo="@id/plantsListFragment" />
         <argument
             android:name="plant_id"
+            android:defaultValue="0L"
             app:argType="long" />
     </fragment>
     <fragment

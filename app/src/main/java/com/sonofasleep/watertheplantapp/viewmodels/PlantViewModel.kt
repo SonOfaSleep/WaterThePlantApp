@@ -56,7 +56,28 @@ class PlantViewModel(private val dao: PlantDao) : ViewModel() {
         }
     }
 
+    fun updatePlant(
+        id: Long,
+        image: Int,
+        name: String,
+        notes: String,
+        reminderFrequency: Int
+    ) {
+        val newPlant = Plant(
+            id = id,
+            image = image,
+            name = name,
+            description = notes,
+            reminderFrequency = reminderFrequency
+        )
+        // Launching coroutine to update in database
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(newPlant)
+        }
+    }
+
     fun deletePlant(plant: Plant) {
+        // Launching coroutine to delete in database
         viewModelScope.launch(Dispatchers.IO) {
             dao.delete(plant)
         }

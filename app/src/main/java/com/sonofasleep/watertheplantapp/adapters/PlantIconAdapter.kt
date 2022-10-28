@@ -13,7 +13,8 @@ import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
  */
 class PlantIconAdapter(
     private val viewModel: PlantViewModel,
-    private val plantIconsList: List<PlantIconItem>
+    private val plantIconsList: List<PlantIconItem>,
+    private var selectedIcon: PlantIconItem? = null
 )
     : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
 
@@ -51,6 +52,14 @@ class PlantIconAdapter(
             holder.setChecked()
         } else {
             holder.setUnChecked()
+        }
+
+        // For checking previously selected icon in recyclerView
+        // and updating checkedPosition for correct work of single selection logic above
+        if (selectedIcon?.image == item.image) {
+            holder.setChecked()
+            checkedPosition = plantIconsList.indexOfFirst { it.image == selectedIcon?.image }
+            selectedIcon = null
         }
 
         holder.itemView.setOnClickListener {

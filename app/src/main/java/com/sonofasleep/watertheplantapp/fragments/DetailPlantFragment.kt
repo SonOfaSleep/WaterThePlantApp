@@ -35,7 +35,7 @@ class DetailPlantFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDetailPlantBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -69,6 +69,13 @@ class DetailPlantFragment : Fragment() {
         binding.deleteButton.setOnClickListener {
             viewModel.deletePlant(plant)
             findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
+        }
+
+        // Edit button action
+        binding.editButton.setOnClickListener {
+            val action = DetailPlantFragmentDirections
+                .actionDetailPlantFragmentToAddPlantFragment().setPlantId(plant.id)
+            findNavController().navigate(action)
         }
     }
 

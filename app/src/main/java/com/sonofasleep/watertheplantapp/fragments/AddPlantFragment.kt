@@ -2,11 +2,13 @@ package com.sonofasleep.watertheplantapp.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,9 @@ import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantIconAdapter
 import com.sonofasleep.watertheplantapp.data.IconSource
+import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
+import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 
@@ -28,18 +32,26 @@ class AddPlantFragment : Fragment() {
         )
     }
 
+    private val navArgs: AddPlantFragmentArgs by navArgs()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var plant: Plant
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddPlantBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Setting recyclerView
+        recyclerView = binding.recyclerView
+
+        // Plant id if it's edit not new one
+        val plantId = navArgs.plantId
+
         // Inflating toolbarMenuLayout
         binding.plantListToolbar.inflateMenu(R.menu.menu_main)
 
@@ -56,22 +68,59 @@ class AddPlantFragment : Fragment() {
         view.findViewById<Toolbar>(R.id.plant_list_toolbar)
             .setupWithNavController(navController, appBarConfiguration)
 
-        // Setting recyclerView adapter
-        recyclerView = binding.recyclerView
-        recyclerView.adapter = PlantIconAdapter(viewModel, IconSource.imageList)
+        /**
+         * If plantId is >0 than it's edit not new one
+         */
+        if (plantId > 0) {
 
-        // Save button action
-        binding.saveButton.setOnClickListener {
-            if (checkEntry()) {
-                viewModel.insertPlant(
-                    viewModel.icon.value!!.image,
-                    binding.plantNameEditText.text.toString(),
-                    binding.wateringSlider.value.toInt(),
-                    binding.notesEditText.text.toString()
-                )
-                viewModel.resetIcon()
-                findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)
+            // Observing liveData plant and binding it to UI
+            viewModel.getPlant(plantId).observe(this.viewLifecycleOwner) {
+                plant = it
+                recyclerView.adapter = PlantIconAdapter(viewModel, IconSource.imageList, PlantIconItem(plant.image))
+                bindPlant(plant)
             }
+        } else {
+            recyclerView.adapter = PlantIconAdapter(viewModel, IconSource.imageList)
+            binding.saveButton.setOnClickListener { addPlant() }
+        }
+    }
+
+    private fun bindPlant(plant: Plant) {
+        viewModel.setPlantIcon(PlantIconItem(plant.image))
+        binding.apply {
+            nameEditText.setText(plant.name, TextView.BufferType.SPANNABLE)
+            notesEditText.setText(plant.description, TextView.BufferType.SPANNABLE)
+            wateringSlider.value = plant.reminderFrequency.toFloat()
+
+            saveButton.setOnClickListener { updatePlant() }
+        }
+    }
+
+    private fun updatePlant() {
+        if (checkEntry()) {
+            viewModel.updatePlant(
+                id = navArgs.plantId,
+                image = viewModel.icon.value!!.image,
+                name = binding.nameEditText.text.toString(),
+                notes = binding.notesEditText.text.toString(),
+                reminderFrequency = binding.wateringSlider.value.toInt()
+            )
+        }
+        viewModel.resetIcon()
+        findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)
+    }
+
+    private fun addPlant() {
+        // Checking if plant is valid than adding it to room
+        if (checkEntry()) {
+            viewModel.insertPlant(
+                viewModel.icon.value!!.image,
+                binding.nameEditText.text.toString(),
+                binding.wateringSlider.value.toInt(),
+                binding.notesEditText.text.toString()
+            )
+            viewModel.resetIcon()
+            findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)
         }
     }
 
@@ -79,10 +128,10 @@ class AddPlantFragment : Fragment() {
         return viewModel.isIconNotNull()
     }
     private fun isNameValid(): Boolean {
-        return viewModel.isNameValid(binding.plantNameEditText.text.toString())
+        return viewModel.isNameValid(binding.nameEditText.text.toString())
     }
     private fun checkEntry(): Boolean {
-        var toastMessage = ""
+        val toastMessage: String
         return if (!isIconNotNull() && !isNameValid()) {
             toastMessage = getText(R.string.choose_icon_and_name).toString()
             makeToast(toastMessage)
