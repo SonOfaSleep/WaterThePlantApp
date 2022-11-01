@@ -30,7 +30,8 @@ class PlantsListFragment : Fragment() {
 
     private val viewModel: PlantViewModel by activityViewModels {
         PlantViewModelFactory(
-            (activity?.application as PlantApplication).database.plantDao()
+            (activity?.application as PlantApplication).database.plantDao(),
+            activity?.application as PlantApplication
         )
     }
 

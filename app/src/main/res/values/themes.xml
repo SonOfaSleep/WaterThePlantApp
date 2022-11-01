@@ -13,6 +13,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/orange_50</item>
         <item name="android:windowLightStatusBar">true</item>
+        <!-- Alert dialog theme -->
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
     <style name="myToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
@@ -38,6 +40,22 @@
     </style>
 
     <style name="myCaptionTextStyle" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="android:colorBackground">@color/orange_50</item>
+        <item name="android:textColor">@color/light_green_300_darker</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/red_300_darker</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/black</item>
     </style>
 

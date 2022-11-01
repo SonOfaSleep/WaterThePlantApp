@@ -27,4 +27,11 @@
     <string name="notes_sub_header">Заметки:</string>
     <string name="delete_button_text">УДАЛИТЬ</string>
     <string name="edit_button_text">ИЗМЕНИТЬ</string>
+
+    <string name="add_plant_button">Кнопка добавить цветок</string>
+    <string name="alert_dialog_title">Удалить цветок?</string>
+    <string name="alert_dialog_text">Вы не сможете восстановить удаленный цветок!</string>
+    <string name="alert_dialog_button_ok">Удалить</string>
+    <string name="alert_dialog_button_cancel">Отмена</string>
+    <string name="reminder_text">Меня пора полить!</string>
 </resources>

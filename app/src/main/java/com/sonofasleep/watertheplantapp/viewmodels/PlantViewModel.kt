@@ -1,6 +1,9 @@
 package com.sonofasleep.watertheplantapp.viewmodels
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.*
+import androidx.work.WorkManager
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.database.SortType
@@ -11,8 +14,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
-class PlantViewModel(private val dao: PlantDao) : ViewModel() {
+class PlantViewModel(private val dao: PlantDao, private val application: Application) : ViewModel() {
 
+    // For plant icon choose in recyclerView
+    // When not in AddPlantFragment icon is null
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
@@ -31,6 +36,11 @@ class PlantViewModel(private val dao: PlantDao) : ViewModel() {
 
     // List of all plants using flow
     val allPlants: LiveData<List<Plant>> = plantListFlow.asLiveData()
+
+    /**
+     * WorkManager instance
+     */
+    val workManager = WorkManager.getInstance(application)
 
     // Changing sortFlow's sortType will emit new flow, and change list of all plants
     fun changeSortType(sortType: SortType) {
@@ -101,11 +111,15 @@ class PlantViewModel(private val dao: PlantDao) : ViewModel() {
  * Tip: The creation of the ViewModel factory is mostly boilerplate code,
  * so you can reuse this code for future ViewModel factories.
  */
-class PlantViewModelFactory(private val dao: PlantDao): ViewModelProvider.Factory {
+class PlantViewModelFactory(
+    private val dao: PlantDao,
+    private val application: Application
+    ) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlantViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PlantViewModel(dao) as T
+            return PlantViewModel(dao, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

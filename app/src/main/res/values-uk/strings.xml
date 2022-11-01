@@ -26,4 +26,11 @@
     <string name="notes_sub_header">Примітки:</string>
     <string name="delete_button_text">ВИДАЛИТИ</string>
     <string name="edit_button_text">РЕДАГУВАТИ</string>
+
+    <string name="add_plant_button">Кнопка добавити квітку</string>
+    <string name="alert_dialog_title">Видалити квітку?</string>
+    <string name="alert_dialog_text">Ви не зможете відновити видалену квітку!</string>
+    <string name="alert_dialog_button_ok">Видалити</string>
+    <string name="alert_dialog_button_cancel">Скасувати</string>
+    <string name="reminder_text">Час мене полити!</string>
 </resources>

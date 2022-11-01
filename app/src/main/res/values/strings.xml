@@ -25,4 +25,12 @@
     <string name="delete_button_text">DELETE</string>
     <string name="edit_button_text">EDIT</string>
     <string name="add_plant_button">Add plant button</string>
+    <string name="alert_dialog_title">Delete plant?</string>
+    <string name="alert_dialog_text">You will not be able to recover plant after delete!</string>
+    <string name="alert_dialog_button_ok">OK</string>
+    <string name="alert_dialog_button_cancel">Cancel</string>
+    <string name="reminder_text">It\'s time to water me!</string>
+
+    <string name="channel_name" translatable="false">Plant reminder channel</string>
+    <string name="channel_description" translatable="false">Plant reminder</string>
 </resources>

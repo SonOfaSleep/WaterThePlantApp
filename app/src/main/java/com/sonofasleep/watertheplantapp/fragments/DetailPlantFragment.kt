@@ -1,9 +1,11 @@
 package com.sonofasleep.watertheplantapp.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,7 +26,8 @@ class DetailPlantFragment : Fragment() {
 
     private val viewModel: PlantViewModel by activityViewModels {
         PlantViewModelFactory(
-            (activity?.application as PlantApplication).database.plantDao()
+            (activity?.application as PlantApplication).database.plantDao(),
+            activity?.application as PlantApplication
         )
     }
 
@@ -67,8 +70,9 @@ class DetailPlantFragment : Fragment() {
 
         // Delete button action
         binding.deleteButton.setOnClickListener {
-            viewModel.deletePlant(plant)
-            findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
+//            viewModel.deletePlant(plant)
+//            findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
+            deleteAlertDialog()
         }
 
         // Edit button action
@@ -82,6 +86,32 @@ class DetailPlantFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun deleteAlertDialog() {
+
+
+        val alertDialog: AlertDialog? = activity?.let {
+
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+
+                setTitle(R.string.alert_dialog_title)
+                setMessage(R.string.alert_dialog_text)
+
+                setNegativeButton(R.string.alert_dialog_button_cancel,
+                    DialogInterface.OnClickListener { dialogInterface, _ ->
+                        dialogInterface.cancel()
+                })
+                setPositiveButton(R.string.alert_dialog_button_ok,
+                    DialogInterface.OnClickListener { _, _ ->
+                        viewModel.deletePlant(plant)
+                        findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
+                    })
+            }
+            builder.create()
+            builder.show()
+        }
     }
 
     private fun bindPlant() {
