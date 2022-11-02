@@ -89,8 +89,6 @@ class DetailPlantFragment : Fragment() {
     }
 
     private fun deleteAlertDialog() {
-
-
         val alertDialog: AlertDialog? = activity?.let {
 
             val builder = AlertDialog.Builder(it)
@@ -102,7 +100,7 @@ class DetailPlantFragment : Fragment() {
                 setNegativeButton(R.string.alert_dialog_button_cancel,
                     DialogInterface.OnClickListener { dialogInterface, _ ->
                         dialogInterface.cancel()
-                })
+                    })
                 setPositiveButton(R.string.alert_dialog_button_ok,
                     DialogInterface.OnClickListener { _, _ ->
                         viewModel.deletePlant(plant)

@@ -24,7 +24,7 @@ interface PlantDao {
     fun getPlantById(id: Long): Flow<Plant>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewPlant(plant: Plant)
+    suspend fun insertNewPlant(plant: Plant): Long
 
     @Update
     suspend fun update(plant: Plant)

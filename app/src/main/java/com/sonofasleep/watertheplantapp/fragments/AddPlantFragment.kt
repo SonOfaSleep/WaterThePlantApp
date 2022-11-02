@@ -77,7 +77,8 @@ class AddPlantFragment : Fragment() {
             // Observing liveData plant and binding it to UI
             viewModel.getPlant(plantId).observe(this.viewLifecycleOwner) {
                 plant = it
-                recyclerView.adapter = PlantIconAdapter(viewModel, IconSource.imageList, PlantIconItem(plant.image))
+                recyclerView.adapter =
+                    PlantIconAdapter(viewModel, IconSource.imageList, PlantIconItem(plant.image))
                 bindPlant(plant)
             }
         } else {
@@ -128,9 +129,11 @@ class AddPlantFragment : Fragment() {
     private fun isIconNotNull(): Boolean {
         return viewModel.isIconNotNull()
     }
+
     private fun isNameValid(): Boolean {
         return viewModel.isNameValid(binding.nameEditText.text.toString())
     }
+
     private fun checkEntry(): Boolean {
         val toastMessage: String
         return if (!isIconNotNull() && !isNameValid()) {

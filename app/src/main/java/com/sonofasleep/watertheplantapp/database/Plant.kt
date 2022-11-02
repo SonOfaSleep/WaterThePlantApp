@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "PlantsTable")
 data class Plant(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val id: Long = 0L,
     val image: Int,
     val name: String,
     @ColumnInfo(name = "reminder_frequency")

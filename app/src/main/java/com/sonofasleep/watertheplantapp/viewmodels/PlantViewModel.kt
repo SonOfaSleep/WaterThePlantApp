@@ -2,24 +2,32 @@ package com.sonofasleep.watertheplantapp.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
-import androidx.work.WorkManager
+import androidx.work.*
+import com.sonofasleep.watertheplantapp.const.myTag
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
+import com.sonofasleep.watertheplantapp.worker.ReminderWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
-class PlantViewModel(private val dao: PlantDao, private val application: Application) : ViewModel() {
+class PlantViewModel(private val dao: PlantDao, private val application: Application) :
+    ViewModel() {
 
     // For plant icon choose in recyclerView
     // When not in AddPlantFragment icon is null
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
+
+    // WorkManager instance
+    private val workManager = WorkManager.getInstance(application)
 
     // Getting a states of flow, witch returns new list of Plants every time we change SortType
     private val sortFlow = MutableStateFlow(SortType.NONE)
@@ -27,7 +35,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     @OptIn(ExperimentalCoroutinesApi::class)
     private val plantListFlow = sortFlow
         .flatMapLatest {
-            when(it) {
+            when (it) {
                 SortType.NONE -> dao.getAllOrderedASC()
                 SortType.ASCENDING -> dao.getAllOrderedASC()
                 else -> dao.getAllOrderedDESC()
@@ -37,32 +45,61 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     // List of all plants using flow
     val allPlants: LiveData<List<Plant>> = plantListFlow.asLiveData()
 
-    /**
-     * WorkManager instance
-     */
-    val workManager = WorkManager.getInstance(application)
-
     // Changing sortFlow's sortType will emit new flow, and change list of all plants
     fun changeSortType(sortType: SortType) {
         sortFlow.value = sortType
     }
 
+    private fun schedulePeriodicReminder(
+        interval: Long,
+        timeUnit: TimeUnit,
+        plantIcon: Int,
+        plantName: String,
+        plantId: Long
+    ) {
+        // Data instance with the icon, name and id passed to it
+        val data = Data.Builder()
+            .putInt(ReminderWorker.plantIconKey, plantIcon)
+            .putString(ReminderWorker.plantNameKey, plantName)
+            .putLong(ReminderWorker.plantIdKey, plantId)
+            .build()
+
+        // Setting periodic work request with plantID as Tag
+        val workRequest = PeriodicWorkRequest.Builder(
+            ReminderWorker::class.java,
+            interval,
+            timeUnit
+        )
+            .setInputData(data)
+            .setInitialDelay(interval, timeUnit)
+            .addTag(plantId.toString())
+            .build()
+
+        workManager.enqueue(workRequest)
+    }
+
     fun insertPlant(image: Int, name: String, reminderFrequency: Int, notes: String) {
-        val newPlant = if (notes.isBlank()) {
-            Plant(
-                image = image,
-                name = name,
-                reminderFrequency = reminderFrequency)
-        } else {
-            Plant(
-                image = image,
-                name = name,
-                reminderFrequency = reminderFrequency,
-                description = notes)
-        }
+        val newPlant = Plant(
+            image = image,
+            name = name,
+            reminderFrequency = reminderFrequency,
+            description = notes
+        )
         // Launching coroutine to insert in database
         viewModelScope.launch(Dispatchers.IO) {
-            dao.insertNewPlant(newPlant)
+
+            val rowId = dao.insertNewPlant(newPlant)
+
+            /**
+             * Scheduling periodic worker
+             */
+            schedulePeriodicReminder(
+                reminderFrequency.toLong(),
+                TimeUnit.MINUTES,
+                plantIcon = newPlant.image,
+                plantName = newPlant.name,
+                plantId = rowId // This will be Tag for worker
+            )
         }
     }
 
@@ -114,7 +151,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
 class PlantViewModelFactory(
     private val dao: PlantDao,
     private val application: Application
-    ) : ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlantViewModel::class.java)) {

@@ -20,8 +20,6 @@ class PlantApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Log.d(myTag, "Application created")
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
@@ -35,8 +33,6 @@ class PlantApplication : Application() {
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
-
-            Log.d(myTag, "Channel registered")
         }
     }
 }
