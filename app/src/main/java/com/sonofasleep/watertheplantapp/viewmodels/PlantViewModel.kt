@@ -1,6 +1,7 @@
 package com.sonofasleep.watertheplantapp.viewmodels
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.work.*
 import com.sonofasleep.watertheplantapp.const.REMINDER_WORKER_TAG
@@ -53,7 +54,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
         sortFlow.value = sortType
     }
 
-    fun createPeriodicWorkRequest(plant: Plant): PeriodicWorkRequest {
+    private fun createPeriodicWorkRequest(plant: Plant): PeriodicWorkRequest {
 
         // Data instance with the icon, name and id passed to it
         val data = Data.Builder()
@@ -61,7 +62,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
             .putString(ReminderWorker.plantNameKey, plant.name)
             .build()
 
-        val timeUnit = TimeUnit.SECONDS
+        val timeUnit = TimeUnit.MINUTES
         // Setting periodic work request with plantID as Tag
         val workRequest = PeriodicWorkRequest.Builder(
             ReminderWorker::class.java,
@@ -75,8 +76,28 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
         return workRequest
     }
 
-    fun startPeriodicWork(periodicWorkRequest: PeriodicWorkRequest) {
+    private fun startPeriodicWork(periodicWorkRequest: PeriodicWorkRequest) {
         workManager.enqueue(periodicWorkRequest)
+    }
+
+    @Synchronized
+    fun switchWork(plant: Plant) {
+        if (plant.notifications) {
+            if (plant.workId != null) {
+                workManager.cancelWorkById(plant.workId)
+            }
+            val newPlant = plant.copy(notifications = false, workId = null)
+            viewModelScope.launch {
+                dao.update(newPlant)
+            }
+        } else {
+            val newWork = createPeriodicWorkRequest(plant)
+            startPeriodicWork(newWork)
+            val newPlantWithWorkId = plant.copy(notifications = true, workId = newWork.id)
+            viewModelScope.launch {
+                dao.update(newPlantWithWorkId)
+            }
+        }
     }
 
     fun insertPlantStartWork(image: Int, name: String, reminderFrequency: Int, notes: String) {
@@ -122,7 +143,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
                 workManager.cancelWorkById(oldPlant.workId)
             }
             val newWork = createPeriodicWorkRequest(newPlant)
-            val newPlantWithWorkId = newPlant.copy(workId = newWork.id)
+            val newPlantWithWorkId = newPlant.copy(notifications = true, workId = newWork.id)
             startPeriodicWork(newWork)
             dao.update(newPlantWithWorkId)
         }

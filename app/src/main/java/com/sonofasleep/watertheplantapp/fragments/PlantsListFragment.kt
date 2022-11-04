@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -66,9 +67,9 @@ class PlantsListFragment : Fragment() {
 
         // RecyclerView binding and click action on item
         recyclerView = binding.recyclerView
-        val adapter = PlantsAdapter {
+        val adapter = PlantsAdapter(viewModel) { plant ->
             val action = PlantsListFragmentDirections
-                .actionPlantsListFragmentToDetailPlantFragment(it.id)
+                .actionPlantsListFragmentToDetailPlantFragment(plant.id)
             findNavController().navigate(action)
         }
 
@@ -126,27 +127,22 @@ class PlantsListFragment : Fragment() {
                 val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
 
                 for (workInfo in workInfoList) {
-                    if (workInfo.state in enqueuedOrRun) {
-                        working++
-                    }
+                    if (workInfo.state in enqueuedOrRun) { working++ }
 
                     val allPlants = viewModel.allPlants.value
-                    if (!allPlants.isNullOrEmpty()) {
-                        val plant = allPlants.firstOrNull { it.workId == workInfo.id }
-                        Log.d(
-                            myTag,
-                            "ID=${workInfo.id} Name=${plant?.name} status=${workInfo.state}"
-                        )
-                    } else {
-                        if (workInfo.state == WorkInfo.State.ENQUEUED) {
-                            Log.w(myTag, "Error! No plants and work in progress! ${workInfo.id}")
+                    val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
+
+                    when(workInfo.state) {
+                        WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
+                            Log.d(myTag, "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}")
                         }
+                        else -> continue
                     }
-                    if (working == 0) {
-                        Log.d(myTag, "No work in progress")
-                    }
-                    Log.d(myTag, "_".repeat(33))
                 }
+                if (working == 0) {
+                    Log.d(myTag, "No work in progress")
+                }
+                Log.d(myTag, "_".repeat(33))
             }
         }
     }

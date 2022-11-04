@@ -2,14 +2,20 @@ package com.sonofasleep.watertheplantapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.databinding.PlantItemBinding
 import com.sonofasleep.watertheplantapp.database.Plant
+import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 
-class PlantsAdapter(val onItemClicked: (Plant) -> Unit) :
+class PlantsAdapter(
+    val viewModel: PlantViewModel,
+    val onItemClicked: (Plant) -> Unit
+) :
     ListAdapter<Plant, PlantsAdapter.PlantsViewHolder>(DiffCallback) {
 
     companion object DiffCallback : DiffUtil.ItemCallback<Plant>() {
@@ -27,6 +33,8 @@ class PlantsAdapter(val onItemClicked: (Plant) -> Unit) :
     class PlantsViewHolder(private var binding: PlantItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        val switch = binding.notifSwitch
+
         fun bind(plant: Plant) {
             binding.apply {
                 cardImage.setImageResource(plant.image)
@@ -37,7 +45,7 @@ class PlantsAdapter(val onItemClicked: (Plant) -> Unit) :
                         plant.reminderFrequency,
                         getPlural(plant.reminderFrequency)
                     )
-                notifSwitch.isChecked = true
+                notifSwitch.isChecked = plant.notifications
             }
         }
 
@@ -58,6 +66,12 @@ class PlantsAdapter(val onItemClicked: (Plant) -> Unit) :
         val currentPlant = getItem(position)
 
         holder.itemView.setOnClickListener { onItemClicked(currentPlant) }
+
+        holder.switch.setOnClickListener {
+            it.isClickable = false
+            viewModel.switchWork(currentPlant)
+        }
+
         holder.bind(currentPlant)
     }
 }
