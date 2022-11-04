@@ -1,11 +1,9 @@
 package com.sonofasleep.watertheplantapp.viewmodels
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
-import com.sonofasleep.watertheplantapp.const.myTag
+import com.sonofasleep.watertheplantapp.const.REMINDER_WORKER_TAG
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.database.SortType
@@ -16,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class PlantViewModel(private val dao: PlantDao, private val application: Application) :
@@ -25,9 +24,6 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     // When not in AddPlantFragment icon is null
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
-
-    // WorkManager instance
-    private val workManager = WorkManager.getInstance(application)
 
     // Getting a states of flow, witch returns new list of Plants every time we change SortType
     private val sortFlow = MutableStateFlow(SortType.NONE)
@@ -45,40 +41,45 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     // List of all plants using flow
     val allPlants: LiveData<List<Plant>> = plantListFlow.asLiveData()
 
+    // WorkManager instance
+    private val workManager = WorkManager.getInstance(application)
+
+    // Workers logs
+    val workStatusByTag = workManager.getWorkInfosByTagLiveData(REMINDER_WORKER_TAG)
+
+
     // Changing sortFlow's sortType will emit new flow, and change list of all plants
     fun changeSortType(sortType: SortType) {
         sortFlow.value = sortType
     }
 
-    private fun schedulePeriodicReminder(
-        interval: Long,
-        timeUnit: TimeUnit,
-        plantIcon: Int,
-        plantName: String,
-        plantId: Long
-    ) {
+    fun createPeriodicWorkRequest(plant: Plant): PeriodicWorkRequest {
+
         // Data instance with the icon, name and id passed to it
         val data = Data.Builder()
-            .putInt(ReminderWorker.plantIconKey, plantIcon)
-            .putString(ReminderWorker.plantNameKey, plantName)
-            .putLong(ReminderWorker.plantIdKey, plantId)
+            .putInt(ReminderWorker.plantIconKey, plant.image)
+            .putString(ReminderWorker.plantNameKey, plant.name)
             .build()
 
+        val timeUnit = TimeUnit.SECONDS
         // Setting periodic work request with plantID as Tag
         val workRequest = PeriodicWorkRequest.Builder(
             ReminderWorker::class.java,
-            interval,
+            plant.reminderFrequency.toLong(),
             timeUnit
         )
             .setInputData(data)
-            .setInitialDelay(interval, timeUnit)
-            .addTag(plantId.toString())
+            .setInitialDelay(plant.reminderFrequency.toLong(), timeUnit)
+            .addTag(REMINDER_WORKER_TAG)
             .build()
-
-        workManager.enqueue(workRequest)
+        return workRequest
     }
 
-    fun insertPlant(image: Int, name: String, reminderFrequency: Int, notes: String) {
+    fun startPeriodicWork(periodicWorkRequest: PeriodicWorkRequest) {
+        workManager.enqueue(periodicWorkRequest)
+    }
+
+    fun insertPlantStartWork(image: Int, name: String, reminderFrequency: Int, notes: String) {
         val newPlant = Plant(
             image = image,
             name = name,
@@ -88,27 +89,25 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
         // Launching coroutine to insert in database
         viewModelScope.launch(Dispatchers.IO) {
 
-            val rowId = dao.insertNewPlant(newPlant)
-
-            /**
-             * Scheduling periodic worker
-             */
-            schedulePeriodicReminder(
-                reminderFrequency.toLong(),
-                TimeUnit.MINUTES,
-                plantIcon = newPlant.image,
-                plantName = newPlant.name,
-                plantId = rowId // This will be Tag for worker
+            // Inserting new plant in dataBase and scheduling reminder
+            val workRequest = createPeriodicWorkRequest(newPlant)
+            val newPlantWithId = newPlant.copy(
+                notifications = true,
+                workId = workRequest.id
             )
+
+            val rowId = dao.insertNewPlant(newPlantWithId)
+            startPeriodicWork(workRequest)
         }
     }
 
-    fun updatePlant(
+    fun updatePlantAndWork(
         id: Long,
         image: Int,
         name: String,
         notes: String,
-        reminderFrequency: Int
+        reminderFrequency: Int,
+        oldPlant: Plant
     ) {
         val newPlant = Plant(
             id = id,
@@ -119,13 +118,22 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
         )
         // Launching coroutine to update in database
         viewModelScope.launch(Dispatchers.IO) {
-            dao.update(newPlant)
+            if (oldPlant.workId != null) {
+                workManager.cancelWorkById(oldPlant.workId)
+            }
+            val newWork = createPeriodicWorkRequest(newPlant)
+            val newPlantWithWorkId = newPlant.copy(workId = newWork.id)
+            startPeriodicWork(newWork)
+            dao.update(newPlantWithWorkId)
         }
     }
 
-    fun deletePlant(plant: Plant) {
+    fun deletePlantCancelWork(plant: Plant) {
         // Launching coroutine to delete in database
         viewModelScope.launch(Dispatchers.IO) {
+            if (plant.workId != null) {
+                workManager.cancelWorkById(plant.workId)
+            }
             dao.delete(plant)
         }
     }

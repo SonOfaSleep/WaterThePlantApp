@@ -15,22 +15,23 @@ class PlantIconAdapter(
     private val viewModel: PlantViewModel,
     private val plantIconsList: List<PlantIconItem>,
     private var selectedIcon: PlantIconItem? = null
-)
-    : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
+) : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
 
     // For storing previous position
     private var checkedPosition = -1
 
     class PlantImageViewHolder(
         private var binding: PlantImageCardBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PlantIconItem) {
             binding.cardImage.setImageResource(item.image)
         }
+
         fun setChecked() {
             binding.cardView.isChecked = true
         }
+
         fun setUnChecked() {
             binding.cardView.isChecked = false
         }

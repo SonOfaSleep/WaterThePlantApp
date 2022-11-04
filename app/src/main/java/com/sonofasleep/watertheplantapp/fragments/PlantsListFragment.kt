@@ -3,6 +3,7 @@ package com.sonofasleep.watertheplantapp.fragments
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -14,9 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkInfo
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
+import com.sonofasleep.watertheplantapp.const.myTag
 import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.databinding.FragmentPlantsListBinding
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
@@ -115,6 +118,36 @@ class PlantsListFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_plantsListFragment_to_addPlantFragment)
+        }
+
+        viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
+            if (!workInfoList.isNullOrEmpty()) {
+                var working = 0
+                val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
+
+                for (workInfo in workInfoList) {
+                    if (workInfo.state in enqueuedOrRun) {
+                        working++
+                    }
+
+                    val allPlants = viewModel.allPlants.value
+                    if (!allPlants.isNullOrEmpty()) {
+                        val plant = allPlants.firstOrNull { it.workId == workInfo.id }
+                        Log.d(
+                            myTag,
+                            "ID=${workInfo.id} Name=${plant?.name} status=${workInfo.state}"
+                        )
+                    } else {
+                        if (workInfo.state == WorkInfo.State.ENQUEUED) {
+                            Log.w(myTag, "Error! No plants and work in progress! ${workInfo.id}")
+                        }
+                    }
+                    if (working == 0) {
+                        Log.d(myTag, "No work in progress")
+                    }
+                    Log.d(myTag, "_".repeat(33))
+                }
+            }
         }
     }
 

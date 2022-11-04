@@ -18,13 +18,14 @@ import com.sonofasleep.watertheplantapp.PlantApplication.Companion.CHANNEL_ID
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.const.myTag
 
-class ReminderWorker(context: Context, workerParameters: WorkerParameters)
-    : Worker(context, workerParameters) {
+class ReminderWorker(context: Context, workerParameters: WorkerParameters) :
+    Worker(context, workerParameters) {
+
+    private val notificationId = 1988
 
     companion object {
         const val plantIconKey = "plantIconKey"
         const val plantNameKey = "plantNameKey"
-        const val plantIdKey = "plantIdKey"
     }
 
     override fun doWork(): Result {
@@ -40,18 +41,20 @@ class ReminderWorker(context: Context, workerParameters: WorkerParameters)
                     applicationContext,
                     0,
                     intent,
-                    PendingIntent.FLAG_IMMUTABLE)
+                    PendingIntent.FLAG_IMMUTABLE
+                )
 
             val plantIcon: Int = inputData.getInt(plantIconKey, R.drawable.ic_launcher_foreground)
             val plantName = inputData.getString(plantNameKey)
-            val notificationId = inputData.getInt(plantIdKey, 1988)
 
             val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground) // Apps icon
-                .setLargeIcon(BitmapFactory.decodeResource(
-                    applicationContext.resources,
-                    plantIcon
-                ))
+                .setLargeIcon(
+                    BitmapFactory.decodeResource(
+                        applicationContext.resources,
+                        plantIcon
+                    )
+                )
                 .setContentTitle("$plantName")
                 .setContentText(applicationContext.getString(R.string.reminder_text))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -66,7 +69,7 @@ class ReminderWorker(context: Context, workerParameters: WorkerParameters)
 
             Result.success()
 
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Result.failure()
         }

@@ -100,12 +100,13 @@ class AddPlantFragment : Fragment() {
 
     private fun updatePlant() {
         if (checkEntry()) {
-            viewModel.updatePlant(
+            viewModel.updatePlantAndWork(
                 id = navArgs.plantId,
                 image = viewModel.icon.value!!.image,
                 name = binding.nameEditText.text.toString(),
                 notes = binding.notesEditText.text.toString(),
-                reminderFrequency = binding.wateringSlider.value.toInt()
+                reminderFrequency = binding.wateringSlider.value.toInt(),
+                oldPlant = plant
             )
         }
         viewModel.resetIcon()
@@ -115,7 +116,7 @@ class AddPlantFragment : Fragment() {
     private fun addPlant() {
         // Checking if plant is valid than adding it to room
         if (checkEntry()) {
-            viewModel.insertPlant(
+            viewModel.insertPlantStartWork(
                 viewModel.icon.value!!.image,
                 binding.nameEditText.text.toString(),
                 binding.wateringSlider.value.toInt(),

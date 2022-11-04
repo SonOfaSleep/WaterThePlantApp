@@ -103,7 +103,7 @@ class DetailPlantFragment : Fragment() {
                     })
                 setPositiveButton(R.string.alert_dialog_button_ok,
                     DialogInterface.OnClickListener { _, _ ->
-                        viewModel.deletePlant(plant)
+                        viewModel.deletePlantCancelWork(plant)
                         findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
                     })
             }
