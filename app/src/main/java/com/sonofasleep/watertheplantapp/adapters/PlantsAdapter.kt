@@ -1,9 +1,9 @@
 package com.sonofasleep.watertheplantapp.adapters
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +13,7 @@ import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 
 class PlantsAdapter(
-    val viewModel: PlantViewModel,
+    private val viewModel: PlantViewModel,
     val onItemClicked: (Plant) -> Unit
 ) :
     ListAdapter<Plant, PlantsAdapter.PlantsViewHolder>(DiffCallback) {
@@ -27,7 +27,6 @@ class PlantsAdapter(
         override fun areContentsTheSame(oldItem: Plant, newItem: Plant): Boolean {
             return oldItem == newItem
         }
-
     }
 
     class PlantsViewHolder(private var binding: PlantItemBinding) :
@@ -37,7 +36,6 @@ class PlantsAdapter(
 
         fun bind(plant: Plant) {
             binding.apply {
-                cardImage.setImageResource(plant.image)
                 plantName.text = plant.name
                 wateringType.text = itemView.context
                     .getString(
@@ -45,7 +43,17 @@ class PlantsAdapter(
                         plant.reminderFrequency,
                         getPlural(plant.reminderFrequency)
                     )
-                notifSwitch.isChecked = plant.notifications
+                if (plant.notifications) {
+                    notifSwitch.isChecked = true
+                    cardImage.setImageResource(plant.image)
+                } else {
+                    notifSwitch.isChecked = false
+                    cardImage.setImageResource(plant.image)
+                    val colorMatrix = ColorMatrix()
+                    colorMatrix.setSaturation(0F)
+                    val filter = ColorMatrixColorFilter(colorMatrix)
+                    cardImage.colorFilter = filter
+                }
             }
         }
 
@@ -68,6 +76,7 @@ class PlantsAdapter(
         holder.itemView.setOnClickListener { onItemClicked(currentPlant) }
 
         holder.switch.setOnClickListener {
+            holder.itemView.isClickable = false
             it.isClickable = false
             viewModel.switchWork(currentPlant)
         }
