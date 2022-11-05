@@ -2,6 +2,7 @@ package com.sonofasleep.watertheplantapp.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,14 @@ class DetailPlantFragment : Fragment() {
 
     private lateinit var plant: Plant
     private val navigationArgs: DetailPlantFragmentArgs by navArgs()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_right)
+        exitTransition = inflater.inflateTransition(R.transition.fade)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

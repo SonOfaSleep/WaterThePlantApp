@@ -3,6 +3,7 @@ package com.sonofasleep.watertheplantapp.fragments
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -43,6 +44,12 @@ class PlantsListFragment : Fragment() {
     private var isOrderedAscIcon: Boolean = true
 
     private lateinit var recyclerView: RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        exitTransition = inflater.inflateTransition(R.transition.fade)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,12 +134,14 @@ class PlantsListFragment : Fragment() {
                 val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
 
                 for (workInfo in workInfoList) {
-                    if (workInfo.state in enqueuedOrRun) { working++ }
+                    if (workInfo.state in enqueuedOrRun) {
+                        working++
+                    }
 
                     val allPlants = viewModel.allPlants.value
                     val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
 
-                    when(workInfo.state) {
+                    when (workInfo.state) {
                         WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
                             Log.d(myTag, "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}")
                         }
