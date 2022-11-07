@@ -11,10 +11,18 @@
         tools:layout="@layout/fragment_plants_list" >
         <action
             android:id="@+id/action_plantsListFragment_to_addPlantFragment"
-            app:destination="@id/addPlantFragment" />
+            app:destination="@id/addPlantFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_rigth" />
         <action
             android:id="@+id/action_plantsListFragment_to_detailPlantFragment"
-            app:destination="@id/detailPlantFragment" />
+            app:destination="@id/detailPlantFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_to_rigth" />
     </fragment>
     <fragment
         android:id="@+id/addPlantFragment"
@@ -24,7 +32,9 @@
         <action
             android:id="@+id/action_addPlantFragment_to_plantsListFragment"
             app:destination="@id/plantsListFragment"
-            app:popUpTo="@id/plantsListFragment" />
+            app:enterAnim="@anim/slide_from_left"
+            app:popUpTo="@id/plantsListFragment"
+            app:exitAnim="@anim/slide_to_rigth" />
         <argument
             android:name="plant_id"
             android:defaultValue="0L"
@@ -37,12 +47,18 @@
         tools:layout="@layout/fragment_detail_plant">
         <action
             android:id="@+id/action_detailPlantFragment_to_addPlantFragment"
-            app:destination="@id/addPlantFragment" />
+            app:destination="@id/addPlantFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_to_rigth" />
         <argument
             android:name="plant_id"
             app:argType="long" />
         <action
             android:id="@+id/action_detailPlantFragment_to_plantsListFragment"
-            app:destination="@id/plantsListFragment" />
+            app:destination="@id/plantsListFragment"
+            app:enterAnim="@anim/slide_from_left"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
 </navigation>

@@ -45,11 +45,6 @@ class PlantsListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val inflater = TransitionInflater.from(requireContext())
-        exitTransition = inflater.inflateTransition(R.transition.fade)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

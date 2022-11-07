@@ -1,6 +1,7 @@
 package com.sonofasleep.watertheplantapp.fragments
 
 import android.os.Bundle
+import android.transition.Transition
 import android.transition.TransitionInflater
 import android.view.*
 import android.widget.TextView
@@ -38,12 +39,6 @@ class AddPlantFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var plant: Plant
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val inflater = TransitionInflater.from(requireContext())
-        enterTransition = inflater.inflateTransition(R.transition.slide_right)
-        exitTransition = inflater.inflateTransition(R.transition.slide_right)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
