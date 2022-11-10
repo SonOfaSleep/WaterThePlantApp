@@ -1,10 +1,13 @@
 package com.sonofasleep.watertheplantapp.viewmodels
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.work.*
 import com.sonofasleep.watertheplantapp.const.REMINDER_WORKER_TAG
+import com.sonofasleep.watertheplantapp.const.myTag
+import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.database.SortType
@@ -26,21 +29,17 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
-    // Getting a states of flow, witch returns new list of Plants every time we change SortType
-    private val sortFlow = MutableStateFlow(SortType.NONE)
+    // DataStore instance
+    private val dataStore = DataStoreRepository(application.applicationContext)
+    val sortTypeIsASC: LiveData<Boolean> = dataStore.readSortType.asLiveData()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val plantListFlow = sortFlow
-        .flatMapLatest {
-            when (it) {
-                SortType.NONE -> dao.getAllOrderedASC()
-                SortType.ASCENDING -> dao.getAllOrderedASC()
-                else -> dao.getAllOrderedDESC()
-            }
+    // List of all plants (observing isSortASC preference in data store)
+    val allPlants: LiveData<List<Plant>> = Transformations.switchMap(sortTypeIsASC) {
+        when (it) {
+            true -> dao.getAllOrderedASC().asLiveData()
+            else -> dao.getAllOrderedDESC().asLiveData()
         }
-
-    // List of all plants using flow
-    val allPlants: LiveData<List<Plant>> = plantListFlow.asLiveData()
+    }
 
     // WorkManager instance
     private val workManager = WorkManager.getInstance(application)
@@ -49,9 +48,11 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     val workStatusByTag = workManager.getWorkInfosByTagLiveData(REMINDER_WORKER_TAG)
 
 
-    // Changing sortFlow's sortType will emit new flow, and change list of all plants
-    fun changeSortType(sortType: SortType) {
-        sortFlow.value = sortType
+    // Save sort type to data store
+    fun saveSortTypeToDataStore(isASC: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStore.saveSortType(isASC, application.applicationContext)
+        }
     }
 
     private fun createPeriodicWorkRequest(plant: Plant): PeriodicWorkRequest {

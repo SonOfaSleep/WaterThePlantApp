@@ -47,9 +47,7 @@ class PlantsListFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlantsListBinding.inflate(inflater, container, false)
         return binding.root
@@ -59,7 +57,6 @@ class PlantsListFragment : Fragment() {
 
         // Inflating toolbarMenuLayout and setting sort icon
         binding.plantListToolbar.inflateMenu(R.menu.menu_main)
-        setIcon()
 
         // Setting navigation
         val navController = findNavController()
@@ -70,9 +67,14 @@ class PlantsListFragment : Fragment() {
         // RecyclerView binding and click action on item
         recyclerView = binding.recyclerView
         val adapter = PlantsAdapter(viewModel) { plant ->
-            val action = PlantsListFragmentDirections
-                .actionPlantsListFragmentToDetailPlantFragment(plant.id)
+            val action =
+                PlantsListFragmentDirections.actionPlantsListFragmentToDetailPlantFragment(plant.id)
             findNavController().navigate(action)
+        }
+
+        // Observing data store preference
+        viewModel.sortTypeIsASC.observe(this.viewLifecycleOwner) {
+            isOrderedAscIcon = it
         }
 
         // Observing viewModel allPlants liveData
@@ -80,6 +82,7 @@ class PlantsListFragment : Fragment() {
         viewModel.allPlants.observe(this.viewLifecycleOwner) {
             binding.addPlantReminderImage.isVisible = it.isNullOrEmpty()
             adapter.submitList(it)
+            setIcon()
         }
         recyclerView.adapter = adapter
 
@@ -111,8 +114,9 @@ class PlantsListFragment : Fragment() {
             when (it.itemId) {
                 R.id.app_bar_sorting -> {
                     isOrderedAscIcon = !isOrderedAscIcon
-                    setIcon()
-                    sortPlantList()
+
+                    viewModel.saveSortTypeToDataStore(isOrderedAscIcon)
+
                     true
                 }
                 else -> false
@@ -123,6 +127,9 @@ class PlantsListFragment : Fragment() {
             findNavController().navigate(R.id.action_plantsListFragment_to_addPlantFragment)
         }
 
+        /**
+         * Work-manager logs
+         */
         viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
             if (!workInfoList.isNullOrEmpty()) {
                 var working = 0
@@ -173,15 +180,9 @@ class PlantsListFragment : Fragment() {
             else -> Color.WHITE // Night
         }
         binding.plantListToolbar.menu.findItem(R.id.app_bar_sorting).icon?.colorFilter =
-            BlendModeColorFilterCompat
-                .createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
-    }
-
-    private fun sortPlantList() {
-        if (isOrderedAscIcon) {
-            viewModel.changeSortType(SortType.ASCENDING)
-        } else {
-            viewModel.changeSortType(SortType.DESCENDING)
-        }
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    color,
+                    BlendModeCompat.SRC_ATOP
+                )
     }
 }
