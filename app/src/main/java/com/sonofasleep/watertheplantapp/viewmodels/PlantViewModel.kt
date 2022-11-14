@@ -1,24 +1,16 @@
 package com.sonofasleep.watertheplantapp.viewmodels
 
 import android.app.Application
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.work.*
 import com.sonofasleep.watertheplantapp.const.REMINDER_WORKER_TAG
-import com.sonofasleep.watertheplantapp.const.myTag
 import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
-import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.worker.ReminderWorker
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 class PlantViewModel(private val dao: PlantDao, private val application: Application) :
@@ -39,6 +31,12 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
             true -> dao.getAllOrderedASC().asLiveData()
             else -> dao.getAllOrderedDESC().asLiveData()
         }
+    }
+
+    // List of all searched plants
+    private val searchQuery = MutableLiveData<String>()
+    val searchResults: LiveData<List<Plant>> = Transformations.switchMap(searchQuery) {
+        getSearchResult(it)
     }
 
     // WorkManager instance
@@ -63,7 +61,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
             .putString(ReminderWorker.plantNameKey, plant.name)
             .build()
 
-        val timeUnit = TimeUnit.MINUTES
+        val timeUnit = TimeUnit.DAYS
         // Setting periodic work request with plantID as Tag
         val workRequest = PeriodicWorkRequest.Builder(
             ReminderWorker::class.java,
@@ -80,7 +78,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     private fun startPeriodicWork(periodicWorkRequest: PeriodicWorkRequest) {
         workManager.enqueue(periodicWorkRequest)
     }
-    
+
     fun switchWork(plant: Plant) {
         if (plant.notifications) {
             if (plant.workId != null) {
@@ -171,6 +169,16 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
 
     fun isIconNotNull(): Boolean = _icon.value != null
     fun isNameValid(name: String): Boolean = name.isNotBlank()
+
+    fun changeSearchQuery(query: String) {
+        searchQuery.value = query
+    }
+
+    private fun getSearchResult(query: String): LiveData<List<Plant>> {
+        // % - needed for SQL LIKE operator
+        val searchQuery = "%$query%"
+        return dao.findByName(searchQuery).asLiveData()
+    }
 }
 
 /**

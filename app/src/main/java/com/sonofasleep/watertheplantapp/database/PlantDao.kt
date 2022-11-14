@@ -17,8 +17,8 @@ interface PlantDao {
     @Query("SELECT * FROM PlantsTable ORDER BY name DESC")
     fun getAllOrderedDESC(): Flow<List<Plant>>
 
-    @Query("SELECT * FROM PlantsTable WHERE name = :name")
-    fun findByName(name: String): Flow<Plant>
+    @Query("SELECT * FROM PlantsTable WHERE name LIKE :name")
+    fun findByName(name: String): Flow<List<Plant>>
 
     @Query("SELECT * FROM PlantsTable WHERE id = :id")
     fun getPlantById(id: Long): Flow<Plant>

@@ -3,10 +3,9 @@ package com.sonofasleep.watertheplantapp.fragments
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -22,13 +21,12 @@ import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
 import com.sonofasleep.watertheplantapp.const.myTag
-import com.sonofasleep.watertheplantapp.database.SortType
 import com.sonofasleep.watertheplantapp.databinding.FragmentPlantsListBinding
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 
 
-class PlantsListFragment : Fragment() {
+class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _binding: FragmentPlantsListBinding? = null
     private val binding get() = _binding!!
@@ -44,7 +42,7 @@ class PlantsListFragment : Fragment() {
     private var isOrderedAscIcon: Boolean = true
 
     private lateinit var recyclerView: RecyclerView
-
+    private lateinit var adapter: PlantsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,6 +56,12 @@ class PlantsListFragment : Fragment() {
         // Inflating toolbarMenuLayout and setting sort icon
         binding.plantListToolbar.inflateMenu(R.menu.menu_main)
 
+        // Setting up searchView and onQueryListener
+        val search = binding.plantListToolbar.menu.findItem(R.id.app_bar_search)
+        val searchView = search.actionView as SearchView
+        searchView.isSubmitButtonEnabled = true
+        searchView.setOnQueryTextListener(this)
+
         // Setting navigation
         val navController = findNavController()
         val appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -66,7 +70,7 @@ class PlantsListFragment : Fragment() {
 
         // RecyclerView binding and click action on item
         recyclerView = binding.recyclerView
-        val adapter = PlantsAdapter(viewModel) { plant ->
+        adapter = PlantsAdapter(viewModel) { plant ->
             val action =
                 PlantsListFragmentDirections.actionPlantsListFragmentToDetailPlantFragment(plant.id)
             findNavController().navigate(action)
@@ -77,13 +81,11 @@ class PlantsListFragment : Fragment() {
             isOrderedAscIcon = it
         }
 
+
         // Observing viewModel allPlants liveData
         // Showing helper addPlant image when list is empty
-        viewModel.allPlants.observe(this.viewLifecycleOwner) {
-            binding.addPlantReminderImage.isVisible = it.isNullOrEmpty()
-            adapter.submitList(it)
-            setIcon()
-        }
+        addAllPlantsObserver()
+
         recyclerView.adapter = adapter
 
         /**
@@ -184,5 +186,56 @@ class PlantsListFragment : Fragment() {
                 color,
                 BlendModeCompat.SRC_ATOP
             )
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        // The main logic is to switch observing between allPlants and searchResults
+        if (!query.isNullOrBlank()) {
+            removeAllPlantsObserver()
+            addSearchObserver()
+            viewModel.changeSearchQuery(query)
+        } else {
+            addAllPlantsObserver()
+            removeSearchObserver()
+        }
+        return true
+    }
+
+    /**
+     * This functions are needed for not messing with observable list. If we will observe
+     * two different lists and submitting to one adapter it will cause bug
+     * (If you switch on/off item when searching, list will be updated and redrawn;
+     * And when not searching, it will still be observing last search request at random)
+     *
+     * P.S. This approach seems to work
+     */
+    private fun addAllPlantsObserver() {
+        if (!viewModel.allPlants.hasObservers()) {
+            viewModel.allPlants.observe(this.viewLifecycleOwner) {
+                binding.addPlantReminderImage.isVisible = it.isNullOrEmpty()
+                adapter.submitList(it)
+                setIcon()
+            }
+        }
+    }
+
+    private fun removeAllPlantsObserver() {
+        viewModel.allPlants.removeObservers(this.viewLifecycleOwner)
+    }
+
+    private fun addSearchObserver() {
+        if (!viewModel.searchResults.hasObservers()) {
+            viewModel.searchResults.observe(this.viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
+        }
+    }
+
+    private fun removeSearchObserver() {
+        viewModel.searchResults.removeObservers(this.viewLifecycleOwner)
     }
 }
