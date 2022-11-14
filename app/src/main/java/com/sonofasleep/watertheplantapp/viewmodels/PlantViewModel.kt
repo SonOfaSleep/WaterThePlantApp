@@ -80,8 +80,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     private fun startPeriodicWork(periodicWorkRequest: PeriodicWorkRequest) {
         workManager.enqueue(periodicWorkRequest)
     }
-
-    @Synchronized
+    
     fun switchWork(plant: Plant) {
         if (plant.notifications) {
             if (plant.workId != null) {

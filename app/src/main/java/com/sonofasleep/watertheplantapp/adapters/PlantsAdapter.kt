@@ -45,6 +45,7 @@ class PlantsAdapter(
                     )
                 if (plant.notifications) {
                     notifSwitch.isChecked = true
+                    cardImage.clearColorFilter()
                     cardImage.setImageResource(plant.image)
                 } else {
                     notifSwitch.isChecked = false

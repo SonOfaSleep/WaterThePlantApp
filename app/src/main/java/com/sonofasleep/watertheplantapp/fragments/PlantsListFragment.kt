@@ -181,8 +181,8 @@ class PlantsListFragment : Fragment() {
         }
         binding.plantListToolbar.menu.findItem(R.id.app_bar_sorting).icon?.colorFilter =
             BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                    color,
-                    BlendModeCompat.SRC_ATOP
-                )
+                color,
+                BlendModeCompat.SRC_ATOP
+            )
     }
 }
