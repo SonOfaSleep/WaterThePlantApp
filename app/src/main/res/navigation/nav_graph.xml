@@ -33,8 +33,9 @@
             android:id="@+id/action_addPlantFragment_to_plantsListFragment"
             app:destination="@id/plantsListFragment"
             app:enterAnim="@anim/slide_from_left"
+            app:exitAnim="@anim/slide_to_rigth"
             app:popUpTo="@id/plantsListFragment"
-            app:exitAnim="@anim/slide_to_rigth" />
+            app:popUpToInclusive="true" />
         <argument
             android:name="plant_id"
             android:defaultValue="0L"
@@ -59,6 +60,8 @@
             android:id="@+id/action_detailPlantFragment_to_plantsListFragment"
             app:destination="@id/plantsListFragment"
             app:enterAnim="@anim/slide_from_left"
-            app:exitAnim="@anim/fade_out" />
+            app:exitAnim="@anim/fade_out"
+            app:popUpTo="@id/plantsListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

@@ -1,12 +1,15 @@
 package com.sonofasleep.watertheplantapp.fragments
 
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.isVisible
@@ -81,7 +84,6 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
             isOrderedAscIcon = it
         }
 
-
         // Observing viewModel allPlants liveData
         // Showing helper addPlant image when list is empty
         addAllPlantsObserver()
@@ -132,7 +134,10 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         /**
          * Work-manager logs
          */
-        viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
+        /**
+         * Work-manager logs
+         */
+            viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
             if (!workInfoList.isNullOrEmpty()) {
                 var working = 0
                 val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
@@ -228,6 +233,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun addSearchObserver() {
+        binding.fab.hide()
         if (!viewModel.searchResults.hasObservers()) {
             viewModel.searchResults.observe(this.viewLifecycleOwner) {
                 adapter.submitList(it)
@@ -236,6 +242,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun removeSearchObserver() {
+        binding.fab.show()
         viewModel.searchResults.removeObservers(this.viewLifecycleOwner)
     }
 }
