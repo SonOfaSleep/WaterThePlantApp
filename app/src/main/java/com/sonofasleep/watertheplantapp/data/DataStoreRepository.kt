@@ -20,7 +20,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 
 class DataStoreRepository(context: Context) {
 
-    val IS_SORT_ASC = booleanPreferencesKey("is_sort_asc")
+    private val isSortASC = booleanPreferencesKey("is_sort_asc")
 
     val readSortType: Flow<Boolean> = context.dataStore.data
         .catch {
@@ -32,12 +32,12 @@ class DataStoreRepository(context: Context) {
             }
         }
         .map { preferences ->
-            preferences[IS_SORT_ASC] ?: true
+            preferences[isSortASC] ?: true
         }
 
     suspend fun saveSortType(isSortASC: Boolean, context: Context) {
         context.dataStore.edit { preference ->
-            preference[IS_SORT_ASC] = isSortASC
+            preference[this.isSortASC] = isSortASC
         }
     }
 }

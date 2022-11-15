@@ -5,8 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.util.Log
-import com.sonofasleep.watertheplantapp.const.myTag
 import com.sonofasleep.watertheplantapp.database.PlantDatabase
 
 class PlantApplication : Application() {

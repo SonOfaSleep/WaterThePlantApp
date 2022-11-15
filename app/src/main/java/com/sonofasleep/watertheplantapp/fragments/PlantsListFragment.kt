@@ -1,15 +1,14 @@
 package com.sonofasleep.watertheplantapp.fragments
 
-import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import android.view.inputmethod.InputMethodManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.isVisible
@@ -137,7 +136,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         /**
          * Work-manager logs
          */
-            viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
+        viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
             if (!workInfoList.isNullOrEmpty()) {
                 var working = 0
                 val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)

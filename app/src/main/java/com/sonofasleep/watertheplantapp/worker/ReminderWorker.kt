@@ -1,22 +1,16 @@
 package com.sonofasleep.watertheplantapp.worker
 
-import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.sonofasleep.watertheplantapp.MainActivity
-import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.PlantApplication.Companion.CHANNEL_ID
 import com.sonofasleep.watertheplantapp.R
-import com.sonofasleep.watertheplantapp.const.myTag
 
 class ReminderWorker(context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {

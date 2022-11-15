@@ -1,8 +1,6 @@
 package com.sonofasleep.watertheplantapp.fragments
 
-import android.content.DialogInterface
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,15 +97,14 @@ class DetailPlantFragment : Fragment() {
                 setTitle(R.string.alert_dialog_title)
                 setMessage(R.string.alert_dialog_text)
 
-                setNegativeButton(R.string.alert_dialog_button_cancel,
-                    DialogInterface.OnClickListener { dialogInterface, _ ->
-                        dialogInterface.cancel()
-                    })
-                setPositiveButton(R.string.alert_dialog_button_ok,
-                    DialogInterface.OnClickListener { _, _ ->
-                        viewModel.deletePlantCancelWork(plant)
-                        findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
-                    })
+                setNegativeButton(R.string.alert_dialog_button_cancel) { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                }
+                setPositiveButton(R.string.alert_dialog_button_ok) { _, _ ->
+                    viewModel.deletePlantCancelWork(plant)
+                    findNavController()
+                        .navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
+                }
             }
             builder.create()
             builder.show()

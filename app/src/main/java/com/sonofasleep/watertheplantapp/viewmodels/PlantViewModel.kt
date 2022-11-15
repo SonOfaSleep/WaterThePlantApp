@@ -63,7 +63,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
 
         val timeUnit = TimeUnit.DAYS
         // Setting periodic work request with plantID as Tag
-        val workRequest = PeriodicWorkRequest.Builder(
+        return PeriodicWorkRequest.Builder(
             ReminderWorker::class.java,
             plant.reminderFrequency.toLong(),
             timeUnit
@@ -72,7 +72,6 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
             .setInitialDelay(plant.reminderFrequency.toLong(), timeUnit)
             .addTag(REMINDER_WORKER_TAG)
             .build()
-        return workRequest
     }
 
     private fun startPeriodicWork(periodicWorkRequest: PeriodicWorkRequest) {

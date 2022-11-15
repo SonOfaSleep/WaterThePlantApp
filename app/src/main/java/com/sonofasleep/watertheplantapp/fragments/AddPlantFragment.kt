@@ -1,8 +1,6 @@
 package com.sonofasleep.watertheplantapp.fragments
 
 import android.os.Bundle
-import android.transition.Transition
-import android.transition.TransitionInflater
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
