@@ -64,7 +64,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
         /**
          * Main interval parameter
          */
-        val timeUnit = TimeUnit.MINUTES
+        val timeUnit = TimeUnit.DAYS
 
         // Setting periodic work request with plantID as Tag
         return PeriodicWorkRequest.Builder(
@@ -118,7 +118,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
                 workId = workRequest.id
             )
 
-            val rowId = dao.insertNewPlant(newPlantWithId)
+            dao.insertNewPlant(newPlantWithId)
             startPeriodicWork(workRequest)
         }
     }
