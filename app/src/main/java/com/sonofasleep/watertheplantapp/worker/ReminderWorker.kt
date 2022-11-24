@@ -8,14 +8,19 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.sonofasleep.watertheplantapp.BuildConfig
 import com.sonofasleep.watertheplantapp.MainActivity
 import com.sonofasleep.watertheplantapp.PlantApplication.Companion.CHANNEL_ID
 import com.sonofasleep.watertheplantapp.R
+import com.sonofasleep.watertheplantapp.const.DEBUG_DIR
+import com.sonofasleep.watertheplantapp.logs.LogUtils
+import java.io.File
 
-class ReminderWorker(context: Context, workerParameters: WorkerParameters) :
+class ReminderWorker(val context: Context, workerParameters: WorkerParameters) :
     Worker(context, workerParameters) {
 
     private val notificationId = 1988
+    private val logUtils = LogUtils(context)
 
     companion object {
         const val plantIconKey = "plantIconKey"
@@ -61,10 +66,19 @@ class ReminderWorker(context: Context, workerParameters: WorkerParameters) :
                 notify(notificationId, builder.build())
             }
 
+            if (BuildConfig.DEBUG) {
+                logUtils.saveLogToFile("Job successful\n")
+            }
+
             Result.success()
 
         } catch (e: Exception) {
             e.printStackTrace()
+
+            if (BuildConfig.DEBUG) {
+                logUtils.saveLogToFile(e.stackTraceToString())
+            }
+
             Result.failure()
         }
     }

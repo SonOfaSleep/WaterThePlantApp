@@ -61,7 +61,11 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
             .putString(ReminderWorker.plantNameKey, plant.name)
             .build()
 
-        val timeUnit = TimeUnit.DAYS
+        /**
+         * Main interval parameter
+         */
+        val timeUnit = TimeUnit.MINUTES
+
         // Setting periodic work request with plantID as Tag
         return PeriodicWorkRequest.Builder(
             ReminderWorker::class.java,

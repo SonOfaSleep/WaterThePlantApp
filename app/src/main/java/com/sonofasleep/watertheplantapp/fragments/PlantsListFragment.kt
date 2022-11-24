@@ -18,12 +18,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.BuildConfig
 import androidx.work.WorkInfo
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
-import com.sonofasleep.watertheplantapp.const.myTag
+import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.databinding.FragmentPlantsListBinding
+import com.sonofasleep.watertheplantapp.logs.LogUtils
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 
@@ -133,33 +135,36 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         /**
          * Work-manager logs
          */
-        /**
-         * Work-manager logs
-         */
-        viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
-            if (!workInfoList.isNullOrEmpty()) {
-                var working = 0
-                val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
 
-                for (workInfo in workInfoList) {
-                    if (workInfo.state in enqueuedOrRun) {
-                        working++
-                    }
+        val logUtils = LogUtils(requireContext())
+        if (BuildConfig.DEBUG) {
+            viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
+                if (!workInfoList.isNullOrEmpty()) {
+                    var working = 0
+                    val noWorkString = "No work in progress\n"
+                    val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
 
-                    val allPlants = viewModel.allPlants.value
-                    val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
+                    for (workInfo in workInfoList) {
+                        if (workInfo.state in enqueuedOrRun) working++
 
-                    when (workInfo.state) {
-                        WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
-                            Log.d(myTag, "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}")
+                        val allPlants = viewModel.allPlants.value
+                        val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
+
+                        when (workInfo.state) {
+                            WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
+                                val logString =
+                                    "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}\n"
+                                Log.d(DEBUG_TAG, logString)
+                                logUtils.saveLogToFile(logString)
+                            }
+                            else -> continue
                         }
-                        else -> continue
+                    }
+                    if (working == 0) {
+                        Log.d(DEBUG_TAG, noWorkString)
+                        logUtils.saveLogToFile(noWorkString)
                     }
                 }
-                if (working == 0) {
-                    Log.d(myTag, "No work in progress")
-                }
-                Log.d(myTag, "_".repeat(33))
             }
         }
     }
