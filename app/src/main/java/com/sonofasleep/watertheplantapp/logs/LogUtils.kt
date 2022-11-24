@@ -4,6 +4,7 @@ import android.content.Context
 import android.icu.text.SimpleDateFormat
 import com.sonofasleep.watertheplantapp.const.DEBUG_DIR
 import java.io.File
+import java.util.Date
 
 class LogUtils(val context: Context) {
 
@@ -14,7 +15,9 @@ class LogUtils(val context: Context) {
             outputDir.mkdir()
         }
         val outputFile = File(outputDir, fileName)
-        val currentTime = SimpleDateFormat.getDateTimeInstance().toString()
+
+        val simpleDateTimeFormat = SimpleDateFormat.getDateTimeInstance()
+        val currentTime = simpleDateTimeFormat.format(Date())
 
         try {
             outputFile.appendText("$currentTime - $input\n")

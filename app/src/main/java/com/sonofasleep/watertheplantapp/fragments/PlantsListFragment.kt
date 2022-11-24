@@ -18,8 +18,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.BuildConfig
 import androidx.work.WorkInfo
+import com.sonofasleep.watertheplantapp.BuildConfig
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
