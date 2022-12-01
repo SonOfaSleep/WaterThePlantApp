@@ -13,6 +13,7 @@
     <string name="choose_plant_name">Choose plant name</string>
     <string name="choose_icon">Choose icon</string>
     <string name="reminder_frequency_int_days">Reminder frequency: %1$d %2$s</string>
+    <string name="reminder_frequency_hour_min">Watering time: %1$s</string>
     <string name="image_of_plant">Image of plant</string>
     <string name="search_hint">Search plant names</string>
 
@@ -33,4 +34,6 @@
 
     <string name="channel_name" translatable="false">Plant reminder channel</string>
     <string name="channel_description" translatable="false">Plant reminder</string>
+    <string name="default_time" translatable="false">10:00</string>
+    <string name="choose_time">Set notification time:</string>
 </resources>

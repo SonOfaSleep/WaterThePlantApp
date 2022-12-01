@@ -135,38 +135,37 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         /**
          * Work-manager logs
          */
-
-        val logUtils = LogUtils(requireContext())
-        if (BuildConfig.DEBUG) {
-            viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
-                if (!workInfoList.isNullOrEmpty()) {
-                    var working = 0
-                    val noWorkString = "No work in progress\n"
-                    val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
-
-                    for (workInfo in workInfoList) {
-                        if (workInfo.state in enqueuedOrRun) working++
-
-                        val allPlants = viewModel.allPlants.value
-                        val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
-
-                        when (workInfo.state) {
-                            WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
-                                val logString =
-                                    "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}\n"
-                                Log.d(DEBUG_TAG, logString)
-                                logUtils.saveLogToFile(logString)
-                            }
-                            else -> continue
-                        }
-                    }
-                    if (working == 0) {
-                        Log.d(DEBUG_TAG, noWorkString)
-                        logUtils.saveLogToFile(noWorkString)
-                    }
-                }
-            }
-        }
+//        val logUtils = LogUtils(requireContext())
+//        if (BuildConfig.DEBUG) {
+//            viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
+//                if (!workInfoList.isNullOrEmpty()) {
+//                    var working = 0
+//                    val noWorkString = "No work in progress\n"
+//                    val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
+//
+//                    for (workInfo in workInfoList) {
+//                        if (workInfo.state in enqueuedOrRun) working++
+//
+//                        val allPlants = viewModel.allPlants.value
+//                        val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
+//
+//                        when (workInfo.state) {
+//                            WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
+//                                val logString =
+//                                    "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}\n"
+//                                Log.d(DEBUG_TAG, logString)
+//                                logUtils.saveLogToFile(logString)
+//                            }
+//                            else -> continue
+//                        }
+//                    }
+//                    if (working == 0) {
+//                        Log.d(DEBUG_TAG, noWorkString)
+//                        logUtils.saveLogToFile(noWorkString)
+//                    }
+//                }
+//            }
+//        }
     }
 
     override fun onDestroyView() {

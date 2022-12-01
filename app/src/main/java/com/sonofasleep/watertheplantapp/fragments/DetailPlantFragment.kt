@@ -70,8 +70,6 @@ class DetailPlantFragment : Fragment() {
 
         // Delete button action
         binding.deleteButton.setOnClickListener {
-//            viewModel.deletePlant(plant)
-//            findNavController().navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
             deleteAlertDialog()
         }
 
@@ -101,7 +99,7 @@ class DetailPlantFragment : Fragment() {
                     dialogInterface.cancel()
                 }
                 setPositiveButton(R.string.alert_dialog_button_ok) { _, _ ->
-                    viewModel.deletePlantCancelWork(plant)
+                    viewModel.deletePlantCancelAlarm(plant)
                     findNavController()
                         .navigate(R.id.action_detailPlantFragment_to_plantsListFragment)
                 }
@@ -125,6 +123,10 @@ class DetailPlantFragment : Fragment() {
                 ) ?: "Ups, something went wrong"
             )
             notesText.text = plant.description
+            wateringTime.text = getString(
+                R.string.reminder_frequency_hour_min,
+                viewModel.timeFormat(plant.timeHour, plant.timeMin)
+            )
         }
     }
 }

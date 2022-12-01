@@ -3,7 +3,9 @@ package com.sonofasleep.watertheplantapp.adapters
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,27 +35,54 @@ class PlantsAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         val switch = binding.notifSwitch
+        val wateringButton = binding.waterCheckButton
 
-        fun bind(plant: Plant) {
+        fun bind(plant: Plant, viewModel: PlantViewModel) {
             binding.apply {
+
                 plantName.text = plant.name
-                wateringType.text = itemView.context
-                    .getString(
-                        R.string.reminder_frequency_int_days,
-                        plant.reminderFrequency,
-                        getPlural(plant.reminderFrequency)
-                    )
-                if (plant.notifications) {
-                    notifSwitch.isChecked = true
-                    cardImage.clearColorFilter()
+
+                if (plant.timeToWater) {
+                    waterCheckButton.visibility = View.VISIBLE
+                    notifSwitch.visibility = View.INVISIBLE
+                    wateringType.visibility = View.INVISIBLE
+                    wateringTime.visibility = View.INVISIBLE
+                    wateringReminder.visibility = View.VISIBLE
+                    wateringJoke.visibility = View.VISIBLE
+
+                    // TODO Set different image when needs watering
                     cardImage.setImageResource(plant.image)
                 } else {
-                    notifSwitch.isChecked = false
-                    cardImage.setImageResource(plant.image)
-                    val colorMatrix = ColorMatrix()
-                    colorMatrix.setSaturation(0F)
-                    val filter = ColorMatrixColorFilter(colorMatrix)
-                    cardImage.colorFilter = filter
+                    waterCheckButton.visibility = View.INVISIBLE
+                    notifSwitch.visibility = View.VISIBLE
+                    wateringType.visibility = View.VISIBLE
+                    wateringTime.visibility = View.VISIBLE
+                    wateringReminder.visibility = View.INVISIBLE
+                    wateringJoke.visibility = View.INVISIBLE
+
+                    wateringType.text = itemView.context
+                        .getString(
+                            R.string.reminder_frequency_int_days,
+                            plant.reminderFrequency,
+                            getPlural(plant.reminderFrequency)
+                        )
+                    wateringTime.text = itemView.context.getString(
+                        R.string.reminder_frequency_hour_min,
+                        viewModel.timeFormat(plant.timeHour, plant.timeMin)
+                    )
+
+                    if (plant.notifications) {
+                        notifSwitch.isChecked = true
+                        cardImage.clearColorFilter()
+                        cardImage.setImageResource(plant.image)
+                    } else {
+                        notifSwitch.isChecked = false
+                        cardImage.setImageResource(plant.image)
+                        val colorMatrix = ColorMatrix()
+                        colorMatrix.setSaturation(0F)
+                        val filter = ColorMatrixColorFilter(colorMatrix)
+                        cardImage.colorFilter = filter
+                    }
                 }
             }
         }
@@ -82,6 +111,12 @@ class PlantsAdapter(
             viewModel.switchWork(currentPlant)
         }
 
-        holder.bind(currentPlant)
+        holder.wateringButton.setOnClickListener {
+            holder.itemView.isClickable = false
+            it.isClickable = false
+            viewModel.wateringDone(currentPlant)
+        }
+
+        holder.bind(currentPlant, viewModel)
     }
 }

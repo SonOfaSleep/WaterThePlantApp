@@ -1,6 +1,7 @@
 package com.sonofasleep.watertheplantapp.fragments
 
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -12,6 +13,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantIconAdapter
@@ -37,6 +40,9 @@ class AddPlantFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var plant: Plant
 
+    // Default plant time
+    private var plantTimeHours: Int = 10
+    private var plantTimeMinutes: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,10 +80,11 @@ class AddPlantFragment : Fragment() {
          * If plantId is >0 than it's edit not new one
          */
         if (plantId > 0) {
-
             // Observing liveData plant and binding it to UI
             viewModel.getPlant(plantId).observe(this.viewLifecycleOwner) {
                 plant = it
+                plantTimeHours = plant.timeHour
+                plantTimeMinutes = plant.timeMin
                 recyclerView.adapter =
                     PlantIconAdapter(viewModel, IconSource.imageList, PlantIconItem(plant.image))
                 bindPlant(plant)
@@ -85,6 +92,30 @@ class AddPlantFragment : Fragment() {
         } else {
             recyclerView.adapter = PlantIconAdapter(viewModel, IconSource.imageList)
             binding.saveButton.setOnClickListener { addPlant() }
+        }
+
+        binding.timeButton.setOnClickListener {
+            createTimePicker()
+        }
+    }
+
+    private fun createTimePicker() {
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
+        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(clockFormat)
+            .setHour(plantTimeHours)
+            .setMinute(plantTimeMinutes)
+            .setTitleText(R.string.choose_time)
+            .build()
+        picker.show(childFragmentManager, "timePicker")
+
+        picker.addOnPositiveButtonClickListener {
+            plantTimeHours = picker.hour
+            plantTimeMinutes = picker.minute
+
+            binding.timeButton.text = viewModel.timeFormat(plantTimeHours, plantTimeMinutes)
         }
     }
 
@@ -94,6 +125,7 @@ class AddPlantFragment : Fragment() {
             nameEditText.setText(plant.name, TextView.BufferType.SPANNABLE)
             notesEditText.setText(plant.description, TextView.BufferType.SPANNABLE)
             wateringSlider.value = plant.reminderFrequency.toFloat()
+            timeButton.text = viewModel.timeFormat(plant.timeHour, plant.timeMin)
 
             saveButton.setOnClickListener { updatePlant() }
         }
@@ -101,12 +133,14 @@ class AddPlantFragment : Fragment() {
 
     private fun updatePlant() {
         if (checkEntry()) {
-            viewModel.updatePlantAndWork(
+            viewModel.updatePlantAndAlarm(
                 id = navArgs.plantId,
                 image = viewModel.icon.value!!.image,
                 name = binding.nameEditText.text.toString(),
                 notes = binding.notesEditText.text.toString(),
                 reminderFrequency = binding.wateringSlider.value.toInt(),
+                timeHours = plantTimeHours,
+                timeMinutes = plantTimeMinutes,
                 oldPlant = plant
             )
         }
@@ -117,11 +151,13 @@ class AddPlantFragment : Fragment() {
     private fun addPlant() {
         // Checking if plant is valid than adding it to room
         if (checkEntry()) {
-            viewModel.insertPlantStartWork(
+            viewModel.insertPlantStartAlarm(
                 viewModel.icon.value!!.image,
                 binding.nameEditText.text.toString(),
                 binding.wateringSlider.value.toInt(),
-                binding.notesEditText.text.toString()
+                binding.notesEditText.text.toString(),
+                plantTimeHours,
+                plantTimeMinutes
             )
             viewModel.resetIcon()
             findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)

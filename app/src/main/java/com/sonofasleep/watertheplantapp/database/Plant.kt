@@ -3,9 +3,8 @@ package com.sonofasleep.watertheplantapp.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.UUID
 
-@Entity(tableName = "PlantsTable")
+@Entity(tableName = "plants_table")
 data class Plant(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
@@ -14,6 +13,11 @@ data class Plant(
     @ColumnInfo(name = "reminder_frequency")
     val reminderFrequency: Int,
     val description: String = "",
-    val notifications: Boolean = false,
-    val workId: UUID? = null
+    val notifications: Boolean = true,
+    @ColumnInfo(name = "time_hour")
+    val timeHour: Int = 10,
+    @ColumnInfo(name = "time_min")
+    val timeMin: Int = 0,
+    @ColumnInfo(name = "time_to_water")
+    val timeToWater: Boolean = false
 )

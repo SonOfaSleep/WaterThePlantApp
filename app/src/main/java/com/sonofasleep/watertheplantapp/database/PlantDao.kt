@@ -11,17 +11,20 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlantDao {
 
-    @Query("SELECT * FROM PlantsTable ORDER BY name ASC")
+    @Query("SELECT * FROM plants_table ORDER BY name ASC")
     fun getAllOrderedASC(): Flow<List<Plant>>
 
-    @Query("SELECT * FROM PlantsTable ORDER BY name DESC")
+    @Query("SELECT * FROM plants_table ORDER BY name DESC")
     fun getAllOrderedDESC(): Flow<List<Plant>>
 
-    @Query("SELECT * FROM PlantsTable WHERE name LIKE :name")
+    @Query("SELECT * FROM plants_table WHERE name LIKE :name")
     fun findByName(name: String): Flow<List<Plant>>
 
-    @Query("SELECT * FROM PlantsTable WHERE id = :id")
-    fun getPlantById(id: Long): Flow<Plant>
+    @Query("SELECT * FROM plants_table WHERE id = :id")
+    fun getPlantByIdAsFlow(id: Long): Flow<Plant>
+
+    @Query("SELECT * FROM plants_table WHERE id = :id")
+    fun getPlantById(id: Long): Plant
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewPlant(plant: Plant): Long

@@ -14,6 +14,7 @@
     <string name="choose_plant_name">Выберите имя цветка</string>
     <string name="choose_icon">Выберите иконку</string>
     <string name="reminder_frequency_int_days">Частота напоминаний: %1$d %2$s</string>
+    <string name="reminder_frequency_hour_min">Время полива: %1$s</string>
     <string name="image_of_plant">Изображение цветка</string>
     <string name="search_hint">Поиск по имени цветка</string>
 
@@ -34,4 +35,5 @@
     <string name="alert_dialog_button_ok">Удалить</string>
     <string name="alert_dialog_button_cancel">Отмена</string>
     <string name="reminder_text">Меня пора полить!</string>
+    <string name="choose_time">Выберите время напоминания:</string>
 </resources>
