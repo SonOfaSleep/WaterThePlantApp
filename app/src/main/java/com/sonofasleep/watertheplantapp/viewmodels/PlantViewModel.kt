@@ -90,7 +90,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
         // If delay is 1 day we add zero, if 2 days add one more day etc.
         timeUntilAlarm += dayInMillis * (plant.reminderFrequency - 1)
 
-        alarmManager.setExact(
+        alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             timeUntilAlarm,
             createAlarmIntent(plant, plantId)
