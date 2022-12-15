@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,6 +23,8 @@ import com.sonofasleep.watertheplantapp.data.IconSource
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
+import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
+import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 
@@ -29,8 +32,8 @@ class AddPlantFragment : Fragment() {
     private var _binding: FragmentAddPlantBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PlantViewModel by activityViewModels {
-        PlantViewModelFactory(
+    private val viewModel: AddNewPlantViewModel by viewModels {
+        AddNewPlantViewModelFactory(
             (activity?.application as PlantApplication).database.plantDao(),
             activity?.application as PlantApplication
         )

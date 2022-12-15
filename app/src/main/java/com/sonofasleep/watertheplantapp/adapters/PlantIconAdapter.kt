@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.databinding.PlantImageCardBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
+import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 
 /**
@@ -12,7 +13,7 @@ import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
  * Also it's holds reference to viewModel for storing selected image.
  */
 class PlantIconAdapter(
-    private val viewModel: PlantViewModel,
+    private val viewModel: AddNewPlantViewModel,
     private val plantIconsList: List<PlantIconItem>,
     private var selectedIcon: PlantIconItem? = null
 ) : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
