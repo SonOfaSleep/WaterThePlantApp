@@ -51,6 +51,7 @@ class PlantsAdapter(
                     wateringJoke.visibility = View.VISIBLE
 
                     // TODO Set different image when needs watering
+                    cardImage.clearColorFilter()
                     cardImage.setImageResource(plant.image)
                 } else {
                     waterCheckButton.visibility = View.INVISIBLE
