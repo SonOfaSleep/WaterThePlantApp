@@ -38,7 +38,6 @@
                 android:layout_marginTop="@dimen/sixteen_dp_margin"
                 android:gravity="start"
                 android:text="@string/choose_plant_icon"
-                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,7 +104,6 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="@dimen/sixteen_dp_margin"
                 android:text="@string/choose_notification_periodicity_days"
-                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filledNotes" />
 
@@ -127,14 +125,14 @@
 
             <Button
                 android:id="@+id/timeButton"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/sixteen_dp_margin"
                 android:text="@string/default_time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/watering_slider"
-                app:layout_constraintTop_toTopOf="@id/watering_slider"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
+                app:layout_constraintTop_toTopOf="@id/watering_slider" />
 
             <Button
                 android:id="@+id/save_button"

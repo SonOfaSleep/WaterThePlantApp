@@ -95,6 +95,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     }
 
     fun timeFormat(hour: Int, min: Int): String = String.format("%02d:%02d", hour, min)
+    fun parseHour(time: String): Int = time.split(":").first().toInt()
+    fun parseMinutes(time: String): Int = time.split(":").last().toInt()
 }
 
 class AddNewPlantViewModelFactory(
