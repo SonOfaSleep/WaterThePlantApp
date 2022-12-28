@@ -129,10 +129,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/sixteen_dp_margin"
-                android:text="@string/default_time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/watering_slider"
-                app:layout_constraintTop_toTopOf="@id/watering_slider" />
+                app:layout_constraintTop_toTopOf="@id/watering_slider"
+                tools:text="10:00" />
 
             <Button
                 android:id="@+id/save_button"

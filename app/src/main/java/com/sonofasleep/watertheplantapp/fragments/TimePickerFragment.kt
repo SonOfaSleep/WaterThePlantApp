@@ -8,9 +8,11 @@ import android.widget.Button
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import com.sonofasleep.watertheplantapp.R
+import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import java.util.*
 
-class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+class TimePickerFragment(private val viewModel: AddNewPlantViewModel)
+    : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
     private lateinit var calendar: Calendar
 
@@ -35,6 +37,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     override fun onTimeSet(p0: TimePicker?, hour: Int, minutes: Int) {
         val timeButton = activity?.findViewById<Button>(R.id.timeButton)
         timeButton?.text = timeFormat(hour, minutes)
+        viewModel.setPlantTime(hour, minutes)
     }
 }
 

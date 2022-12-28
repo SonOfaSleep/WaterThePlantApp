@@ -14,10 +14,33 @@ import kotlinx.coroutines.launch
 class AddNewPlantViewModel(private val dao: PlantDao, private val application: Application) :
     ViewModel() {
 
+    // For first entering addFragment ONLY (true = first time; every other time it will be false)
+    private val _init = MutableLiveData<Boolean>(true)
+    val init: LiveData<Boolean> = _init
+
+    // Old plant is needed for canceling alarm
+    private val _oldPlant = MutableLiveData<Plant?>(null)
+    val oldPlant: LiveData<Plant?> = _oldPlant
+
     // For plant icon choose in recyclerView
     // When not in AddPlantFragment icon is null
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
+
+    private val _name = MutableLiveData<String?>(null)
+    val name: LiveData<String?> = _name
+
+    private val _notes = MutableLiveData<String?>(null)
+    val notes: LiveData<String?> = _notes
+
+    private val _sliderValue = MutableLiveData<Int>(1)
+    val sliderValue: LiveData<Int> = _sliderValue
+
+    // Time values for plant
+    private val _hour = MutableLiveData<Int>(10)
+    val hour: LiveData<Int> = _hour
+    private val _minutes = MutableLiveData<Int>(0)
+    val minutes: LiveData<Int> = _minutes
 
     // AlarmManager instance
     private val alarmManager: AlarmManager = application.applicationContext
@@ -25,19 +48,53 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
 
+    fun setInitFalse() {
+        _init.value = false
+    }
+
+    fun setOldPlant(plant: Plant) {
+        _oldPlant.value = plant
+    }
+
     fun setPlantIcon(item: PlantIconItem) {
         _icon.value = item
     }
 
-    fun resetIcon() {
+    fun setName(name: String) {
+        _name.value = name
+    }
+
+    fun setNotes(notes: String) {
+        _notes.value = notes
+    }
+
+    fun setSliderValue(value: Int) {
+        _sliderValue.value = value
+    }
+
+    fun setPlantTime(hour: Int, minutes: Int) {
+        _hour.value = hour
+        _minutes.value = minutes
+    }
+
+    fun resetFragmentValues() {
+        _init.value = true
+        _oldPlant.value = null
         _icon.value = null
+        _name.value = null
+        _notes.value = null
+        _sliderValue.value = 1
+        _hour.value = 10
+        _minutes.value = 0
     }
 
     fun isIconNotNull(): Boolean = _icon.value != null
 
     fun isNameValid(name: String): Boolean = name.isNotBlank()
 
-    fun getPlant(id: Long): LiveData<Plant> = dao.getPlantByIdAsFlow(id).asLiveData()
+    fun getPlantAsLiveData(id: Long): LiveData<Plant> = dao.getPlantByIdAsFlow(id).asLiveData()
+
+    fun getPlant(id: Long): Plant = dao.getPlantById(id)
 
     fun insertPlantStartAlarm(
         image: Int,
@@ -95,8 +152,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     }
 
     fun timeFormat(hour: Int, min: Int): String = String.format("%02d:%02d", hour, min)
-    fun parseHour(time: String): Int = time.split(":").first().toInt()
-    fun parseMinutes(time: String): Int = time.split(":").last().toInt()
+    fun getTime(): String = timeFormat(hour.value!!, minutes.value!!)
 }
 
 class AddNewPlantViewModelFactory(
