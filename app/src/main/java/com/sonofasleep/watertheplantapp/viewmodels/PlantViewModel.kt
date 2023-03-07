@@ -2,23 +2,13 @@ package com.sonofasleep.watertheplantapp.viewmodels
 
 import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
-import com.sonofasleep.watertheplantapp.alarm.AlarmReceiver
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
-import com.sonofasleep.watertheplantapp.const.PLANT_ICON
-import com.sonofasleep.watertheplantapp.const.PLANT_ID
-import com.sonofasleep.watertheplantapp.const.PLANT_NAME
 import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
-import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*

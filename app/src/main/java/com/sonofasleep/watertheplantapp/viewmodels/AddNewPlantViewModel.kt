@@ -30,7 +30,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val _name = MutableLiveData<String?>(null)
     val name: LiveData<String?> = _name
 
-    private val _notes = MutableLiveData<String?>(null)
+    private val _notes = MutableLiveData<String?>("")
     val notes: LiveData<String?> = _notes
 
     private val _sliderValue = MutableLiveData<Int>(1)
@@ -46,7 +46,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val alarmManager: AlarmManager = application.applicationContext
         .getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
+    private val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
 
     fun setInitFalse() {
         _init.value = false
@@ -82,7 +82,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _oldPlant.value = null
         _icon.value = null
         _name.value = null
-        _notes.value = null
+        _notes.value = ""
         _sliderValue.value = 1
         _hour.value = 10
         _minutes.value = 0

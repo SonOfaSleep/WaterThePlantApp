@@ -1,13 +1,17 @@
 package com.sonofasleep.watertheplantapp.fragments
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,7 +23,7 @@ import com.google.android.material.slider.Slider
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantIconAdapter
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
+import com.sonofasleep.watertheplantapp.const.NOTIFICATION_REQUEST_CODE
 import com.sonofasleep.watertheplantapp.data.IconSource
 import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
@@ -95,10 +99,6 @@ class AddPlantFragment : Fragment() {
             bindPlant()
         }
 
-        viewModel.name.observe(this.viewLifecycleOwner) {
-            Log.d(DEBUG_TAG, "Name is = $it")
-        }
-
         binding.nameEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -126,12 +126,19 @@ class AddPlantFragment : Fragment() {
         }
 
         binding.saveButton.setOnClickListener {
+
+            if (Build.VERSION.SDK_INT >= 33) {
+                if (!checkForNotificationPermission()) {
+                    askForNotificationPermission()
+                }
+            }
+
+            // Plant will be created no matter the user answer and i decided to not wait for him
             if (plantId > 0) updatePlant() else addPlant()
         }
     }
 
     private fun bindPlant() {
-        Log.d(DEBUG_TAG, "binding")
         recyclerView.adapter = PlantIconAdapter(
             viewModel,
             IconSource.imageList,
@@ -145,14 +152,32 @@ class AddPlantFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkForNotificationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            android.Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun askForNotificationPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+            NOTIFICATION_REQUEST_CODE
+        )
+    }
+
     private fun updatePlant() {
         if (checkEntry()) {
             viewModel.updatePlantAndAlarm(
                 id = navArgs.plantId,
                 image = viewModel.icon.value!!.image,
-                name = binding.nameEditText.text.toString(),
-                notes = binding.notesEditText.text.toString(),
-                reminderFrequency = binding.wateringSlider.value.toInt(),
+                name = viewModel.name.value!!,
+                notes = viewModel.notes.value!!,
+                reminderFrequency = viewModel.sliderValue.value!!,
                 timeHours = viewModel.hour.value!!,
                 timeMinutes = viewModel.minutes.value!!,
                 oldPlant = viewModel.oldPlant.value!!
@@ -167,9 +192,9 @@ class AddPlantFragment : Fragment() {
         if (checkEntry()) {
             viewModel.insertPlantStartAlarm(
                 viewModel.icon.value!!.image,
-                binding.nameEditText.text.toString(),
-                binding.wateringSlider.value.toInt(),
-                binding.notesEditText.text.toString(),
+                viewModel.name.value!!,
+                viewModel.sliderValue.value!!,
+                viewModel.notes.value!!,
                 viewModel.hour.value!!,
                 viewModel.minutes.value!!
             )

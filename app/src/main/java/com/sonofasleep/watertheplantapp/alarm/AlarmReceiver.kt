@@ -24,7 +24,6 @@ class AlarmReceiver : BroadcastReceiver() {
     lateinit var dao: PlantDao
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val notificationId = 1988
         val logUtils = LogUtils(context!!)
 
         val icon = intent?.getIntExtra(PLANT_ICON, R.drawable.ic_launcher_foreground)
@@ -64,7 +63,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
             with(NotificationManagerCompat.from(context)) {
                 // notificationId is a unique int for each notification that you must define
-                notify(notificationId, builder.build())
+                notify(plantID!!.toInt(), builder.build())
             }
 
             /**

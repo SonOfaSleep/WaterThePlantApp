@@ -13,3 +13,6 @@ const val DEBUG_DIR = "Debug_logs"
 const val PLANT_ICON = "plantIcon"
 const val PLANT_NAME = "plantName"
 const val PLANT_ID = "plantID"
+
+// For POST_NOTIFICATIONS permission
+const val NOTIFICATION_REQUEST_CODE = 123
