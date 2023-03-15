@@ -3,7 +3,10 @@ package com.sonofasleep.watertheplantapp.viewmodels
 import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.work.*
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
 import com.sonofasleep.watertheplantapp.data.DataStoreRepository
@@ -21,7 +24,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     val sortTypeIsASC: LiveData<Boolean> = dataStore.readSortType.asLiveData()
 
     // List of all plants (observing isSortASC preference in data store)
-    val allPlants: LiveData<List<Plant>> = Transformations.switchMap(sortTypeIsASC) {
+    val allPlants: LiveData<List<Plant>> = sortTypeIsASC.switchMap {
         when (it) {
             true -> dao.getAllOrderedASC().asLiveData()
             else -> dao.getAllOrderedDESC().asLiveData()
@@ -30,7 +33,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
 
     // List of all searched plants
     private val searchQuery = MutableLiveData<String>()
-    val searchResults: LiveData<List<Plant>> = Transformations.switchMap(searchQuery) {
+    val searchResults: LiveData<List<Plant>> = searchQuery.switchMap {
         getSearchResult(it)
     }
 
