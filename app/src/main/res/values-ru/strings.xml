@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Поливака</string>
+    <string name="app_name">WaterIt</string>
     <string name="action_settings">Настройки</string>
     <string name="search">Поиск</string>
     <string name="sorting_plants_alphabetically">Сортировать по имени</string>
-    <string name="new_plant">Новый цветок</string>
-    <string name="choose_plant_icon">Выберите иконку цветка:</string>
-    <string name="plant_name">Имя цветка</string>
-    <string name="notes">Заметки</string>
-    <string name="choose_notification_periodicity_days">Выберите частоту напоминаний (дней):</string>
-    <string name="save">Сохранить</string>
+    <string name="choose_plant_icon">Иконка</string>
+    <string name="plant_name">Имя</string>
+    <string name="notes">Особенности ухода</string>
+    <string name="choose_notification_periodicity_days">Частота и время напоминаний</string>
+    <string name="save">Добавить</string>
     <string name="choose_icon_and_name">Выберите иконку и имя цветка</string>
     <string name="choose_plant_name">Выберите имя цветка</string>
     <string name="choose_icon">Выберите иконку</string>
-    <string name="reminder_frequency_int_days">Частота напоминаний: %1$d %2$s</string>
-    <string name="reminder_frequency_hour_min">Время полива: %1$s</string>
+    <string name="reminder_frequency_int_days">%1$d %2$s</string>
+    <string name="reminder_frequency_hour_min">%1$s</string>
     <string name="image_of_plant">Изображение цветка</string>
     <string name="search_hint">Поиск по имени цветка</string>
 
@@ -26,14 +25,17 @@
     </plurals>
 
     <string name="notes_sub_header">Заметки:</string>
-    <string name="delete_button_text">УДАЛИТЬ</string>
-    <string name="edit_button_text">ИЗМЕНИТЬ</string>
+    <string name="delete_button_text">Удалить</string>
+    <string name="edit_button_text">Изменить</string>
 
     <string name="add_plant_button">Кнопка добавить цветок</string>
     <string name="alert_dialog_title">Удалить цветок?</string>
     <string name="alert_dialog_text">Вы не сможете восстановить удаленный цветок!</string>
     <string name="alert_dialog_button_ok">Удалить</string>
     <string name="alert_dialog_button_cancel">Отмена</string>
-    <string name="reminder_text">Меня пора полить!</string>
+    <string name="reminder_text">Уже время меня полить</string>
     <string name="choose_time">Выберите время напоминания:</string>
+    <string name="welcome_text_1">Привет!</string>
+    <string name="welcome_text_2">Добавь свой первый\nцветок</string>
+    <string name="new_plant_toolbar_title">Новый цветок</string>
 </resources>

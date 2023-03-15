@@ -7,19 +7,8 @@
     android:orientation="vertical"
     tools:context=".fragments.AddPlantFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/material_toolbar"
-        style="@style/myToolbarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/plant_list_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
-
-    </com.google.android.material.appbar.MaterialToolbar>
+    <include layout="@layout/main_toolbar"
+        android:id="@+id/toolbar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,6 +44,38 @@
                 app:layout_constraintTop_toBottomOf="@id/choose_image_text"
                 tools:listitem="@layout/plant_image_card" />
 
+
+<!--            <com.google.android.material.card.MaterialCardView-->
+<!--                android:id="@+id/name_card_view"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="@dimen/sixteen_dp_margin"-->
+<!--                app:cardElevation="4dp"-->
+<!--                app:cardCornerRadius="@dimen/view_corner_radius"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/recycler_view">-->
+
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:id="@+id/filledPlantName"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    style="@style/InputTextField"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:hint="@string/plant_name"-->
+<!--                    android:clipToPadding="true"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/recycler_view">-->
+
+<!--                    <com.google.android.material.textfield.TextInputEditText-->
+<!--                        android:id="@+id/name_edit_text"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:inputType="textCapSentences"-->
+<!--                        android:singleLine="true" />-->
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
+<!--            </com.google.android.material.card.MaterialCardView>-->
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filledPlantName"
                 style="@style/InputTextField"
@@ -72,7 +93,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
                     android:singleLine="true" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -91,63 +111,110 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine|textCapSentences"
-                    android:lines="3"
-                    android:maxLines="3" />
+                    android:lines="5" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/slider_hint"
-                style="@style/myCaptionTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="@dimen/sixteen_dp_margin"
-                android:text="@string/choose_notification_periodicity_days"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filledNotes" />
-
-
-            <com.google.android.material.slider.Slider
-                android:id="@+id/watering_slider"
-                style="@style/Theme.WaterThePlantApp.Slider"
-                android:layout_width="0dp"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/time_reminder_bubble"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/sixteen_dp_margin"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="@dimen/sixteen_dp_margin"
-                android:stepSize="1"
-                android:valueFrom="1"
-                android:valueTo="30"
-                app:layout_constraintEnd_toStartOf="@id/timeButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/slider_hint" />
-
-            <Button
-                android:id="@+id/timeButton"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/sixteen_dp_margin"
+                app:cardBackgroundColor="@color/main_background"
+                app:cardCornerRadius="27dp"
+                app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/watering_slider"
-                app:layout_constraintTop_toTopOf="@id/watering_slider"
-                tools:text="10:00" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filledNotes">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/slider_hint"
+                        style="@style/myCaptionTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/left_margin"
+                        android:layout_marginTop="@dimen/sixteen_dp_margin"
+                        android:text="@string/choose_notification_periodicity_days"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/callendar_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/left_margin"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_calendar_24"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/slider_hint" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/watering_slider"
+                        style="@style/Theme.WaterThePlantApp.Slider"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/sixteen_dp_margin"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="@dimen/sixteen_dp_margin"
+                        android:stepSize="1"
+                        android:valueFrom="1"
+                        android:valueTo="30"
+                        app:layout_constraintBottom_toBottomOf="@id/callendar_icon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/callendar_icon"
+                        app:layout_constraintTop_toBottomOf="@id/slider_hint" />
+
+                    <ImageView
+                        android:id="@+id/clock_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/left_margin"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="@dimen/sixteen_dp_margin"
+                        android:src="@drawable/ic_time_24"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/callendar_icon" />
+
+                    <Button
+                        android:id="@+id/timeButton"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="@id/clock_icon"
+                        app:layout_constraintStart_toEndOf="@id/clock_icon"
+                        app:layout_constraintTop_toTopOf="@id/clock_icon"
+                        tools:text="10:00" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <Button
                 android:id="@+id/save_button"
+                style="@style/myButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/button_height"
                 android:layout_marginStart="@dimen/sixteen_dp_margin"
                 android:layout_marginTop="@dimen/sixteen_dp_margin"
                 android:layout_marginEnd="@dimen/sixteen_dp_margin"
                 android:text="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/watering_slider" />
-
+                app:layout_constraintTop_toBottomOf="@id/time_reminder_bubble" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
 </LinearLayout>

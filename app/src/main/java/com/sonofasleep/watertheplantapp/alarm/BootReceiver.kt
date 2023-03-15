@@ -4,7 +4,9 @@ import android.app.AlarmManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.getSystemService
+import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.database.PlantDatabase
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +37,7 @@ class BootReceiver : BroadcastReceiver() {
                             alarmUtilities.setExactAlarm(plant, plant.id)
                         }
                     }
+                    Log.d(DEBUG_TAG, "Alarms set anew")
                 }
             }
         }

@@ -6,13 +6,13 @@
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:layout_margin="8dp"
-    android:backgroundTint="@color/orange_50"
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:checkedIconTint="@color/red_300">
+    app:cardCornerRadius="50dp"
+    app:cardElevation="0dp"
+    app:checkedIconMargin="12dp"
+    app:checkedIconTint="@color/accent_color">
 
     <ImageView
         android:id="@+id/card_image"
@@ -20,6 +20,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        tools:src="@drawable/plant1" />
+        tools:src="@drawable/choose_flower_1" />
 
 </com.google.android.material.card.MaterialCardView>

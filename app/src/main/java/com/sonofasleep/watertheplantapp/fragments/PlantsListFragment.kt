@@ -53,10 +53,10 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         // Inflating toolbarMenuLayout and setting sort icon
-        binding.plantListToolbar.inflateMenu(R.menu.menu_main)
+        binding.toolbar.plantListToolbar.inflateMenu(R.menu.menu_main)
 
         // Setting up searchView and onQueryListener
-        val search = binding.plantListToolbar.menu.findItem(R.id.app_bar_search)
+        val search = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
         val searchView = search.actionView as SearchView
         searchView.isSubmitButtonEnabled = true
         searchView.setOnQueryTextListener(this)
@@ -84,6 +84,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         // Showing helper addPlant image when list is empty
         addAllPlantsObserver()
 
+        // RecyclerView adapter
         recyclerView.adapter = adapter
 
         /**
@@ -95,9 +96,9 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
 
                 // Showing elevation of toolbar when can scroll
                 if (recyclerView.canScrollVertically(-1)) {
-                    binding.materialToolbar.elevation = 50f
+                    binding.toolbar.materialToolbar.elevation = 50f
                 } else {
-                    binding.materialToolbar.elevation = 0f
+                    binding.toolbar.materialToolbar.elevation = 0f
                 }
 
                 // Hiding addButton when scrolling down
@@ -110,7 +111,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         })
 
         // Menu item clickListener
-        binding.plantListToolbar.setOnMenuItemClickListener {
+        binding.toolbar.plantListToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.app_bar_sorting -> {
                     isOrderedAscIcon = !isOrderedAscIcon
@@ -169,7 +170,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun setIcon() {
-        val sortItem = binding.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
+        val sortItem = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
         val icon = when (isOrderedAscIcon) {
             true -> R.drawable.ic_sort_asc
             else -> R.drawable.ic_sort_desc
@@ -184,7 +185,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
             Configuration.UI_MODE_NIGHT_NO -> Color.BLACK // Day
             else -> Color.WHITE // Night
         }
-        binding.plantListToolbar.menu.findItem(R.id.app_bar_sorting).icon?.colorFilter =
+        binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting).icon?.colorFilter =
             BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 color,
                 BlendModeCompat.SRC_ATOP
@@ -219,7 +220,13 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun addAllPlantsObserver() {
         if (!viewModel.allPlants.hasObservers()) {
             viewModel.allPlants.observe(this.viewLifecycleOwner) {
-                binding.addPlantReminderImage.isVisible = it.isNullOrEmpty()
+                // Setting welcome image and text visibility
+                val visibility: Int = if (it.isNullOrEmpty()) View.VISIBLE else View.INVISIBLE
+                binding.apply {
+                    addPlantWelcomeImage.visibility = visibility
+                    addPlantWelcomeText1.visibility = visibility
+                    addPlantWelcomeText2.visibility = visibility
+                }
                 adapter.submitList(it)
                 setIcon()
             }

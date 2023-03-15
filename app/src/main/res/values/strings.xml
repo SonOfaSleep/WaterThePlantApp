@@ -1,19 +1,18 @@
 <resources>
-    <string name="app_name">WaterThePlantApp</string>
+    <string name="app_name">WaterIt</string>
     <string name="action_settings">Settings</string>
     <string name="search">Search</string>
     <string name="sorting_plants_alphabetically">Sort plants by name</string>
-    <string name="new_plant">New plant</string>
-    <string name="choose_plant_icon">Choose plant icon:</string>
-    <string name="plant_name">Plant name</string>
-    <string name="notes">Notes</string>
-    <string name="choose_notification_periodicity_days">Select reminder frequency (days):</string>
+    <string name="choose_plant_icon">Icon</string>
+    <string name="plant_name">Name</string>
+    <string name="notes">Care notes</string>
+    <string name="choose_notification_periodicity_days">Frequency and time of reminders</string>
     <string name="save">Save</string>
     <string name="choose_icon_and_name">Choose icon and name of the plant</string>
     <string name="choose_plant_name">Choose plant name</string>
     <string name="choose_icon">Choose icon</string>
-    <string name="reminder_frequency_int_days">Reminder frequency: %1$d %2$s</string>
-    <string name="reminder_frequency_hour_min">Watering time: %1$s</string>
+    <string name="reminder_frequency_int_days">%1$d %2$s</string>
+    <string name="reminder_frequency_hour_min">%1$s</string>
     <string name="image_of_plant">Image of plant</string>
     <string name="search_hint">Search plant names</string>
 
@@ -23,17 +22,20 @@
     </plurals>
 
     <string name="notes_sub_header">Notes:</string>
-    <string name="delete_button_text">DELETE</string>
-    <string name="edit_button_text">EDIT</string>
+    <string name="delete_button_text">Delete</string>
+    <string name="edit_button_text">Edit</string>
     <string name="add_plant_button">Add plant button</string>
     <string name="alert_dialog_title">Delete plant?</string>
     <string name="alert_dialog_text">You will not be able to recover plant after delete!</string>
     <string name="alert_dialog_button_ok">OK</string>
     <string name="alert_dialog_button_cancel">Cancel</string>
-    <string name="reminder_text">It\'s time to water me!</string>
+    <string name="reminder_text">It\'s time to water me</string>
 
     <string name="channel_name" translatable="false">Plant reminder channel</string>
     <string name="channel_description" translatable="false">Plant reminder</string>
     <string name="default_time" translatable="false">10:00</string>
     <string name="choose_time">Set notification time:</string>
+    <string name="welcome_text_1">Hello!</string>
+    <string name="welcome_text_2">Add your first plant</string>
+    <string name="new_plant_toolbar_title">New plant</string>
 </resources>

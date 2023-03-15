@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.MaterialToolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/material_toolbar"
+    style="@style/myToolbarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.WaterThePlantApp.AppBarOverlay">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/plant_list_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:titleTextAppearance="@style/myToolbarTextStyle"
+        tools:menu="@menu/menu_main"
+        tools:title="@string/app_name" />
+</com.google.android.material.appbar.MaterialToolbar>

@@ -27,7 +27,7 @@
     <fragment
         android:id="@+id/addPlantFragment"
         android:name="com.sonofasleep.watertheplantapp.fragments.AddPlantFragment"
-        android:label="@string/app_name"
+        android:label="@string/new_plant_toolbar_title"
         tools:layout="@layout/fragment_add_plant">
         <action
             android:id="@+id/action_addPlantFragment_to_plantsListFragment"

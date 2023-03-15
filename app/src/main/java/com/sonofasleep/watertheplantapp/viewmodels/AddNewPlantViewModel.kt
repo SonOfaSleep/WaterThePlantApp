@@ -97,7 +97,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     fun getPlant(id: Long): Plant = dao.getPlantById(id)
 
     fun insertPlantStartAlarm(
-        image: Int,
+        image: PlantIconItem,
         name: String,
         reminderFrequency: Int,
         notes: String,
@@ -123,7 +123,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     fun updatePlantAndAlarm(
         id: Long,
-        image: Int,
+        image: PlantIconItem,
         name: String,
         notes: String,
         reminderFrequency: Int,

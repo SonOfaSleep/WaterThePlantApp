@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -29,6 +30,7 @@ import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
+import java.util.Calendar
 
 class AddPlantFragment : Fragment() {
     private var _binding: FragmentAddPlantBinding? = null
@@ -61,11 +63,11 @@ class AddPlantFragment : Fragment() {
         val plantId = navArgs.plantId
 
         // Inflating toolbarMenuLayout
-        binding.plantListToolbar.inflateMenu(R.menu.menu_main)
+        binding.toolbar.plantListToolbar.inflateMenu(R.menu.menu_main)
 
         // Hiding buttons
-        val searchButton = binding.plantListToolbar.menu.findItem(R.id.app_bar_search)
-        val sortButton = binding.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
+        val searchButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
+        val sortButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
         searchButton.isVisible = false
         sortButton.isVisible = false
 
@@ -77,6 +79,16 @@ class AddPlantFragment : Fragment() {
             .setupWithNavController(navController, appBarConfiguration)
 
         /**
+         * Setting different fonts for the label and input text
+         * Changing it in xml don't work ¯\_(ツ)_/¯
+         */
+        val typeface = getFont(requireContext(), R.font.montserrat_alternates_bold)
+        binding.apply {
+            filledPlantName.typeface = typeface
+            filledNotes.typeface = typeface
+        }
+
+        /**
          * If plantId is > 0 than it's edit not new one
          * viewModel.init is true only at first enter. We need it for updating viewModels values
          * when editing plant.
@@ -86,7 +98,7 @@ class AddPlantFragment : Fragment() {
             viewModel.getPlantAsLiveData(plantId).observe(this.viewLifecycleOwner) { plant ->
                 viewModel.apply {
                     setOldPlant(plant)
-                    setPlantIcon(PlantIconItem(plant.image))
+                    setPlantIcon(PlantIconItem(plant.image.iconNormal, plant.image.iconDry))
                     setName(plant.name)
                     setNotes(plant.description)
                     setSliderValue(plant.reminderFrequency)
@@ -96,6 +108,12 @@ class AddPlantFragment : Fragment() {
                 bindPlant()
             }
         } else {
+            // Current time for time button in new plant creation
+            val calendar = Calendar.getInstance()
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minutes = calendar.get(Calendar.MINUTE)
+            viewModel.setPlantTime(hour, minutes)
+
             bindPlant()
         }
 
@@ -174,7 +192,7 @@ class AddPlantFragment : Fragment() {
         if (checkEntry()) {
             viewModel.updatePlantAndAlarm(
                 id = navArgs.plantId,
-                image = viewModel.icon.value!!.image,
+                image = viewModel.icon.value!!,
                 name = viewModel.name.value!!,
                 notes = viewModel.notes.value!!,
                 reminderFrequency = viewModel.sliderValue.value!!,
@@ -191,7 +209,7 @@ class AddPlantFragment : Fragment() {
         // Checking if plant is valid than adding it to room
         if (checkEntry()) {
             viewModel.insertPlantStartAlarm(
-                viewModel.icon.value!!.image,
+                viewModel.icon.value!!,
                 viewModel.name.value!!,
                 viewModel.sliderValue.value!!,
                 viewModel.notes.value!!,

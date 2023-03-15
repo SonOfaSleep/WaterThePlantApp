@@ -1,14 +1,17 @@
 package com.sonofasleep.watertheplantapp.database
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sonofasleep.watertheplantapp.model.PlantIconItem
 
 @Entity(tableName = "plants_table")
 data class Plant(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
-    val image: Int,
+    @Embedded
+    val image: PlantIconItem,
     val name: String,
     @ColumnInfo(name = "reminder_frequency")
     val reminderFrequency: Int,

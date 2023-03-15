@@ -1,5 +1,6 @@
 package com.sonofasleep.watertheplantapp.adapters
 
+import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
@@ -43,16 +44,19 @@ class PlantsAdapter(
                 plantName.text = plant.name
 
                 if (plant.timeToWater) {
+                    wateringReminder.visibility = View.VISIBLE
+                    wateringJoke.visibility = View.VISIBLE
                     waterCheckButton.visibility = View.VISIBLE
+
+                    calenderIcon.visibility = View.INVISIBLE
+                    clockIcon.visibility = View.INVISIBLE
                     notifSwitch.visibility = View.INVISIBLE
                     wateringType.visibility = View.INVISIBLE
                     wateringTime.visibility = View.INVISIBLE
-                    wateringReminder.visibility = View.VISIBLE
-                    wateringJoke.visibility = View.VISIBLE
 
                     // TODO Set different image when needs watering
                     cardImage.clearColorFilter()
-                    cardImage.setImageResource(plant.image)
+                    cardImage.setImageResource(plant.image.iconDry)
                 } else {
                     waterCheckButton.visibility = View.INVISIBLE
                     notifSwitch.visibility = View.VISIBLE
@@ -74,15 +78,17 @@ class PlantsAdapter(
 
                     if (plant.notifications) {
                         notifSwitch.isChecked = true
+                        mainBackground.background.clearColorFilter()
                         cardImage.clearColorFilter()
-                        cardImage.setImageResource(plant.image)
+                        cardImage.setImageResource(plant.image.iconNormal)
                     } else {
                         notifSwitch.isChecked = false
-                        cardImage.setImageResource(plant.image)
+                        cardImage.setImageResource(plant.image.iconNormal)
                         val colorMatrix = ColorMatrix()
                         colorMatrix.setSaturation(0F)
                         val filter = ColorMatrixColorFilter(colorMatrix)
                         cardImage.colorFilter = filter
+                        mainBackground.background.colorFilter = filter
                     }
                 }
             }

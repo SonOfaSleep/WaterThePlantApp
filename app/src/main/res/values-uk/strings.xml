@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Поливака</string>
+    <string name="app_name">WaterIt</string>
     <string name="action_settings">Налаштування</string>
     <string name="search">Пошук</string>
     <string name="sorting_plants_alphabetically">Сортувати за ім\'ям</string>
-    <string name="new_plant">Нова квітка</string>
-    <string name="choose_plant_icon">Оберіть іконку:</string>
-    <string name="plant_name">Назва квітки</string>
-    <string name="notes">Нотатки</string>
-    <string name="choose_notification_periodicity_days">Оберіть частоту повідомлень (днів):</string>
-    <string name="save">Зберегти</string>
+
+    <string name="choose_plant_icon">Малюнок</string>
+    <string name="plant_name">Ім\'я</string>
+    <string name="notes">Особливості догляду</string>
+    <string name="choose_notification_periodicity_days">Частота та час нагадувань</string>
+    <string name="save">Додати</string>
     <string name="choose_icon_and_name">Оберіть іконку і назву квітки</string>
     <string name="choose_plant_name">Оберіть назву квітки</string>
     <string name="choose_icon">Оберіть іконку</string>
-    <string name="reminder_frequency_int_days">Частота повідомлень: %1$d %2$s</string>
-    <string name="reminder_frequency_hour_min">Час поливу: %1$s</string>
+    <string name="reminder_frequency_int_days">%1$d %2$s</string>
+    <string name="reminder_frequency_hour_min">%1$s</string>
     <string name="image_of_plant">Зображення квітки</string>
     <string name="search_hint">Пошук за назвою квіткі</string>
 
@@ -25,14 +25,17 @@
     </plurals>
 
     <string name="notes_sub_header">Примітки:</string>
-    <string name="delete_button_text">ВИДАЛИТИ</string>
-    <string name="edit_button_text">РЕДАГУВАТИ</string>
+    <string name="delete_button_text">Видалити</string>
+    <string name="edit_button_text">Редагувати</string>
 
     <string name="add_plant_button">Кнопка добавити квітку</string>
     <string name="alert_dialog_title">Видалити квітку?</string>
     <string name="alert_dialog_text">Ви не зможете відновити видалену квітку!</string>
     <string name="alert_dialog_button_ok">Видалити</string>
     <string name="alert_dialog_button_cancel">Скасувати</string>
-    <string name="reminder_text">Час мене полити!</string>
+    <string name="reminder_text">Вже час мене полити</string>
     <string name="choose_time">Оберіть час нагадування:</string>
+    <string name="welcome_text_1">Привіт!</string>
+    <string name="welcome_text_2">Додай свою першу\nрослину</string>
+    <string name="new_plant_toolbar_title">Нова рослина</string>
 </resources>

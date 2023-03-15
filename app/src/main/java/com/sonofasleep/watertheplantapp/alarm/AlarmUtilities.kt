@@ -4,12 +4,17 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import com.sonofasleep.watertheplantapp.const.PLANT_ICON
 import com.sonofasleep.watertheplantapp.const.PLANT_ID
 import com.sonofasleep.watertheplantapp.const.PLANT_NAME
 import com.sonofasleep.watertheplantapp.database.Plant
 import java.util.*
+
 
 /**
  * This class handles setting and deleting alarms
@@ -18,7 +23,7 @@ class AlarmUtilities(private val context: Context, private val alarmManager: Ala
 
     private fun createAlarmIntent(plant: Plant, plantId: Long): PendingIntent {
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent.putExtra(PLANT_ICON, plant.image)
+        alarmIntent.putExtra(PLANT_ICON, plant.image.iconDry)
         alarmIntent.putExtra(PLANT_NAME, plant.name)
         alarmIntent.putExtra(PLANT_ID, plantId)
 

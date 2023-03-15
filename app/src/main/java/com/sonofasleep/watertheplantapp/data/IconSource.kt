@@ -5,12 +5,11 @@ import com.sonofasleep.watertheplantapp.model.PlantIconItem
 
 object IconSource {
     val imageList: List<PlantIconItem> = listOf(
-        PlantIconItem(R.drawable.plant1),
-        PlantIconItem(R.drawable.plant2),
-        PlantIconItem(R.drawable.plant3),
-        PlantIconItem(R.drawable.plant4),
-        PlantIconItem(R.drawable.plant5),
-        PlantIconItem(R.drawable.plant6),
-        PlantIconItem(R.drawable.plant7)
+        PlantIconItem(R.drawable.choose_flower_1, R.drawable.choose_flower_1_dry),
+        PlantIconItem(R.drawable.choose_flower_2, R.drawable.choose_flower_2_dry),
+        PlantIconItem(R.drawable.choose_flower_3, R.drawable.choose_flower_3_dry),
+        PlantIconItem(R.drawable.choose_flower_4, R.drawable.choose_flower_4_dry),
+        PlantIconItem(R.drawable.choose_flower_5, R.drawable.choose_flower_5_dry),
+        PlantIconItem(R.drawable.choose_flower_6, R.drawable.choose_flower_6_dry)
     )
 }

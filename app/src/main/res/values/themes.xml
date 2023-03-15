@@ -2,68 +2,118 @@
     <!-- Base application theme. -->
     <style name="Theme.WaterThePlantApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_green_300_darker</item>
-        <item name="colorPrimaryVariant">@color/light_green_300</item>
+
+        <item name="colorPrimary">@color/main_green_darker</item>
+        <item name="colorPrimaryVariant">@color/main_green_lighter</item>
         <item name="colorOnPrimary">@color/black</item>
-        <item name="android:colorBackground">@color/orange_50</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/red_300</item>
-        <item name="colorSecondaryVariant">@color/red_300_darker</item>
+        <item name="colorSecondary">@color/main_green_darker</item>
+        <item name="colorSecondaryVariant">@color/main_green_lighter</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/orange_50</item>
+        <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <!-- Alert dialog theme -->
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.App.Caption</item>
+    </style>
+
+    <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/montserrat_alternates_regular</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_regular</item>
+    </style>
+
+    <style name="TextAppearance.App.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
+    </style>
+
+    <style name="myTitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
+    </style>
+
+    <style name="myRegularText">
+        <item name="fontFamily">@font/montserrat_alternates_regular</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="myToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
-        <item name="android:background">@color/orange_50</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
-    <style name="Theme.WaterThePlantApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="Theme.WaterThePlantApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="InputTextField" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="boxBackgroundColor">#D0DFC0</item>
-        <item name="boxCornerRadiusTopStart">8dp</item>
-        <item name="boxCornerRadiusTopEnd">8dp</item>
+    <style name="InputTextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/main_background</item>
+        <item name="boxCornerRadiusTopStart">@dimen/view_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/view_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/view_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/view_corner_radius</item>
+        <item name="boxStrokeColor">@color/accent_color</item>
+        <item name="hintTextColor">@color/accent_color</item>
         <item name="android:textColorHint">@color/black</item>
-        <item name="hintTextColor">@color/black</item>
     </style>
 
-    <style name="Theme.WaterThePlantApp.Slider" parent="Widget.MaterialComponents.Slider" >
+    <style name="Theme.WaterThePlantApp.Slider" parent="Widget.MaterialComponents.Slider">
         <item name="labelStyle">@style/Widget.WaterThePlantApp.Tooltip</item>
     </style>
 
     <style name="Widget.WaterThePlantApp.Tooltip" parent="Widget.MaterialComponents.Tooltip">
-        <item name="backgroundTint">@color/red_300</item>
+        <item name="backgroundTint">@color/accent_color</item>
     </style>
 
     <style name="myCaptionTextStyle" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
+    </style>
+
+    <style name="myToolbarTextStyle" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
     </style>
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="dialogCornerRadius">8dp</item>
-        <item name="android:colorBackground">@color/orange_50</item>
-        <item name="android:textColor">@color/light_green_300_darker</item>
+        <item name="dialogCornerRadius">@dimen/view_corner_radius</item>
+        <item name="android:textColor">@color/main_blue_darker</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/red_300_darker</item>
-    </style>
-
-    <style name="NegativeButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/light_green_300</item>
+    <style name="NegativeButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/main_blue_darker</item>
+    </style>
+
+    <style name="myButtonStyle" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="backgroundTint">@color/main_green_darker</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
+    <style name="myImageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/main_blue_darker</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="dialogCornerRadius">@dimen/view_corner_radius</item>
     </style>
 
 </resources>

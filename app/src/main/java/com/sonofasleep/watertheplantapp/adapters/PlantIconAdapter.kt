@@ -26,7 +26,7 @@ class PlantIconAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PlantIconItem) {
-            binding.cardImage.setImageResource(item.image)
+            binding.cardImage.setImageResource(item.iconNormal)
         }
 
         fun setChecked() {
@@ -58,9 +58,9 @@ class PlantIconAdapter(
 
         // For checking previously selected icon in recyclerView
         // and updating checkedPosition for correct work of single selection logic above
-        if (selectedIcon?.image == item.image) {
+        if (selectedIcon?.iconNormal == item.iconNormal) {
             holder.setChecked()
-            checkedPosition = plantIconsList.indexOfFirst { it.image == selectedIcon?.image }
+            checkedPosition = plantIconsList.indexOfFirst { it.iconNormal == selectedIcon?.iconNormal }
             selectedIcon = null
         }
 
