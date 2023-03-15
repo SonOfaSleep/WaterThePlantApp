@@ -24,6 +24,8 @@
     <color name="main_blue_darker">#ACC6D4</color>
     <color name="accent_color">#FCB563</color>
     <color name="gray_stroke">#757C82</color>
+    <color name="warning_text_color">#3D6073</color>
+    <color name="warning_accent_text_color">#E77812</color>
 
     <!-- Outlined box stroke color when not focused -->
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/main_background</color>

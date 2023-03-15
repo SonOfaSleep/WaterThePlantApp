@@ -81,7 +81,7 @@
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="dialogCornerRadius">@dimen/view_corner_radius</item>
-        <item name="android:textColor">@color/main_blue_darker</item>
+        <item name="android:textColor">@color/warning_text_color</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="fontFamily">@font/montserrat_alternates_bold</item>
@@ -89,11 +89,13 @@
     </style>
 
     <style name="PositiveButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/warning_accent_text_color</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/main_blue_darker</item>
+        <item name="android:textColor">@color/warning_text_color</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="myButtonStyle" parent="TextAppearance.MaterialComponents.Button">

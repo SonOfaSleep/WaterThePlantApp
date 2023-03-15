@@ -166,8 +166,3 @@ class DetailPlantFragment : Fragment() {
         binding.notesCardView.layoutParams.height = newNotesHeights
     }
 }
-
-fun convertPixelsToDp(px: Float, context: Context): Float {
-    return px / (context.resources
-        .displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
-}
