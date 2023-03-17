@@ -1,19 +1,11 @@
 package com.sonofasleep.watertheplantapp.fragments
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.ScaleDrawable
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.fragment.app.Fragment
@@ -24,7 +16,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.databinding.FragmentDetailPlantBinding
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
@@ -56,9 +47,6 @@ class DetailPlantFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val plantId = navigationArgs.plantId
-
-        // Inflating toolbarMenuLayout
-        binding.toolbar.plantListToolbar.inflateMenu(R.menu.menu_main)
 
         // Hiding buttons
         val searchButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
@@ -101,10 +89,15 @@ class DetailPlantFragment : Fragment() {
         val alertDialog: AlertDialog? = activity?.let {
 
             val builder = AlertDialog.Builder(it)
+            val plantTitlePlural = context?.resources?.getQuantityString(
+                R.plurals.alert_dialog_plant_plural,
+                1
+            )
+
             builder.apply {
 
-                setTitle(R.string.alert_dialog_title)
-                setMessage(R.string.alert_dialog_text)
+                setTitle(getString(R.string.alert_dialog_title, 1, plantTitlePlural))
+                setMessage(getString(R.string.alert_dialog_text, plantTitlePlural))
 
                 setNegativeButton(R.string.alert_dialog_button_cancel) { dialogInterface, _ ->
                     dialogInterface.cancel()

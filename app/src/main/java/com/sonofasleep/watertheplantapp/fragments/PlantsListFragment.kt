@@ -3,14 +3,14 @@ package com.sonofasleep.watertheplantapp.fragments
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -21,9 +21,9 @@ import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantsAdapter
 import com.sonofasleep.watertheplantapp.databinding.FragmentPlantsListBinding
+import com.sonofasleep.watertheplantapp.viewmodels.OnLongClickEnabled
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
-
 
 class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
 
@@ -43,6 +43,8 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PlantsAdapter
 
+    private var actionMode: ActionMode? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -51,9 +53,6 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        // Inflating toolbarMenuLayout and setting sort icon
-        binding.toolbar.plantListToolbar.inflateMenu(R.menu.menu_main)
 
         // Setting up searchView and onQueryListener
         val search = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
@@ -70,9 +69,11 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         // RecyclerView binding and click action on item
         recyclerView = binding.recyclerView
         adapter = PlantsAdapter(viewModel) { plant ->
-            val action =
-                PlantsListFragmentDirections.actionPlantsListFragmentToDetailPlantFragment(plant.id)
-            findNavController().navigate(action)
+            if (viewModel.longClickEnabled.value == OnLongClickEnabled.FALSE) {
+                val action = PlantsListFragmentDirections
+                    .actionPlantsListFragmentToDetailPlantFragment(plant.id)
+                findNavController().navigate(action)
+            }
         }
 
         // Observing data store preference
@@ -102,13 +103,65 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
                 }
 
                 // Hiding addButton when scrolling down
-                if (dy > 0) {
+                if (dy > 0 && viewModel.longClickEnabled.value == OnLongClickEnabled.FALSE) {
                     binding.fab.hide()
                 } else {
                     binding.fab.show()
                 }
             }
         })
+
+        /**
+         * Contextual action bar behaviour
+         */
+        val callback = object : ActionMode.Callback {
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                mode?.menuInflater?.inflate(R.menu.contextual_action_bar, menu)
+                return true
+            }
+
+            override fun onPrepareActionMode(mode: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onActionItemClicked(mode: ActionMode?, p1: MenuItem?): Boolean {
+                return when (p1?.itemId) {
+                    R.id.delete_button -> {
+                        // Handle delete icon press
+                        deleteAlertDialog(mode, viewModel.longClickChosenPlants.value?.size ?: 1)
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {
+                // Maybe change state here?
+                viewModel.apply {
+                    changeLongClickStateToFalse()
+                    emptyChosenPlantsList()
+                }
+            }
+        }
+
+        // Observing onLongClickState
+        viewModel.longClickEnabled.observe(this.viewLifecycleOwner) {
+            if (it == OnLongClickEnabled.TRUE) {
+                actionMode = activity?.startActionMode(callback)
+                binding.fab.hide()
+                adapter.notifyDataSetChanged()
+            } else {
+                binding.fab.show()
+                adapter.notifyDataSetChanged()
+            }
+        }
+
+        // Observing list of chosen plants when long click mode enabled
+        viewModel.longClickChosenPlants.observe(this.viewLifecycleOwner) {
+            if (actionMode != null) {
+                actionMode!!.title = getString(R.string.long_click_chosen_text, it.size)
+            }
+        }
 
         // Menu item clickListener
         binding.toolbar.plantListToolbar.setOnMenuItemClickListener {
@@ -127,46 +180,44 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_plantsListFragment_to_addPlantFragment)
         }
-
-        /**
-         * Work-manager logs
-         */
-//        val logUtils = LogUtils(requireContext())
-//        if (BuildConfig.DEBUG) {
-//            viewModel.workStatusByTag.observe(this.viewLifecycleOwner) { workInfoList ->
-//                if (!workInfoList.isNullOrEmpty()) {
-//                    var working = 0
-//                    val noWorkString = "No work in progress\n"
-//                    val enqueuedOrRun = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING)
-//
-//                    for (workInfo in workInfoList) {
-//                        if (workInfo.state in enqueuedOrRun) working++
-//
-//                        val allPlants = viewModel.allPlants.value
-//                        val plant = allPlants?.firstOrNull { it.workId == workInfo.id }
-//
-//                        when (workInfo.state) {
-//                            WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING -> {
-//                                val logString =
-//                                    "ID=${workInfo.id} Name=${plant?.name} ${workInfo.state}\n"
-//                                Log.d(DEBUG_TAG, logString)
-//                                logUtils.saveLogToFile(logString)
-//                            }
-//                            else -> continue
-//                        }
-//                    }
-//                    if (working == 0) {
-//                        Log.d(DEBUG_TAG, noWorkString)
-//                        logUtils.saveLogToFile(noWorkString)
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun deleteAlertDialog(mode: ActionMode?, plantQuantity: Int) {
+        val alertDialog: AlertDialog? = activity?.let {
+
+            val builder = AlertDialog.Builder(it)
+            val plantPluralForTitle = context?.resources?.getQuantityString(
+                R.plurals.alert_dialog_plant_plural,
+                plantQuantity
+            )
+            builder.apply {
+
+                setTitle(getString(R.string.alert_dialog_title, plantQuantity, plantPluralForTitle))
+                setMessage(getString(R.string.alert_dialog_text, plantPluralForTitle))
+
+                setNegativeButton(R.string.alert_dialog_button_cancel) { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                }
+                setPositiveButton(R.string.alert_dialog_button_ok) { _, _ ->
+                    viewModel.apply {
+                        deleteChosenPlantsWhenLongClickModeEnabled()
+                        mode?.finish()
+                    }
+                }
+            }
+            builder.create()
+            builder.show()
+        }
+        // Setting font only to message in alert dialog. Main fontStyle set in themes (AlertDialogTheme)
+        val textView = alertDialog?.findViewById<TextView>(android.R.id.message)
+        val typeFace =
+            ResourcesCompat.getFont(requireContext(), R.font.montserrat_alternates_regular)
+        textView?.typeface = typeFace
     }
 
     private fun setIcon() {

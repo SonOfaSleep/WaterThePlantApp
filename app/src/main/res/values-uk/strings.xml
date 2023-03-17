@@ -27,15 +27,22 @@
     <string name="notes_sub_header">Примітки:</string>
     <string name="delete_button_text">Видалити</string>
     <string name="edit_button_text">Редагувати</string>
-
     <string name="add_plant_button">Кнопка добавити квітку</string>
-    <string name="alert_dialog_title">Видалити квітку?</string>
-    <string name="alert_dialog_text">Ви не зможете відновити видалену квітку!</string>
+
+    <plurals name="alert_dialog_plant_plural">
+        <item quantity="one" tools:ignore="ImpliedQuantity">рослину</item>
+        <item quantity="few">рослини</item>
+        <item quantity="many">рослин</item>
+    </plurals>
+    <string name="alert_dialog_title">Видалити %1$d %2$s?</string>
+    <string name="alert_dialog_text">Ви не зможете відновити %1$s після видалення!</string>
     <string name="alert_dialog_button_ok">Видалити</string>
     <string name="alert_dialog_button_cancel">Скасувати</string>
+
     <string name="reminder_text">Вже час мене полити</string>
     <string name="choose_time">Оберіть час нагадування:</string>
     <string name="welcome_text_1">Привіт!</string>
     <string name="welcome_text_2">Додай свою першу\nрослину</string>
     <string name="new_plant_toolbar_title">Нова рослина</string>
+    <string name="long_click_chosen_text">Обрано: %1$d</string>
 </resources>

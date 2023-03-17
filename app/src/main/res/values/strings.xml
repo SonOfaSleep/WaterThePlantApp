@@ -25,12 +25,17 @@
     <string name="delete_button_text">Delete</string>
     <string name="edit_button_text">Edit</string>
     <string name="add_plant_button">Add plant button</string>
-    <string name="alert_dialog_title">Delete plant?</string>
-    <string name="alert_dialog_text">You will not be able to recover plant after delete!</string>
+
+    <plurals name="alert_dialog_plant_plural">
+        <item quantity="one">plant</item>
+        <item quantity="other">plants</item>
+    </plurals>
+    <string name="alert_dialog_title">Delete %1$d %2$s?</string>
+    <string name="alert_dialog_text">You will not be able to recover %1$s after delete!</string>
     <string name="alert_dialog_button_ok">OK</string>
     <string name="alert_dialog_button_cancel">Cancel</string>
-    <string name="reminder_text">It\'s time to water me</string>
 
+    <string name="reminder_text">It\'s time to water me</string>
     <string name="channel_name" translatable="false">Plant reminder channel</string>
     <string name="channel_description" translatable="false">Plant reminder</string>
     <string name="default_time" translatable="false">10:00</string>
@@ -38,4 +43,5 @@
     <string name="welcome_text_1">Hello!</string>
     <string name="welcome_text_2">Add your first plant</string>
     <string name="new_plant_toolbar_title">New plant</string>
+    <string name="long_click_chosen_text">Selected: %1$d</string>
 </resources>

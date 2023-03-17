@@ -16,6 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
+enum class OnLongClickEnabled { TRUE, FALSE }
+
 class PlantViewModel(private val dao: PlantDao, private val application: Application) :
     ViewModel() {
 
@@ -40,10 +42,51 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     // AlarmManager instance
     private val alarmManager: AlarmManager = application.applicationContext
         .getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
 
-    val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
+    // OnLongClick state
+    private val _longClickEnabled = MutableLiveData(OnLongClickEnabled.FALSE)
+    val longClickEnabled: LiveData<OnLongClickEnabled> = _longClickEnabled
 
+    // Chosen plant list when long click state enabled
+    private val _longClickChosenPlants = MutableLiveData<List<Plant>>()
+    val longClickChosenPlants: LiveData<List<Plant>> = _longClickChosenPlants
 
+    // For changing _longClickEnabled state
+    fun changeLongClickStateToTrue() {
+        _longClickEnabled.value = OnLongClickEnabled.TRUE
+    }
+
+    fun changeLongClickStateToFalse() {
+        _longClickEnabled.value = OnLongClickEnabled.FALSE
+    }
+
+    /**
+     * Long click list functions
+     */
+    fun addPlantToChosenList(plant: Plant) {
+        val list = _longClickChosenPlants.value?.toMutableList() ?: mutableListOf<Plant>()
+        list.add(plant)
+        _longClickChosenPlants.value = list
+    }
+
+    fun removePlantFromChosenList(plant: Plant) {
+        val list = _longClickChosenPlants.value?.toMutableList() ?: mutableListOf<Plant>()
+        list.remove(plant)
+        _longClickChosenPlants.value = list
+    }
+
+    fun emptyChosenPlantsList() {
+        _longClickChosenPlants.value = mutableListOf<Plant>()
+    }
+
+    fun deleteChosenPlantsWhenLongClickModeEnabled() {
+        val list = _longClickChosenPlants.value
+        list?.forEach { deletePlantCancelAlarm(it) }
+
+        emptyChosenPlantsList()
+        changeLongClickStateToFalse()
+    }
 
     // Cancel the alarm or setExactAlarm
     fun switchWork(plant: Plant) {

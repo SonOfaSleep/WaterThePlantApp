@@ -62,9 +62,6 @@ class AddPlantFragment : Fragment() {
         // Plant id will be > 0 if it's edit not new one (default value is 0L)
         val plantId = navArgs.plantId
 
-        // Inflating toolbarMenuLayout
-        binding.toolbar.plantListToolbar.inflateMenu(R.menu.menu_main)
-
         // Hiding buttons
         val searchButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
         val sortButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
