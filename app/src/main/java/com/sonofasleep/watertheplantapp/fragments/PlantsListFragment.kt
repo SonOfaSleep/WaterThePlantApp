@@ -40,10 +40,10 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     // For choosing SortType and sort icon for menu
     private var isOrderedAscIcon: Boolean = true
 
+    private var actionMode: ActionMode? = null
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: PlantsAdapter
-
-    private var actionMode: ActionMode? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -182,9 +182,19 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
     }
 
+    override fun onStop() {
+        // I decided that i don't wont to store actionMode state if app is closed
+        if (actionMode != null) {
+            viewModel.changeLongClickStateToFalse()
+            actionMode!!.finish()
+        }
+        super.onStop()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        actionMode = null
     }
 
     private fun deleteAlertDialog(mode: ActionMode?, plantQuantity: Int) {
