@@ -43,5 +43,6 @@
     <string name="welcome_text_1">Hello!</string>
     <string name="welcome_text_2">Add your first plant</string>
     <string name="new_plant_toolbar_title">New plant</string>
+    <string name="edit_plant_toolbar_title">Edit plant</string>
     <string name="long_click_chosen_text">Selected: %1$d</string>
 </resources>

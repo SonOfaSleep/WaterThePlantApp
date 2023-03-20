@@ -91,6 +91,7 @@ class AddPlantFragment : Fragment() {
          * when editing plant.
          */
         if (viewModel.init.value!! && plantId > 0) {
+            binding.toolbar.plantListToolbar.title = getString(R.string.edit_plant_toolbar_title)
 
             viewModel.getPlantAsLiveData(plantId).observe(this.viewLifecycleOwner) { plant ->
                 viewModel.apply {
@@ -105,6 +106,7 @@ class AddPlantFragment : Fragment() {
                 bindPlant()
             }
         } else {
+            binding.toolbar.plantListToolbar.title = getString(R.string.new_plant_toolbar_title)
             // Current time for time button in new plant creation
             val calendar = Calendar.getInstance()
             val hour = calendar.get(Calendar.HOUR_OF_DAY)

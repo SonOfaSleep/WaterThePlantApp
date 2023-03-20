@@ -45,5 +45,6 @@
     <string name="welcome_text_1">Привет!</string>
     <string name="welcome_text_2">Добавь свой первый\nцветок</string>
     <string name="new_plant_toolbar_title">Новый цветок</string>
+    <string name="edit_plant_toolbar_title">Редактировать цветок</string>
     <string name="long_click_chosen_text">Выбрано: %1$d</string>
 </resources>

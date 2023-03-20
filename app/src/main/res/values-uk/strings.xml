@@ -44,5 +44,6 @@
     <string name="welcome_text_1">Привіт!</string>
     <string name="welcome_text_2">Додай свою першу\nрослину</string>
     <string name="new_plant_toolbar_title">Нова рослина</string>
+    <string name="edit_plant_toolbar_title">Редагувати рослину</string>
     <string name="long_click_chosen_text">Обрано: %1$d</string>
 </resources>
