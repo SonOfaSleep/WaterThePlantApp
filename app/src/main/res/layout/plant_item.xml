@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:cardCornerRadius="21dp"
         android:checkable="true"
+        app:cardCornerRadius="21dp"
         app:cardElevation="@dimen/card_elevation"
         app:checkedIconTint="@color/accent_color">
 
@@ -42,10 +42,10 @@
                 android:layout_marginEnd="@dimen/sixteen_dp_margin"
                 android:maxLines="2"
                 app:layout_constraintBottom_toTopOf="@id/calender_icon"
+                app:layout_constraintEnd_toStartOf="@+id/water_check_button"
                 app:layout_constraintStart_toEndOf="@id/card_image"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Степан Бандера" />
+                tools:text="Степан Бандера довгий" />
 
             <ImageView
                 android:id="@+id/calender_icon"
@@ -146,16 +146,16 @@
                 style="@style/myImageButtonStyle"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginEnd="@dimen/sixteen_dp_margin"
                 android:background="@drawable/roundcorner"
                 android:backgroundTint="@color/main_blue_darker"
-                android:elevation="@dimen/eight_dp_margin"
+                android:elevation="@dimen/sixteen_dp_margin"
                 android:src="@drawable/ic_drop_24x30"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/plant_name"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="invisible" />
+                tools:visibility="visible" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

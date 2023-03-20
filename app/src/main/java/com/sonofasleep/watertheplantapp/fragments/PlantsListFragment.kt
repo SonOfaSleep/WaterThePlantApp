@@ -76,17 +76,17 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
             }
         }
 
-        // Observing data store preference
-        viewModel.sortTypeIsASC.observe(this.viewLifecycleOwner) {
-            isOrderedAscIcon = it
-        }
+        // RecyclerView adapter
+        recyclerView.adapter = adapter
 
         // Observing viewModel allPlants liveData
         // Showing helper addPlant image when list is empty
         addAllPlantsObserver()
 
-        // RecyclerView adapter
-        recyclerView.adapter = adapter
+        // Observing data store preference
+        viewModel.sortTypeIsASC.observe(this.viewLifecycleOwner) {
+            isOrderedAscIcon = it
+        }
 
         /**
          *  Handling scroll behavior

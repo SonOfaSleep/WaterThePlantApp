@@ -26,8 +26,21 @@ class PlantsAdapter(
             return oldItem.id == newItem.id
         }
 
+        // Because plant.image is an instance of a class link to it everytime is different, hence
+        // areContentsTheSame returns false every time even when nothing changed
+        // link looks like this = image=com.sonofasleep.watertheplantapp.model.PlantIconItem@7d184bc
+        // so we need to compare every property of plant, oldItem == newItem don't work!
         override fun areContentsTheSame(oldItem: Plant, newItem: Plant): Boolean {
-            return oldItem == newItem
+            return (oldItem.id == newItem.id
+                    && oldItem.notifications == newItem.notifications
+                    && oldItem.image.iconNormal == newItem.image.iconNormal
+                    && oldItem.image.iconDry == newItem.image.iconDry
+                    && oldItem.timeToWater == newItem.timeToWater
+                    && oldItem.name == newItem.name
+                    && oldItem.description == newItem.description
+                    && oldItem.reminderFrequency == newItem.reminderFrequency
+                    && oldItem.timeHour == newItem.timeHour
+                    && oldItem.timeMin == newItem.timeMin)
         }
     }
 
