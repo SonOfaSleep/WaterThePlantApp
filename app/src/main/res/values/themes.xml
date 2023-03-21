@@ -28,12 +28,16 @@
         <item name="android:background">@android:color/white</item>
     </style>
 
-    <style name="Theme.WaterThePlantApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.WaterThePlantApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorControlNormal">@color/black</item>
+        <item name="android:colorControlNormal">@color/black</item>
+    </style>
 
     <style name="Widget.App.ActionMode" parent="Widget.AppCompat.ActionMode">
         <item name="titleTextStyle">@style/myTitleMedium</item>
         <item name="subtitleTextStyle">@style/myRegularText</item>
         <item name="background">@color/white</item>
+        <item name="android:colorControlNormal">@color/black</item>
     </style>
 
     <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
