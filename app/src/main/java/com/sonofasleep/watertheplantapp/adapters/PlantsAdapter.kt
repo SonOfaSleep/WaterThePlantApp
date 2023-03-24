@@ -15,10 +15,8 @@ import com.sonofasleep.watertheplantapp.viewmodels.OnLongClickEnabled
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 
 class PlantsAdapter(
-    private val viewModel: PlantViewModel,
-    val onItemClicked: (Plant) -> Unit
-) :
-    ListAdapter<Plant, PlantsAdapter.PlantsViewHolder>(DiffCallback) {
+    private val viewModel: PlantViewModel, val onItemClicked: (Plant) -> Unit
+) : ListAdapter<Plant, PlantsAdapter.PlantsViewHolder>(DiffCallback) {
 
     companion object DiffCallback : DiffUtil.ItemCallback<Plant>() {
 
@@ -31,16 +29,7 @@ class PlantsAdapter(
         // link looks like this = image=com.sonofasleep.watertheplantapp.model.PlantIconItem@7d184bc
         // so we need to compare every property of plant, oldItem == newItem don't work!
         override fun areContentsTheSame(oldItem: Plant, newItem: Plant): Boolean {
-            return (oldItem.id == newItem.id
-                    && oldItem.notifications == newItem.notifications
-                    && oldItem.image.iconNormal == newItem.image.iconNormal
-                    && oldItem.image.iconDry == newItem.image.iconDry
-                    && oldItem.timeToWater == newItem.timeToWater
-                    && oldItem.name == newItem.name
-                    && oldItem.description == newItem.description
-                    && oldItem.reminderFrequency == newItem.reminderFrequency
-                    && oldItem.timeHour == newItem.timeHour
-                    && oldItem.timeMin == newItem.timeMin)
+            return (oldItem.id == newItem.id && oldItem.notifications == newItem.notifications && oldItem.image.iconNormal == newItem.image.iconNormal && oldItem.image.iconDry == newItem.image.iconDry && oldItem.timeToWater == newItem.timeToWater && oldItem.name == newItem.name && oldItem.description == newItem.description && oldItem.reminderFrequency == newItem.reminderFrequency && oldItem.timeHour == newItem.timeHour && oldItem.timeMin == newItem.timeMin)
         }
     }
 
@@ -52,71 +41,92 @@ class PlantsAdapter(
         val cardView = binding.itemCardView
 
         fun bind(plant: Plant, viewModel: PlantViewModel) {
+
+            val longClickEnabled = viewModel.longClickEnabled.value == OnLongClickEnabled.TRUE
+
             binding.apply {
 
+                // PLANT NAME
                 plantName.text = plant.name
 
-                if (viewModel.longClickEnabled.value == OnLongClickEnabled.FALSE) {
-                    itemCardView.isChecked = false
-
-                    if (plant.timeToWater) {
-                        wateringReminder.visibility = View.VISIBLE
-                        wateringJoke.visibility = View.VISIBLE
-                        waterCheckButton.visibility = View.VISIBLE
-
-                        calenderIcon.visibility = View.INVISIBLE
-                        clockIcon.visibility = View.INVISIBLE
-                        notifSwitch.visibility = View.INVISIBLE
-                        wateringType.visibility = View.INVISIBLE
-                        wateringTime.visibility = View.INVISIBLE
-
-                        // Set different image when needs watering
-                        cardImage.clearColorFilter()
-                        cardImage.setImageResource(plant.image.iconDry)
-                    } else {
-                        waterCheckButton.visibility = View.INVISIBLE
-                        notifSwitch.visibility = View.VISIBLE
-                        wateringType.visibility = View.VISIBLE
-                        wateringTime.visibility = View.VISIBLE
-                        wateringReminder.visibility = View.INVISIBLE
-                        wateringJoke.visibility = View.INVISIBLE
-
-                        wateringType.text = itemView.context
-                            .getString(
-                                R.string.reminder_frequency_int_days,
-                                plant.reminderFrequency,
-                                getPlural(plant.reminderFrequency)
-                            )
-                        wateringTime.text = itemView.context.getString(
-                            R.string.reminder_frequency_hour_min,
-                            viewModel.timeFormat(plant.timeHour, plant.timeMin)
-                        )
-
-                        if (plant.notifications) {
-                            notifSwitch.isChecked = true
-                            mainBackground.background.clearColorFilter()
-                            cardImage.clearColorFilter()
-                            cardImage.setImageResource(plant.image.iconNormal)
-                        } else {
-                            notifSwitch.isChecked = false
-                            cardImage.setImageResource(plant.image.iconNormal)
-                            val colorMatrix = ColorMatrix()
-                            colorMatrix.setSaturation(0F)
-                            val filter = ColorMatrixColorFilter(colorMatrix)
-                            cardImage.colorFilter = filter
-                            mainBackground.background.colorFilter = filter
-                        }
-                    }
+                // ↓ PLANT CARD IMAGE BLOCK ↓
+                val image = if (!plant.timeToWater) {
+                    plant.image.iconNormal
                 } else {
-                    // Long click enabled
-                    notifSwitch.visibility = View.INVISIBLE
+                    plant.image.iconDry
                 }
+                cardImage.setImageResource(image)
+
+                if (plant.notifications) {
+                    mainBackground.background.clearColorFilter()
+                    cardImage.clearColorFilter()
+                } else {
+                    mainBackground.background.colorFilter = getColorFilter()
+                    cardImage.colorFilter = getColorFilter()
+                }
+                // ↑ PLANT CARD IMAGE BLOCK ↑
+
+
+                // ↓ WATERING TYPE, TIME AND REMINDER BLOCK ↓
+                val type = itemView.context.getString(
+                    R.string.reminder_frequency_int_days,
+                    plant.reminderFrequency,
+                    getPlural(plant.reminderFrequency)
+                )
+                wateringType.text = type
+
+                val time = itemView.context.getString(
+                    R.string.reminder_frequency_hour_min,
+                    viewModel.timeFormat(plant.timeHour, plant.timeMin)
+                )
+                wateringTime.text = time
+
+                val visibility = if (plant.timeToWater) View.INVISIBLE else View.VISIBLE
+                val reminderVisibility = if (plant.timeToWater) View.VISIBLE else View.INVISIBLE
+
+                calenderIcon.visibility = visibility
+                clockIcon.visibility = visibility
+                wateringType.visibility = visibility
+                wateringTime.visibility = visibility
+
+                wateringReminder.visibility = reminderVisibility
+                // ↑ WATERING TYPE AND TIME BLOCK ↑
+
+
+                // ↓ SWITCH AND WATERING BUTTON BLOCK ↓
+                notifSwitch.isChecked = plant.notifications
+
+                val switchVisibility =
+                    if (longClickEnabled || plant.timeToWater) View.INVISIBLE else View.VISIBLE
+                notifSwitch.visibility = switchVisibility
+
+                val waterCheckButtonVisibility = if (plant.timeToWater && !longClickEnabled) {
+                    View.VISIBLE
+                } else {
+                    View.INVISIBLE
+                }
+                waterCheckButton.visibility = waterCheckButtonVisibility
+                // ↑ SWITCH AND WATERING BUTTON BLOCK ↑
+
+
+                // CARD CHECKED BEHAVIOUR DURING LONG CLICK STATE
+                val chosenList = viewModel.longClickChosenPlants.value ?: listOf()
+                var bool = false
+                for (i in chosenList) {
+                    if (i.id == plant.id) bool = true
+                }
+                cardView.isChecked = bool
             }
         }
 
         private fun getPlural(days: Int): String {
-            return itemView.context.resources
-                .getQuantityString(R.plurals.plural_day, days, days)
+            return itemView.context.resources.getQuantityString(R.plurals.plural_day, days, days)
+        }
+
+        private fun getColorFilter(): ColorMatrixColorFilter {
+            val colorMatrix = ColorMatrix()
+            colorMatrix.setSaturation(0F)
+            return ColorMatrixColorFilter(colorMatrix)
         }
     }
 

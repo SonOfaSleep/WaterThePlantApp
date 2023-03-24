@@ -24,19 +24,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:listitem="@layout/plant_item"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <ImageView
         android:id="@+id/add_plant_welcome_image_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/onboardingscreen_circles"
+        android:background="@drawable/onboardingscreen_circles"
+        android:backgroundTint="@color/main_background"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:visibility="visible"/>
 
     <ImageView
         android:id="@+id/add_plant_welcome_image"
@@ -50,7 +52,7 @@
         app:layout_constraintStart_toStartOf="@id/add_plant_welcome_image_background"
         app:layout_constraintTop_toTopOf="@id/add_plant_welcome_image_background"
         tools:ignore="ContentDescription"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
 
     <TextView
@@ -65,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/add_plant_welcome_image_background"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/add_plant_welcome_text_2"
@@ -79,7 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/add_plant_welcome_text_1"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

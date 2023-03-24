@@ -72,7 +72,7 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
 
     fun removePlantFromChosenList(plant: Plant) {
         val list = _longClickChosenPlants.value?.toMutableList() ?: mutableListOf<Plant>()
-        list.remove(plant)
+        list.removeIf { it.id == plant.id }
         _longClickChosenPlants.value = list
     }
 
