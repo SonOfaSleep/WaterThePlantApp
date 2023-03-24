@@ -3,16 +3,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- New Colors-->
+    <!-- Light theme Colors-->
     <color name="main_background">#EAF7FF</color>
-    <color name="main_green_darker">#A0C385</color>
-    <color name="main_green_lighter">#ECFFDD</color>
     <color name="main_blue_darker">#ACC6D4</color>
-    <color name="accent_color">#FCB563</color>
-    <color name="gray_stroke">#757C82</color>
     <color name="warning_text_color">#3D6073</color>
+
+    <color name="main_green_lighter">#ECFFDD</color>
+    <color name="main_green_darker">#A0C385</color>
+
+    <color name="accent_color">#FCB563</color>
     <color name="warning_accent_text_color">#E77812</color>
 
+    <color name="gray_stroke">#757C82</color>
     <color name="dark_theme_background">#121212</color>
 
     <!-- Outlined box stroke color when not focused -->

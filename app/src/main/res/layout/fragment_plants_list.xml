@@ -23,47 +23,63 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:listitem="@layout/plant_item" />
+        tools:listitem="@layout/plant_item"
+        tools:visibility="visible" />
 
     <ImageView
-        android:id="@+id/add_plant_welcome_image"
+        android:id="@+id/add_plant_welcome_image_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/welcome_image_screen"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/onboardingscreen_circles"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/add_plant_welcome_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/main_flower"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/add_plant_welcome_image_background"
+        app:layout_constraintEnd_toEndOf="@id/add_plant_welcome_image_background"
+        app:layout_constraintStart_toStartOf="@id/add_plant_welcome_image_background"
+        app:layout_constraintTop_toTopOf="@id/add_plant_welcome_image_background"
         tools:ignore="ContentDescription"
         tools:visibility="invisible" />
+
 
     <TextView
         android:id="@+id/add_plant_welcome_text_1"
         style="@style/myTitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sixteen_dp_margin"
         android:text="@string/welcome_text_1"
         android:textSize="24sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/add_plant_welcome_text_2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_plant_welcome_image_background"
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/add_plant_welcome_text_2"
         style="@style/myTitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
         android:gravity="center"
         android:text="@string/welcome_text_2"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_plant_welcome_text_1"
+        tools:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

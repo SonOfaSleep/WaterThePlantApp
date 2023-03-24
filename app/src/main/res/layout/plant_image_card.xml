@@ -19,7 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:background="@drawable/plant_bubble_small"
+        android:backgroundTint="@color/main_background"
         android:scaleType="centerCrop"
-        tools:src="@drawable/choose_flower_1" />
+        tools:src="@drawable/choose_flower_1_v2" />
 
 </com.google.android.material.card.MaterialCardView>

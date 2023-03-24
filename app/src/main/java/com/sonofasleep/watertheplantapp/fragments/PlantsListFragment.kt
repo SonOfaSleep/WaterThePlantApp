@@ -237,20 +237,6 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
             else -> R.drawable.ic_sort_desc
         }
         sortItem.setIcon(icon)
-        changeDayNightSortIconColor()
-    }
-
-    private fun changeDayNightSortIconColor() {
-        // color is set by uiColorSchema (NightDay)
-        val color = when (context?.resources?.configuration?.uiMode?.minus(1)) {
-            Configuration.UI_MODE_NIGHT_NO -> Color.BLACK // Day
-            else -> Color.WHITE // Night
-        }
-        binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting).icon?.colorFilter =
-            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                color,
-                BlendModeCompat.SRC_ATOP
-            )
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -287,6 +273,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
                     addPlantWelcomeImage.visibility = visibility
                     addPlantWelcomeText1.visibility = visibility
                     addPlantWelcomeText2.visibility = visibility
+                    addPlantWelcomeImageBackground.visibility = visibility
                 }
                 adapter.submitList(it)
                 setIcon()

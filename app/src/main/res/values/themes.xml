@@ -1,18 +1,21 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.WaterThePlantApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
 
+        <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_green_darker</item>
         <item name="colorPrimaryVariant">@color/main_green_lighter</item>
         <item name="colorOnPrimary">@color/black</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/main_green_darker</item>
         <item name="colorSecondaryVariant">@color/main_green_lighter</item>
         <item name="colorOnSecondary">@color/black</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+
         <!-- Alert dialog theme -->
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
 
@@ -119,6 +122,11 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
         <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
+    <style name="myBorderlessButtonStyle" parent="Base.Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAppearance">@style/myRegularText</item>
     </style>
 
     <style name="myImageButtonStyle" parent="Widget.AppCompat.ImageButton">

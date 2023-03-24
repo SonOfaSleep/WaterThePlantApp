@@ -7,8 +7,9 @@
     android:orientation="vertical"
     tools:context=".fragments.AddPlantFragment">
 
-    <include layout="@layout/main_toolbar"
-        android:id="@+id/toolbar"/>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/main_toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -45,37 +46,37 @@
                 tools:listitem="@layout/plant_image_card" />
 
 
-<!--            <com.google.android.material.card.MaterialCardView-->
-<!--                android:id="@+id/filledPlantName"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="@dimen/sixteen_dp_margin"-->
-<!--                app:cardElevation="4dp"-->
-<!--                app:cardCornerRadius="@dimen/view_corner_radius"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/recycler_view">-->
+            <!--            <com.google.android.material.card.MaterialCardView-->
+            <!--                android:id="@+id/filledPlantName"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_margin="@dimen/sixteen_dp_margin"-->
+            <!--                app:cardElevation="4dp"-->
+            <!--                app:cardCornerRadius="@dimen/view_corner_radius"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/recycler_view">-->
 
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/filledPlantName_textinput_layout"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    style="@style/InputTextField"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:background="@null"-->
-<!--                    android:hint="@string/plant_name"-->
-<!--                    android:clipToPadding="true"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/recycler_view">-->
+            <!--                <com.google.android.material.textfield.TextInputLayout-->
+            <!--                    android:id="@+id/filledPlantName_textinput_layout"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    style="@style/InputTextField"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:background="@null"-->
+            <!--                    android:hint="@string/plant_name"-->
+            <!--                    android:clipToPadding="true"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@id/recycler_view">-->
 
-<!--                    <com.google.android.material.textfield.TextInputEditText-->
-<!--                        android:id="@+id/name_edit_text"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:inputType="textCapSentences"-->
-<!--                        android:singleLine="true" />-->
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
-<!--            </com.google.android.material.card.MaterialCardView>-->
+            <!--                    <com.google.android.material.textfield.TextInputEditText-->
+            <!--                        android:id="@+id/name_edit_text"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:inputType="textCapSentences"-->
+            <!--                        android:singleLine="true" />-->
+            <!--                </com.google.android.material.textfield.TextInputLayout>-->
+            <!--            </com.google.android.material.card.MaterialCardView>-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filledPlantName"
@@ -189,7 +190,7 @@
 
                     <Button
                         android:id="@+id/timeButton"
-                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        style="@style/myBorderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="@id/clock_icon"

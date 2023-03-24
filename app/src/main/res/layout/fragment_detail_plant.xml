@@ -18,13 +18,15 @@
             android:id="@+id/card_image"
             android:layout_width="244dp"
             android:layout_height="244dp"
+            android:background="@drawable/plant_bubble_small"
+            android:backgroundTint="@color/main_background"
             android:contentDescription="@string/image_of_plant"
             android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/notes_card_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toTopOf="@+id/notes_card_view"
-            tools:src="@drawable/choose_flower_2" />
+            tools:src="@drawable/choose_flower_2_v2" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/notes_card_view"
