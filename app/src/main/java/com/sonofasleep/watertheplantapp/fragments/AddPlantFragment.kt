@@ -59,6 +59,19 @@ class AddPlantFragment : Fragment() {
         // Setting recyclerView
         recyclerView = binding.recyclerView
 
+        val adapter = PlantIconAdapter(
+            viewModel,
+            IconSource.imageList,
+            viewModel.icon.value,
+
+            // TODO This is the place to insert camera function ↓
+            onCameraClicked = {
+                makeToast("On camera clicked")
+            }
+        )
+
+        recyclerView.adapter = adapter
+
         // Plant id will be > 0 if it's edit not new one (default value is 0L)
         val plantId = navArgs.plantId
 
@@ -156,11 +169,6 @@ class AddPlantFragment : Fragment() {
     }
 
     private fun bindPlant() {
-        recyclerView.adapter = PlantIconAdapter(
-            viewModel,
-            IconSource.imageList,
-            viewModel.icon.value
-        )
         binding.apply {
             nameEditText.setText(viewModel.name.value, TextView.BufferType.SPANNABLE)
             notesEditText.setText(viewModel.notes.value, TextView.BufferType.SPANNABLE)

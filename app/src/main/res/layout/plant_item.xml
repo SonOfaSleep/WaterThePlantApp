@@ -30,7 +30,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/choose_flower_1_v2" />
+                tools:src="@drawable/choose_flower_1_v3" />
 
             <TextView
                 android:id="@+id/plant_name"

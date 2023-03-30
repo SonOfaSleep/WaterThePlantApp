@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.databinding.PlantImageCardBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
-import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 
 /**
  * This adapters handles onClick listener, allowing only one cardView to be checked at a time.
@@ -15,7 +14,8 @@ import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 class PlantIconAdapter(
     private val viewModel: AddNewPlantViewModel,
     private val plantIconsList: List<PlantIconItem>,
-    private var selectedIcon: PlantIconItem? = null
+    private var selectedIcon: PlantIconItem? = null,
+    val onCameraClicked: () -> Unit
 ) : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
 
     // For storing previous position
@@ -50,7 +50,7 @@ class PlantIconAdapter(
         holder.bind(item)
 
         // Single selection logic
-        if (checkedPosition == position) {
+        if (checkedPosition == position && position != 0) {
             holder.setChecked()
         } else {
             holder.setUnChecked()
@@ -60,7 +60,8 @@ class PlantIconAdapter(
         // and updating checkedPosition for correct work of single selection logic above
         if (selectedIcon?.iconNormal == item.iconNormal) {
             holder.setChecked()
-            checkedPosition = plantIconsList.indexOfFirst { it.iconNormal == selectedIcon?.iconNormal }
+            checkedPosition =
+                plantIconsList.indexOfFirst { it.iconNormal == selectedIcon?.iconNormal }
             selectedIcon = null
         }
 
@@ -84,5 +85,9 @@ class PlantIconAdapter(
         notifyItemChanged(checkedPosition)
         checkedPosition = position
         notifyItemChanged(checkedPosition)
+
+        if (position == 0) {
+            onCameraClicked()
+        }
     }
 }

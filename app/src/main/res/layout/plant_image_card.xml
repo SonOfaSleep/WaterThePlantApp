@@ -3,25 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="140dp"
+    android:layout_height="140dp"
     android:layout_margin="8dp"
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="50dp"
+    app:cardCornerRadius="70dp"
     app:cardElevation="0dp"
-    app:checkedIconMargin="12dp"
+    app:checkedIconMargin="20dp"
     app:checkedIconTint="@color/accent_color">
+
+    <ImageView
+        android:id="@+id/card_image_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/plant_bubble_small"
+        android:backgroundTint="@color/main_background" />
 
     <ImageView
         android:id="@+id/card_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/plant_bubble_small"
-        android:backgroundTint="@color/main_background"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/choose_flower_1_v2" />
+        android:scaleType="center"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        tools:src="@drawable/ic_baseline_photo_camera_24" />
 
 </com.google.android.material.card.MaterialCardView>
