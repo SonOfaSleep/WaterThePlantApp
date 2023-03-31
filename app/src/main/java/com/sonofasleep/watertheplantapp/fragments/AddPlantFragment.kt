@@ -5,10 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -24,6 +26,7 @@ import com.google.android.material.slider.Slider
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantIconAdapter
+import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.const.NOTIFICATION_REQUEST_CODE
 import com.sonofasleep.watertheplantapp.data.IconSource
 import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
@@ -56,25 +59,6 @@ class AddPlantFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Setting recyclerView
-        recyclerView = binding.recyclerView
-
-        val adapter = PlantIconAdapter(
-            viewModel,
-            IconSource.imageList,
-            viewModel.icon.value,
-
-            // TODO This is the place to insert camera function ↓
-            onCameraClicked = {
-                makeToast("On camera clicked")
-            }
-        )
-
-        recyclerView.adapter = adapter
-
-        // Plant id will be > 0 if it's edit not new one (default value is 0L)
-        val plantId = navArgs.plantId
-
         // Hiding buttons
         val searchButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
         val sortButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
@@ -87,6 +71,26 @@ class AddPlantFragment : Fragment() {
 
         view.findViewById<Toolbar>(R.id.plant_list_toolbar)
             .setupWithNavController(navController, appBarConfiguration)
+
+        // Setting recyclerView
+        recyclerView = binding.recyclerView
+
+        val adapter = PlantIconAdapter(
+            viewModel,
+            IconSource.imageList,
+            viewModel.icon.value,
+
+            // TODO This is the place to insert camera function ↓
+            onCameraClicked = {
+                val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraFragment()
+                findNavController().navigate(action)
+            }
+        )
+
+        recyclerView.adapter = adapter
+
+        // Plant id will be > 0 if it's edit not new one (default value is 0L)
+        val plantId = navArgs.plantId
 
         /**
          * Setting different fonts for the label and input text
