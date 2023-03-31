@@ -1,11 +1,16 @@
 package com.sonofasleep.watertheplantapp.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.SharedElementCallback
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -70,6 +75,14 @@ class CameraFragment : Fragment() {
         resetStatusBarColor(myView)
         _binding = null
     }
+
+
+
+
+
+    private fun startCamera() {}
+
+    private fun takePhoto() {}
 
     private fun setStatusBarDark(view: View) {
         activity?.window?.statusBarColor = requireContext().getColor(R.color.dark_theme_background)

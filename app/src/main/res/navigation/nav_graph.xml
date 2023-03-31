@@ -40,12 +40,9 @@
             android:defaultValue="0L"
             app:argType="long" />
         <action
-            android:id="@+id/action_addPlantFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out" />
+            android:id="@+id/action_addPlantFragment_to_cameraPermissionFragment"
+            app:destination="@id/cameraPermissionFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/detailPlantFragment"
@@ -77,6 +74,23 @@
         tools:layout="@layout/fragment_camera" >
         <action
             android:id="@+id/action_cameraFragment_to_addPlantFragment"
-            app:destination="@id/addPlantFragment" />
+            app:destination="@id/addPlantFragment"
+            app:popUpTo="@id/addPlantFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraPermissionFragment"
+        android:name="com.sonofasleep.watertheplantapp.fragments.CameraPermissionFragment"
+        android:label="CameraPermissionFragment" >
+        <action
+            android:id="@+id/action_cameraPermissionFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment"
+            app:popUpTo="@id/addPlantFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_cameraPermissionFragment_to_addPlantFragment"
+            app:destination="@id/addPlantFragment"
+            app:popUpTo="@id/addPlantFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

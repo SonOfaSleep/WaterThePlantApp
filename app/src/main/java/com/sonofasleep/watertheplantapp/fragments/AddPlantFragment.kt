@@ -82,7 +82,9 @@ class AddPlantFragment : Fragment() {
 
             // TODO This is the place to insert camera function ↓
             onCameraClicked = {
-                val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraFragment()
+//                val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraFragment()
+//                findNavController().navigate(action)
+                val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraPermissionFragment()
                 findNavController().navigate(action)
             }
         )
