@@ -3,6 +3,7 @@ package com.sonofasleep.watertheplantapp.viewmodels
 import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
 import com.sonofasleep.watertheplantapp.database.Plant
@@ -27,6 +28,9 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
+    private val _photo = MutableLiveData<Bitmap?>(null)
+    val photo: LiveData<Bitmap?> = _photo
+
     private val _name = MutableLiveData<String?>(null)
     val name: LiveData<String?> = _name
 
@@ -47,6 +51,10 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         .getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     private val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
+
+    fun setPhoto(bitmap: Bitmap) {
+        _photo.value = bitmap
+    }
 
     fun setInitFalse() {
         _init.value = false
@@ -86,9 +94,12 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _sliderValue.value = 1
         _hour.value = 10
         _minutes.value = 0
+        _photo.value = null
     }
 
     fun isIconNotNull(): Boolean = _icon.value != null
+
+    fun isPhotoNotNull(): Boolean = _photo.value != null
 
     fun isNameValid(name: String): Boolean = name.isNotBlank()
 

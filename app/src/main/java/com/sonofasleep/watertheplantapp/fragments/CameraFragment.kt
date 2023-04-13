@@ -1,15 +1,16 @@
 package com.sonofasleep.watertheplantapp.fragments
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.os.Build
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.util.Rational
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.SharedElementCallback
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
@@ -20,15 +21,22 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
+import com.sonofasleep.watertheplantapp.const.ANIMATION_FAST_MILLIS
+import com.sonofasleep.watertheplantapp.const.ANIMATION_SLOW_MILLIS
 import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.databinding.FragmentCameraBinding
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
+
+    private var imageCapture: ImageCapture? = null
+    private lateinit var cameraExecutor: ExecutorService
 
     private val viewModel: AddNewPlantViewModel by viewModels {
         AddNewPlantViewModelFactory(
@@ -38,6 +46,7 @@ class CameraFragment : Fragment() {
     }
     private val navArgs: AddPlantFragmentArgs by navArgs()
 
+    // This view is for changing color of toolbar
     lateinit var myView: View
 
     override fun onCreateView(
@@ -66,7 +75,16 @@ class CameraFragment : Fragment() {
         // Setting status bar to black
         setStatusBarDark(myView)
 
+        // Starting camera
+        startCamera()
 
+        // Camera shutter button
+        binding.makePhotoButton.setOnClickListener {
+            simulateFlash()
+            takePhoto()
+        }
+
+        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
     override fun onDestroyView() {
@@ -74,19 +92,86 @@ class CameraFragment : Fragment() {
 
         resetStatusBarColor(myView)
         _binding = null
+        imageCapture = null
+
+        cameraExecutor.shutdown()
     }
 
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
+            // Setting height of viewFinder to width (I wont it to be square)
+            val widthInPx = binding.viewFinder.width
+            binding.viewFinder.layoutParams.height = widthInPx
 
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                }
 
-    private fun startCamera() {}
+            imageCapture = ImageCapture
+                .Builder()
+                .build()
 
-    private fun takePhoto() {}
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            val viewPort = ViewPort.Builder(Rational(300, 300), Surface.ROTATION_0).build()
+            val useCaseGroup = UseCaseGroup.Builder()
+                .addUseCase(preview)
+                .addUseCase(imageCapture!!)
+                .setViewPort(viewPort)
+                .build()
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, useCaseGroup
+                )
+
+//                cameraProvider.bindToLifecycle(
+//                    this, cameraSelector, preview, imageCapture)
+
+            } catch (exc: Exception) {
+                Log.e(DEBUG_TAG, "Use case binding failed", exc)
+            }
+
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        // imageCapture is initialized in startCamera()
+        val imageCapture = imageCapture ?: return
+
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(requireContext()),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    val bitmap: Bitmap = image.toBitmap()
+                    viewModel.setPhoto(bitmap)
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e(DEBUG_TAG, "Image capture failed ${exception.message}")
+                }
+            }
+        )
+    }
 
     private fun setStatusBarDark(view: View) {
         activity?.window?.statusBarColor = requireContext().getColor(R.color.dark_theme_background)
-        WindowInsetsControllerCompat(requireActivity().window, view).isAppearanceLightStatusBars = false
+        WindowInsetsControllerCompat(requireActivity().window, view).isAppearanceLightStatusBars =
+            false
     }
 
     private fun resetStatusBarColor(view: View) {
@@ -96,11 +181,24 @@ class CameraFragment : Fragment() {
             }
             Configuration.UI_MODE_NIGHT_NO -> {
                 activity?.window?.statusBarColor = requireContext().getColor(R.color.white)
-                WindowInsetsControllerCompat(requireActivity().window, view).isAppearanceLightStatusBars = true
+                WindowInsetsControllerCompat(
+                    requireActivity().window,
+                    view
+                ).isAppearanceLightStatusBars = true
             }
             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                 Log.d(DEBUG_TAG, "Nigh not specified")
             }
         }
+    }
+
+    private fun simulateFlash() {
+        // Display flash animation to indicate that photo was captured
+        binding.root.postDelayed({
+            binding.root.foreground = ColorDrawable(Color.BLACK)
+            binding.root.postDelayed(
+                { binding.root.foreground = null }, ANIMATION_FAST_MILLIS
+            )
+        }, ANIMATION_SLOW_MILLIS)
     }
 }

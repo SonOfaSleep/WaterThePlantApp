@@ -16,3 +16,7 @@ const val PLANT_ID = "plantID"
 
 // For POST_NOTIFICATIONS permission
 const val NOTIFICATION_REQUEST_CODE = 123
+
+// For camera flash animation
+const val ANIMATION_FAST_MILLIS = 50L
+const val ANIMATION_SLOW_MILLIS = 100L

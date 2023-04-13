@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.getFont
@@ -80,10 +81,7 @@ class AddPlantFragment : Fragment() {
             IconSource.imageList,
             viewModel.icon.value,
 
-            // TODO This is the place to insert camera function ↓
             onCameraClicked = {
-//                val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraFragment()
-//                findNavController().navigate(action)
                 val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraPermissionFragment()
                 findNavController().navigate(action)
             }

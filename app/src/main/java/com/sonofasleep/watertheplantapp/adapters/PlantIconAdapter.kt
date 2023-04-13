@@ -46,7 +46,7 @@ class PlantIconAdapter(
     }
 
     override fun onBindViewHolder(holder: PlantImageViewHolder, position: Int) {
-        val item = plantIconsList[position]
+        val item: PlantIconItem = plantIconsList[position]
         holder.bind(item)
 
         // Single selection logic

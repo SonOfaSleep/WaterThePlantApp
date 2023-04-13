@@ -45,6 +45,4 @@
     <string name="new_plant_toolbar_title">New plant</string>
     <string name="edit_plant_toolbar_title">Edit plant</string>
     <string name="long_click_chosen_text">Selected: %1$d</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
