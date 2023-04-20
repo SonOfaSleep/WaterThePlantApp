@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -40,7 +41,7 @@ class AddPlantFragment : Fragment() {
     private var _binding: FragmentAddPlantBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: AddNewPlantViewModel by viewModels {
+    private val viewModel: AddNewPlantViewModel by activityViewModels {
         AddNewPlantViewModelFactory(
             (activity?.application as PlantApplication).database.plantDao(),
             activity?.application as PlantApplication
@@ -236,17 +237,21 @@ class AddPlantFragment : Fragment() {
         return viewModel.isIconNotNull()
     }
 
+    private fun isPhotoNotNull(): Boolean {
+        return viewModel.isPhotoNotNull()
+    }
+
     private fun isNameValid(): Boolean {
         return viewModel.isNameValid(binding.nameEditText.text.toString())
     }
 
     private fun checkEntry(): Boolean {
         val toastMessage: String
-        return if (!isIconNotNull() && !isNameValid()) {
+        return if (!isIconNotNull() && !isNameValid() && !isPhotoNotNull()) {
             toastMessage = getText(R.string.choose_icon_and_name).toString()
             makeToast(toastMessage)
             false
-        } else if (!isIconNotNull()) {
+        } else if (!isIconNotNull() && !isPhotoNotNull()) {
             toastMessage = getText(R.string.choose_plant_icon).toString()
             makeToast(toastMessage)
             false

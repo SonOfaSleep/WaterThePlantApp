@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -26,19 +25,19 @@ import kotlinx.coroutines.*
 
 class AlarmReceiver : BroadcastReceiver() {
 
-    lateinit var dao: PlantDao
+    private lateinit var dao: PlantDao
 
     @SuppressLint("MissingPermission")
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent?) {
 
-        val logUtils = LogUtils(context!!)
+        val logUtils = LogUtils(context)
 
         val icon = intent?.getIntExtra(PLANT_ICON, R.drawable.ic_launcher_foreground)
         val name = intent?.getStringExtra(PLANT_NAME)
         val plantID = intent?.getLongExtra(PLANT_ID, 0L)
 
         fun getBitmap(drawableRes: Int): Bitmap? {
-            val drawable: Drawable? = ContextCompat.getDrawable(context!!, drawableRes)
+            val drawable: Drawable? = ContextCompat.getDrawable(context, drawableRes)
             val canvas = Canvas()
             val bitmap = drawable?.let {
                 Bitmap.createBitmap(
@@ -55,14 +54,14 @@ class AlarmReceiver : BroadcastReceiver() {
 
         try {
             // Create an explicit intent for an Activity in your app
-            val notifIntent = Intent(context, MainActivity::class.java).apply {
+            val notificationIntent = Intent(context, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             val pendingIntent: PendingIntent =
                 PendingIntent.getActivity(
                     context,
                     0,
-                    notifIntent,
+                    notificationIntent,
                     PendingIntent.FLAG_IMMUTABLE
                 )
 

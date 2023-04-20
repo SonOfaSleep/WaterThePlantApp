@@ -4,14 +4,15 @@
     <string name="action_settings">Настройки</string>
     <string name="search">Поиск</string>
     <string name="sorting_plants_alphabetically">Сортировать по имени</string>
-    <string name="choose_plant_icon">Иконка</string>
+
     <string name="plant_name">Имя</string>
     <string name="notes">Особенности ухода</string>
     <string name="choose_notification_periodicity_days">Частота и время напоминаний</string>
     <string name="save">Сохранить</string>
     <string name="choose_icon_and_name">Выберите иконку и имя цветка</string>
     <string name="choose_plant_name">Выберите имя цветка</string>
-    <string name="choose_icon">Выберите иконку</string>
+    <string name="choose_icon">Иконка цветка</string>
+    <string name="choose_plant_icon">Выберите иконку цветка или сделайте фото</string>
     <string name="reminder_frequency_int_days">%1$d %2$s</string>
     <string name="reminder_frequency_hour_min">%1$s</string>
     <string name="image_of_plant">Изображение цветка</string>
@@ -47,4 +48,6 @@
     <string name="new_plant_toolbar_title">Новый цветок</string>
     <string name="edit_plant_toolbar_title">Редактировать цветок</string>
     <string name="long_click_chosen_text">Выбрано: %1$d</string>
+
+    <string name="image_capture_error">Упс, что-то пошло не так…</string>
 </resources>

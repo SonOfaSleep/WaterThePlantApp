@@ -31,9 +31,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.sonofasleep.watertheplantapp'
 }
 
 dependencies {
@@ -68,7 +70,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.0")
 
     // CameraX (Stable 1.2.2 don't have toBitmap() method =( )
-    def camerax_version = "1.3.0-alpha05"
+    def camerax_version = "1.2.2"
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"

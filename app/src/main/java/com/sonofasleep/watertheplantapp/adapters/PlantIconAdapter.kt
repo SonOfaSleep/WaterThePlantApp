@@ -1,7 +1,9 @@
 package com.sonofasleep.watertheplantapp.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.databinding.PlantImageCardBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
@@ -26,7 +28,17 @@ class PlantIconAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PlantIconItem) {
-            binding.cardImage.setImageResource(item.iconNormal)
+            binding.cardImage.apply {
+                scaleType = ImageView.ScaleType.CENTER
+                setImageResource(item.iconNormal)
+            }
+        }
+
+        fun bindUri(uri: Uri) {
+            binding.cardImage.apply {
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                setImageURI(uri)
+            }
         }
 
         fun setChecked() {
@@ -47,10 +59,20 @@ class PlantIconAdapter(
 
     override fun onBindViewHolder(holder: PlantImageViewHolder, position: Int) {
         val item: PlantIconItem = plantIconsList[position]
-        holder.bind(item)
+
+        if (position == 0 && viewModel.photo.value != null) {
+            holder.bindUri(viewModel.photo.value!!)
+        } else {
+            holder.bind(item)
+        }
+
+        if (viewModel.chosenPlantIconPosition.value != null) {
+            checkedPosition = viewModel.chosenPlantIconPosition.value!!
+        }
+
 
         // Single selection logic
-        if (checkedPosition == position && position != 0) {
+        if (checkedPosition == position) {
             holder.setChecked()
         } else {
             holder.setUnChecked()
@@ -66,10 +88,20 @@ class PlantIconAdapter(
         }
 
         holder.itemView.setOnClickListener {
+
             setSingleSelection(position)
 
-            // Changing viewModels icon
-            viewModel.setPlantIcon(item)
+            // Registering choice
+            viewModel.setChosenPlantPosition(position)
+
+            // Starting camera
+            if (position == 0) {
+                // We need icon only for drawn plants
+                viewModel.setPlantIcon(null)
+                onCameraClicked()
+            } else {
+                viewModel.setPlantIcon(item)
+            }
         }
     }
 
@@ -85,9 +117,5 @@ class PlantIconAdapter(
         notifyItemChanged(checkedPosition)
         checkedPosition = position
         notifyItemChanged(checkedPosition)
-
-        if (position == 0) {
-            onCameraClicked()
-        }
     }
 }

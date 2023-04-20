@@ -20,3 +20,9 @@ const val NOTIFICATION_REQUEST_CODE = 123
 // For camera flash animation
 const val ANIMATION_FAST_MILLIS = 50L
 const val ANIMATION_SLOW_MILLIS = 100L
+
+// Camera photos
+const val CAMERA_IMAGE_FOLDER = "WaterIt_images"
+
+// CameraX const
+const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"

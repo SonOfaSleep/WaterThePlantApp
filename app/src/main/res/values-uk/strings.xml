@@ -5,14 +5,14 @@
     <string name="search">Пошук</string>
     <string name="sorting_plants_alphabetically">Сортувати за ім\'ям</string>
 
-    <string name="choose_plant_icon">Малюнок</string>
     <string name="plant_name">Ім\'я</string>
     <string name="notes">Особливості догляду</string>
     <string name="choose_notification_periodicity_days">Частота та час нагадувань</string>
     <string name="save">Зберегти</string>
     <string name="choose_icon_and_name">Оберіть іконку і назву квітки</string>
     <string name="choose_plant_name">Оберіть назву квітки</string>
-    <string name="choose_icon">Оберіть іконку</string>
+    <string name="choose_icon">Іконка рослини</string>
+    <string name="choose_plant_icon">Оберіть іконку рослини чи зробіть фото</string>
     <string name="reminder_frequency_int_days">%1$d %2$s</string>
     <string name="reminder_frequency_hour_min">%1$s</string>
     <string name="image_of_plant">Зображення квітки</string>
@@ -46,4 +46,6 @@
     <string name="new_plant_toolbar_title">Нова рослина</string>
     <string name="edit_plant_toolbar_title">Редагувати рослину</string>
     <string name="long_click_chosen_text">Обрано: %1$d</string>
+
+    <string name="image_capture_error">Упс, щось пішло не так…</string>
 </resources>

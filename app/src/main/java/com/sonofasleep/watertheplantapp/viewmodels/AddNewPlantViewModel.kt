@@ -3,7 +3,7 @@ package com.sonofasleep.watertheplantapp.viewmodels
 import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
-import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.*
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
 import com.sonofasleep.watertheplantapp.database.Plant
@@ -28,8 +28,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
-    private val _photo = MutableLiveData<Bitmap?>(null)
-    val photo: LiveData<Bitmap?> = _photo
+    private val _photo = MutableLiveData<Uri?>(null)
+    val photo: LiveData<Uri?> = _photo
 
     private val _name = MutableLiveData<String?>(null)
     val name: LiveData<String?> = _name
@@ -39,6 +39,9 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     private val _sliderValue = MutableLiveData<Int>(1)
     val sliderValue: LiveData<Int> = _sliderValue
+
+    private val _chosenPlantIconPosition = MutableLiveData<Int?>(null)
+    val chosenPlantIconPosition: LiveData<Int?> = _chosenPlantIconPosition
 
     // Time values for plant
     private val _hour = MutableLiveData<Int>(10)
@@ -52,8 +55,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     private val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
 
-    fun setPhoto(bitmap: Bitmap) {
-        _photo.value = bitmap
+    fun setPhoto(uri: Uri?) {
+        _photo.value = uri
     }
 
     fun setInitFalse() {
@@ -64,7 +67,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _oldPlant.value = plant
     }
 
-    fun setPlantIcon(item: PlantIconItem) {
+    fun setPlantIcon(item: PlantIconItem?) {
         _icon.value = item
     }
 
@@ -85,6 +88,10 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _minutes.value = minutes
     }
 
+    fun setChosenPlantPosition(position: Int) {
+        _chosenPlantIconPosition.value = position
+    }
+
     fun resetFragmentValues() {
         _init.value = true
         _oldPlant.value = null
@@ -95,6 +102,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _hour.value = 10
         _minutes.value = 0
         _photo.value = null
+        _chosenPlantIconPosition.value = null
     }
 
     fun isIconNotNull(): Boolean = _icon.value != null
