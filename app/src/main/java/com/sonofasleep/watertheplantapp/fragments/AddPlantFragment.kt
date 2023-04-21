@@ -10,15 +10,12 @@ import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -35,6 +32,8 @@ import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
+import java.io.File
+import java.net.URI
 import java.util.Calendar
 
 class AddPlantFragment : Fragment() {
@@ -83,7 +82,10 @@ class AddPlantFragment : Fragment() {
             viewModel.icon.value,
 
             onCameraClicked = {
-                val action = AddPlantFragmentDirections.actionAddPlantFragmentToCameraPermissionFragment()
+                // Monitoring that we are moving to camera (if not reset viewModel values)
+                viewModel.setGoingToCamera(true)
+                val action =
+                    AddPlantFragmentDirections.actionAddPlantFragmentToCameraPermissionFragment()
                 findNavController().navigate(action)
             }
         )
@@ -237,8 +239,8 @@ class AddPlantFragment : Fragment() {
         return viewModel.isIconNotNull()
     }
 
-    private fun isPhotoNotNull(): Boolean {
-        return viewModel.isPhotoNotNull()
+    private fun isImageUriNotNull(): Boolean {
+        return viewModel.isImageUriNotNull()
     }
 
     private fun isNameValid(): Boolean {
@@ -247,11 +249,11 @@ class AddPlantFragment : Fragment() {
 
     private fun checkEntry(): Boolean {
         val toastMessage: String
-        return if (!isIconNotNull() && !isNameValid() && !isPhotoNotNull()) {
+        return if (!isIconNotNull() && !isNameValid() && !isImageUriNotNull()) {
             toastMessage = getText(R.string.choose_icon_and_name).toString()
             makeToast(toastMessage)
             false
-        } else if (!isIconNotNull() && !isPhotoNotNull()) {
+        } else if (!isIconNotNull() && !isImageUriNotNull()) {
             toastMessage = getText(R.string.choose_plant_icon).toString()
             makeToast(toastMessage)
             false
@@ -270,6 +272,13 @@ class AddPlantFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        // Resetting viewModel values if it's not to camera navigation
+        if (viewModel.goingToCamera.value == false) {
+            viewModel.resetFragmentValues()
+        }
+
+        viewModel.deleteImageFile()
         _binding = null
     }
 }

@@ -8,14 +8,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.sonofasleep.watertheplantapp.R
+import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
+import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
+import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
 
 private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
 
@@ -23,7 +23,14 @@ private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA)
  * The sole purpose of this fragment is to request permissions and, once granted, display the
  * camera fragment to the user.
  */
-class CameraPermissionFragment: Fragment() {
+class CameraPermissionFragment : Fragment() {
+
+    private val viewModel: AddNewPlantViewModel by activityViewModels {
+        AddNewPlantViewModelFactory(
+            (activity?.application as PlantApplication).database.plantDao(),
+            activity?.application as PlantApplication
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +51,8 @@ class CameraPermissionFragment: Fragment() {
     }
 
     private fun navigateToCamera() {
-        val action = CameraPermissionFragmentDirections.actionCameraPermissionFragmentToCameraFragment()
+        val action =
+            CameraPermissionFragmentDirections.actionCameraPermissionFragmentToCameraFragment()
         findNavController().navigate(action)
     }
 
@@ -60,7 +68,11 @@ class CameraPermissionFragment: Fragment() {
             }
             if (!permissionGranted) {
                 Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
-                val action = CameraPermissionFragmentDirections.actionCameraPermissionFragmentToAddPlantFragment()
+
+                viewModel.setGoingToCamera(false)
+
+                val action =
+                    CameraPermissionFragmentDirections.actionCameraPermissionFragmentToAddPlantFragment()
                 findNavController().navigate(action)
             } else {
                 navigateToCamera()

@@ -60,8 +60,8 @@ class PlantIconAdapter(
     override fun onBindViewHolder(holder: PlantImageViewHolder, position: Int) {
         val item: PlantIconItem = plantIconsList[position]
 
-        if (position == 0 && viewModel.photo.value != null) {
-            holder.bindUri(viewModel.photo.value!!)
+        if (position == 0 && viewModel.imageUri.value != null) {
+            holder.bindUri(viewModel.imageUri.value!!)
         } else {
             holder.bind(item)
         }

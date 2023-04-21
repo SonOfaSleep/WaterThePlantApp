@@ -1,13 +1,9 @@
 package com.sonofasleep.watertheplantapp.fragments
 
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Icon
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.util.Rational
 import android.view.*
@@ -19,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.AppBarConfiguration
@@ -95,6 +90,8 @@ class CameraFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        viewModel.setGoingToCamera(false)
 
         resetStatusBarColor(myView)
         _binding = null
@@ -179,12 +176,10 @@ class CameraFragment : Fragment() {
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
-            object  : ImageCapture.OnImageSavedCallback {
+            object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    Log.d(DEBUG_TAG, "Image Saved! Uri = ${outputFileResults.savedUri}")
-                    viewModel.setPhoto(outputFileResults.savedUri)
-                    Log.d(DEBUG_TAG, "viewModel photo now = ${viewModel.photo.value}")
 
+                    viewModel.setImageUri(outputFileResults.savedUri)
                     navigateToAddPlant()
                 }
 
@@ -211,6 +206,7 @@ class CameraFragment : Fragment() {
             Configuration.UI_MODE_NIGHT_YES -> {
                 return
             }
+
             Configuration.UI_MODE_NIGHT_NO -> {
                 activity?.window?.statusBarColor = requireContext().getColor(R.color.white)
                 WindowInsetsControllerCompat(
@@ -218,6 +214,7 @@ class CameraFragment : Fragment() {
                     view
                 ).isAppearanceLightStatusBars = true
             }
+
             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
                 Log.e(DEBUG_TAG, "Night not specified")
             }

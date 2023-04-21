@@ -4,13 +4,17 @@ import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.*
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
+import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
+import java.net.URI
 
 class AddNewPlantViewModel(private val dao: PlantDao, private val application: Application) :
     ViewModel() {
@@ -28,8 +32,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val _icon = MutableLiveData<PlantIconItem?>(null)
     val icon: LiveData<PlantIconItem?> = _icon
 
-    private val _photo = MutableLiveData<Uri?>(null)
-    val photo: LiveData<Uri?> = _photo
+    private val _imageUri = MutableLiveData<Uri?>(null)
+    val imageUri: LiveData<Uri?> = _imageUri
 
     private val _name = MutableLiveData<String?>(null)
     val name: LiveData<String?> = _name
@@ -43,6 +47,15 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val _chosenPlantIconPosition = MutableLiveData<Int?>(null)
     val chosenPlantIconPosition: LiveData<Int?> = _chosenPlantIconPosition
 
+    // For deleting image before resetting values if user decided not to use it
+    // false = delete image file, true = save to plantUri
+    private val _saveImage = MutableLiveData<Boolean>(false)
+    val saveImage: LiveData<Boolean> = _saveImage
+
+    // For knowing when navigating to camera, if false = reset viewModel values
+    private val _goingToCamera = MutableLiveData(false)
+    val goingToCamera: LiveData<Boolean> = _goingToCamera
+
     // Time values for plant
     private val _hour = MutableLiveData<Int>(10)
     val hour: LiveData<Int> = _hour
@@ -55,8 +68,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     private val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
 
-    fun setPhoto(uri: Uri?) {
-        _photo.value = uri
+    fun setImageUri(uri: Uri?) {
+        _imageUri.value = uri
     }
 
     fun setInitFalse() {
@@ -92,6 +105,14 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _chosenPlantIconPosition.value = position
     }
 
+    fun setSaveImage(boolean: Boolean = true) {
+        _saveImage.value = boolean
+    }
+
+    fun setGoingToCamera(boolean: Boolean = true) {
+        _goingToCamera.value = boolean
+    }
+
     fun resetFragmentValues() {
         _init.value = true
         _oldPlant.value = null
@@ -101,13 +122,14 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _sliderValue.value = 1
         _hour.value = 10
         _minutes.value = 0
-        _photo.value = null
+        _imageUri.value = null
         _chosenPlantIconPosition.value = null
+        _saveImage.value = false
     }
 
     fun isIconNotNull(): Boolean = _icon.value != null
 
-    fun isPhotoNotNull(): Boolean = _photo.value != null
+    fun isImageUriNotNull(): Boolean = _imageUri.value != null
 
     fun isNameValid(name: String): Boolean = name.isNotBlank()
 
@@ -167,6 +189,23 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
         viewModelScope.launch(Dispatchers.IO) {
             dao.update(newPlant)
+        }
+    }
+
+    // Deleting image if it is not saved to plant (saveImage != true)
+    fun deleteImageFile() {
+        val saveImage: Boolean = saveImage.value ?: false
+        // Deleting only if saveImage = false; when true we need Uri to be saved in plantImageUri
+        if (isImageUriNotNull() && !saveImage) {
+            val uriString = imageUri.value.toString()
+            val imageFile = File(URI.create(uriString))
+
+            try {
+                imageFile.delete()
+                setImageUri(null)
+            } catch (e: Exception) {
+                Log.e(DEBUG_TAG, "${e.message}")
+            }
         }
     }
 
