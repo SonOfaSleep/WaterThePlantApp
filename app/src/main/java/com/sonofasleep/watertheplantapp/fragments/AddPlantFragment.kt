@@ -1,11 +1,11 @@
 package com.sonofasleep.watertheplantapp.fragments
 
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -32,8 +32,6 @@ import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
-import java.io.File
-import java.net.URI
 import java.util.Calendar
 
 class AddPlantFragment : Fragment() {
@@ -79,7 +77,6 @@ class AddPlantFragment : Fragment() {
         val adapter = PlantIconAdapter(
             viewModel,
             IconSource.imageList,
-            viewModel.icon.value,
 
             onCameraClicked = {
                 // Monitoring that we are moving to camera (if not reset viewModel values)
@@ -89,11 +86,17 @@ class AddPlantFragment : Fragment() {
                 findNavController().navigate(action)
             }
         )
-
         recyclerView.adapter = adapter
 
         // Plant id will be > 0 if it's edit not new one (default value is 0L)
-        val plantId = navArgs.plantId
+        // We save it to viewModel because when we move from this fragment to camera it becomes zero
+        // and we need it to be saved (so we relly on viewModels plantId not navArgs.plantId)
+        if (viewModel.init.value!!) {
+            viewModel.apply {
+                setPlantId(navArgs.plantId)
+            }
+        }
+        val plantId = viewModel.plantId.value!!
 
         /**
          * Setting different fonts for the label and input text
@@ -110,20 +113,32 @@ class AddPlantFragment : Fragment() {
          * viewModel.init is true only at first enter. We need it for updating viewModels values
          * when editing plant.
          */
-        if (viewModel.init.value!! && plantId > 0) {
+        // if (viewModel.init.value!! && plantId > 0)
+        if (plantId > 0 && viewModel.init.value!!) {
             binding.toolbar.plantListToolbar.title = getString(R.string.edit_plant_toolbar_title)
 
             viewModel.getPlantAsLiveData(plantId).observe(this.viewLifecycleOwner) { plant ->
                 viewModel.apply {
+                    if (plant.photoImageUri != null) {
+                        setChosenPlantPosition(0)
+                        setImageUri(Uri.parse(plant.photoImageUri))
+                        adapter.notifyItemChanged(0)
+                    }
+                    if (plant.image != null) {
+                        val position =
+                            IconSource.imageList.indexOfFirst { it.iconNormal == plant.image.iconNormal }
+                        setChosenPlantPosition(position)
+                        setPlantIcon(PlantIconItem(plant.image.iconNormal, plant.image.iconDry))
+                        adapter.notifyItemChanged(position)
+                    }
                     setOldPlant(plant)
-                    setPlantIcon(PlantIconItem(plant.image.iconNormal, plant.image.iconDry))
                     setName(plant.name)
                     setNotes(plant.description)
                     setSliderValue(plant.reminderFrequency)
                     setPlantTime(plant.timeHour, plant.timeMin)
-                    setInitFalse()
                 }
                 bindPlant()
+                viewModel.setInit(false)
             }
         } else {
             binding.toolbar.plantListToolbar.title = getString(R.string.new_plant_toolbar_title)
@@ -171,7 +186,11 @@ class AddPlantFragment : Fragment() {
             }
 
             // Plant will be created no matter the user answer and i decided to not wait for him
-            if (plantId > 0) updatePlant() else addPlant()
+            if (plantId > 0) {
+                updatePlant()
+            } else {
+                addPlant()
+            }
         }
     }
 
@@ -205,8 +224,9 @@ class AddPlantFragment : Fragment() {
     private fun updatePlant() {
         if (checkEntry()) {
             viewModel.updatePlantAndAlarm(
-                id = navArgs.plantId,
-                image = viewModel.icon.value!!,
+                id = viewModel.plantId.value!!,
+                image = viewModel.iconDrawable.value,
+                imageUri = viewModel.iconPhotoUri.value,
                 name = viewModel.name.value!!,
                 notes = viewModel.notes.value!!,
                 reminderFrequency = viewModel.sliderValue.value!!,
@@ -223,7 +243,8 @@ class AddPlantFragment : Fragment() {
         // Checking if plant is valid than adding it to room
         if (checkEntry()) {
             viewModel.insertPlantStartAlarm(
-                viewModel.icon.value!!,
+                iconDrawable = viewModel.iconDrawable.value,
+                iconPhotoImageUri = viewModel.iconPhotoUri.value,
                 viewModel.name.value!!,
                 viewModel.sliderValue.value!!,
                 viewModel.notes.value!!,

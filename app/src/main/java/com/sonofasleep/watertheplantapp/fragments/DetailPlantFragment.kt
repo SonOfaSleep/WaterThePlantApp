@@ -119,7 +119,7 @@ class DetailPlantFragment : Fragment() {
 
     private fun bindPlant() {
         binding.apply {
-            setCardImageAccordingToScreenSize()
+            if (plant.image != null) setCardImageAccordingToScreenSize()
             toolbar.plantListToolbar.title = plant.name
             wateringType.text = getString(
                 R.string.reminder_frequency_int_days,
@@ -139,7 +139,7 @@ class DetailPlantFragment : Fragment() {
     }
 
     private fun setCardImageAccordingToScreenSize() {
-        binding.cardImage.setImageResource(plant.image.iconNormal)
+        binding.cardImage.setImageResource(plant.image!!.iconNormal)
         val displayHeight = context?.resources?.displayMetrics?.heightPixels ?: 1000
         // Getting default view size in pixels. Default is set in layout file in dp
         // For small screens i want it to be half the size

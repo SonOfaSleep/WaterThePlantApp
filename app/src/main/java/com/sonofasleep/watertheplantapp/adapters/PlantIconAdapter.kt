@@ -16,7 +16,6 @@ import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 class PlantIconAdapter(
     private val viewModel: AddNewPlantViewModel,
     private val plantIconsList: List<PlantIconItem>,
-    private var selectedIcon: PlantIconItem? = null,
     val onCameraClicked: () -> Unit
 ) : RecyclerView.Adapter<PlantIconAdapter.PlantImageViewHolder>() {
 
@@ -60,8 +59,8 @@ class PlantIconAdapter(
     override fun onBindViewHolder(holder: PlantImageViewHolder, position: Int) {
         val item: PlantIconItem = plantIconsList[position]
 
-        if (position == 0 && viewModel.imageUri.value != null) {
-            holder.bindUri(viewModel.imageUri.value!!)
+        if (position == 0 && viewModel.iconPhotoUri.value != null) {
+            holder.bindUri(viewModel.iconPhotoUri.value!!)
         } else {
             holder.bind(item)
         }
@@ -70,21 +69,11 @@ class PlantIconAdapter(
             checkedPosition = viewModel.chosenPlantIconPosition.value!!
         }
 
-
         // Single selection logic
         if (checkedPosition == position) {
             holder.setChecked()
         } else {
             holder.setUnChecked()
-        }
-
-        // For checking previously selected icon in recyclerView
-        // and updating checkedPosition for correct work of single selection logic above
-        if (selectedIcon?.iconNormal == item.iconNormal) {
-            holder.setChecked()
-            checkedPosition =
-                plantIconsList.indexOfFirst { it.iconNormal == selectedIcon?.iconNormal }
-            selectedIcon = null
         }
 
         holder.itemView.setOnClickListener {
@@ -100,6 +89,7 @@ class PlantIconAdapter(
                 viewModel.setPlantIcon(null)
                 onCameraClicked()
             } else {
+                viewModel.setImageUri(null)
                 viewModel.setPlantIcon(item)
             }
         }

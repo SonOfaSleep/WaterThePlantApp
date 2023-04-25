@@ -19,9 +19,13 @@ import java.net.URI
 class AddNewPlantViewModel(private val dao: PlantDao, private val application: Application) :
     ViewModel() {
 
-    // For first entering addFragment ONLY (true = first time; every other time it will be false)
-    private val _init = MutableLiveData<Boolean>(true)
+    // For setting plantId if it's first entry here from PlantListFragment
+    private val _init = MutableLiveData(true)
     val init: LiveData<Boolean> = _init
+
+    // PlantId needs for deciding to create new plant or edit old one
+    private val _plantId = MutableLiveData<Long>(-1)
+    val plantId: LiveData<Long> = _plantId
 
     // Old plant is needed for canceling alarm
     private val _oldPlant = MutableLiveData<Plant?>(null)
@@ -29,11 +33,11 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     // For plant icon choose in recyclerView
     // When not in AddPlantFragment icon is null
-    private val _icon = MutableLiveData<PlantIconItem?>(null)
-    val icon: LiveData<PlantIconItem?> = _icon
+    private val _iconDrawable = MutableLiveData<PlantIconItem?>(null)
+    val iconDrawable: LiveData<PlantIconItem?> = _iconDrawable
 
-    private val _imageUri = MutableLiveData<Uri?>(null)
-    val imageUri: LiveData<Uri?> = _imageUri
+    private val _iconPhotoUri = MutableLiveData<Uri?>(null)
+    val iconPhotoUri: LiveData<Uri?> = _iconPhotoUri
 
     private val _name = MutableLiveData<String?>(null)
     val name: LiveData<String?> = _name
@@ -68,12 +72,16 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     private val alarmUtilities = AlarmUtilities(application.applicationContext, alarmManager)
 
-    fun setImageUri(uri: Uri?) {
-        _imageUri.value = uri
+    fun setInit(boolean: Boolean) {
+        _init.value = boolean
     }
 
-    fun setInitFalse() {
-        _init.value = false
+    fun setPlantId(plantId: Long) {
+        _plantId.value = plantId
+    }
+
+    fun setImageUri(uri: Uri?) {
+        _iconPhotoUri.value = uri
     }
 
     fun setOldPlant(plant: Plant) {
@@ -81,7 +89,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     }
 
     fun setPlantIcon(item: PlantIconItem?) {
-        _icon.value = item
+        _iconDrawable.value = item
     }
 
     fun setName(name: String) {
@@ -114,22 +122,23 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     }
 
     fun resetFragmentValues() {
-        _init.value = true
         _oldPlant.value = null
-        _icon.value = null
+        _iconDrawable.value = null
         _name.value = null
         _notes.value = ""
         _sliderValue.value = 1
         _hour.value = 10
         _minutes.value = 0
-        _imageUri.value = null
+        _iconPhotoUri.value = null
         _chosenPlantIconPosition.value = null
         _saveImage.value = false
+        _init.value =
+            true // If not set this here it will be false on init sometimes, have no idea why
     }
 
-    fun isIconNotNull(): Boolean = _icon.value != null
+    fun isIconNotNull(): Boolean = _iconDrawable.value != null
 
-    fun isImageUriNotNull(): Boolean = _imageUri.value != null
+    fun isImageUriNotNull(): Boolean = _iconPhotoUri.value != null
 
     fun isNameValid(name: String): Boolean = name.isNotBlank()
 
@@ -138,7 +147,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     fun getPlant(id: Long): Plant = dao.getPlantById(id)
 
     fun insertPlantStartAlarm(
-        image: PlantIconItem,
+        iconDrawable: PlantIconItem? = null,
+        iconPhotoImageUri: Uri? = null,
         name: String,
         reminderFrequency: Int,
         notes: String,
@@ -146,7 +156,6 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         timeMinutes: Int
     ) {
         val newPlant = Plant(
-            image = image,
             name = name,
             reminderFrequency = reminderFrequency,
             description = notes,
@@ -154,17 +163,25 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
             timeMin = timeMinutes
         )
 
+        // Plant can have only one icon (iconDrawable or iconPhotoUri)
+        val plantForSave = if (iconPhotoImageUri != null) {
+            newPlant.copy(photoImageUri = iconPhotoImageUri.toString())
+        } else {
+            newPlant.copy(image = iconDrawable)
+        }
+
         // Launching coroutine to insert in database and get plantId
         viewModelScope.launch(Dispatchers.IO) {
             // We need ID to set unique pending intent and we don't have it until we insert it in database
-            val plantId = dao.insertNewPlant(newPlant)
-            alarmUtilities.setExactAlarm(newPlant, plantId)
+            val plantId = dao.insertNewPlant(plantForSave)
+            alarmUtilities.setExactAlarm(plantForSave, plantId)
         }
     }
 
     fun updatePlantAndAlarm(
         id: Long,
-        image: PlantIconItem,
+        image: PlantIconItem? = null,
+        imageUri: Uri? = null,
         name: String,
         notes: String,
         reminderFrequency: Int,
@@ -175,6 +192,7 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         val newPlant = Plant(
             id = id,
             image = image,
+            photoImageUri = imageUri?.toString(),
             name = name,
             description = notes,
             reminderFrequency = reminderFrequency,
@@ -182,6 +200,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
             timeHour = timeHours,
             timeMin = timeMinutes
         )
+
+
         alarmUtilities.apply {
             cancelAlarm(oldPlant)
             setExactAlarm(newPlant, newPlant.id)
@@ -190,14 +210,20 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         viewModelScope.launch(Dispatchers.IO) {
             dao.update(newPlant)
         }
+
+        // deleting old image if oldPlant had one
+        if (oldPlant.photoImageUri != null) {
+            deleteImageFile(Uri.parse(oldPlant.photoImageUri))
+        }
     }
 
     // Deleting image if it is not saved to plant (saveImage != true)
-    fun deleteImageFile() {
+    // Also if uri in function != null it will delete it
+    fun deleteImageFile(uri: Uri? = null) {
         val saveImage: Boolean = saveImage.value ?: false
         // Deleting only if saveImage = false; when true we need Uri to be saved in plantImageUri
-        if (isImageUriNotNull() && !saveImage) {
-            val uriString = imageUri.value.toString()
+        if (isImageUriNotNull() && !saveImage || uri != null) {
+            val uriString = uri?.toString() ?: iconPhotoUri.value.toString()
             val imageFile = File(URI.create(uriString))
 
             try {

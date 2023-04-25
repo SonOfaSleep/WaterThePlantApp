@@ -11,7 +11,8 @@ data class Plant(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
     @Embedded
-    val image: PlantIconItem,
+    val image: PlantIconItem? = null, // Plant icon if drawable was chosen
+    val photoImageUri: String? = null, // Plant icon if image was taken via camera
     val name: String,
     @ColumnInfo(name = "reminder_frequency")
     val reminderFrequency: Int,

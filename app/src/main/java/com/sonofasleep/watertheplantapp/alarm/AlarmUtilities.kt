@@ -23,7 +23,7 @@ class AlarmUtilities(private val context: Context, private val alarmManager: Ala
 
     private fun createAlarmIntent(plant: Plant, plantId: Long): PendingIntent {
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent.putExtra(PLANT_ICON, plant.image.iconDry)
+        alarmIntent.putExtra(PLANT_ICON, plant.image?.iconDry)
         alarmIntent.putExtra(PLANT_NAME, plant.name)
         alarmIntent.putExtra(PLANT_ID, plantId)
 

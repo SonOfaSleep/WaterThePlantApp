@@ -2,13 +2,17 @@ package com.sonofasleep.watertheplantapp.adapters
 
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sonofasleep.watertheplantapp.R
+import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.databinding.PlantItemBinding
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.viewmodels.OnLongClickEnabled
@@ -29,7 +33,18 @@ class PlantsAdapter(
         // link looks like this = image=com.sonofasleep.watertheplantapp.model.PlantIconItem@7d184bc
         // so we need to compare every property of plant, oldItem == newItem don't work!
         override fun areContentsTheSame(oldItem: Plant, newItem: Plant): Boolean {
-            return (oldItem.id == newItem.id && oldItem.notifications == newItem.notifications && oldItem.image.iconNormal == newItem.image.iconNormal && oldItem.image.iconDry == newItem.image.iconDry && oldItem.timeToWater == newItem.timeToWater && oldItem.name == newItem.name && oldItem.description == newItem.description && oldItem.reminderFrequency == newItem.reminderFrequency && oldItem.timeHour == newItem.timeHour && oldItem.timeMin == newItem.timeMin)
+            return (oldItem.id == newItem.id &&
+                    oldItem.notifications == newItem.notifications &&
+                    oldItem.image?.iconNormal == newItem.image?.iconNormal &&
+                    oldItem.image?.iconDry == newItem.image?.iconDry &&
+                    oldItem.photoImageUri == newItem.photoImageUri &&
+                    oldItem.timeToWater == newItem.timeToWater &&
+                    oldItem.name == newItem.name &&
+                    oldItem.description == newItem.description &&
+                    oldItem.reminderFrequency == newItem.reminderFrequency &&
+                    oldItem.timeHour == newItem.timeHour &&
+                    oldItem.timeMin == newItem.timeMin
+                    )
         }
     }
 
@@ -49,14 +64,27 @@ class PlantsAdapter(
                 // PLANT NAME
                 plantName.text = plant.name
 
-                // ↓ PLANT CARD IMAGE BLOCK ↓
-                val image = if (!plant.timeToWater) {
-                    plant.image.iconNormal
+                /**
+                 * ↓ PLANT CARD IMAGE BLOCK ↓
+                 */
+                if (plant.photoImageUri != null) {
+                    cardImage.apply {
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                        setImageURI(Uri.parse(plant.photoImageUri))
+                    }
                 } else {
-                    plant.image.iconDry
+                    // if photoImageUri == null than plant.image != null
+                    val image = if (!plant.timeToWater) {
+                        plant.image!!.iconNormal
+                    } else {
+                        plant.image!!.iconDry
+                    }
+                    cardImage.apply {
+                        scaleType = ImageView.ScaleType.CENTER
+                        setImageResource(image)
+                    }
                 }
-                cardImage.setImageResource(image)
-
+                // Coloring background to grey
                 if (plant.notifications) {
                     mainBackground.background.clearColorFilter()
                     cardImage.clearColorFilter()
@@ -64,7 +92,9 @@ class PlantsAdapter(
                     mainBackground.background.colorFilter = getColorFilter()
                     cardImage.colorFilter = getColorFilter()
                 }
-                // ↑ PLANT CARD IMAGE BLOCK ↑
+                /**
+                 * ↑ PLANT CARD IMAGE BLOCK ↑
+                 */
 
 
                 // ↓ WATERING TYPE, TIME AND REMINDER BLOCK ↓
