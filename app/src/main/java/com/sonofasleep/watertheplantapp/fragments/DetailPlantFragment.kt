@@ -1,5 +1,6 @@
 package com.sonofasleep.watertheplantapp.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -119,7 +120,7 @@ class DetailPlantFragment : Fragment() {
 
     private fun bindPlant() {
         binding.apply {
-            if (plant.image != null) setCardImageAccordingToScreenSize()
+            setCardImageAccordingToScreenSize()
             toolbar.plantListToolbar.title = plant.name
             wateringType.text = getString(
                 R.string.reminder_frequency_int_days,
@@ -139,23 +140,51 @@ class DetailPlantFragment : Fragment() {
     }
 
     private fun setCardImageAccordingToScreenSize() {
-        binding.cardImage.setImageResource(plant.image!!.iconNormal)
+        // largeRadius for large screens = 244dp; for small (122dp) = largeRadius / 2
+        var largeRadius = binding.materialCardViewPhotoImage.radius
+        val defaultElevation4dp = binding.materialCardViewPhotoImage.elevation
+
         val displayHeight = context?.resources?.displayMetrics?.heightPixels ?: 1000
         // Getting default view size in pixels. Default is set in layout file in dp
         // For small screens i want it to be half the size
-        val imageSizeInPx = binding.cardImage.height
+        val imageSizeInPx = binding.materialCardViewPhotoImageImageview.height
         val notesSizeInPx = binding.notesCardView.height
-        val newHeights = when {
-            displayHeight <= 1000 -> imageSizeInPx / 2
-            else -> imageSizeInPx
+        val newHeights: Int
+        when {
+            displayHeight <= 1000 -> {
+                newHeights = imageSizeInPx / 2
+                largeRadius /= 2
+            }
+
+            else -> newHeights = imageSizeInPx
         }
+
         val newNotesHeights = when {
             displayHeight <= 1000 -> notesSizeInPx / 2
             else -> notesSizeInPx
         }
 
-        binding.cardImage.layoutParams.height = newHeights
-        binding.cardImage.layoutParams.width = newHeights
-        binding.notesCardView.layoutParams.height = newNotesHeights
+        binding.apply {
+            if (plant.photoImageUri != null) { // if uri == null than plant.image != null (100% sure)
+                materialCardViewPhotoImageImageview.setImageURI(Uri.parse(plant.photoImageUri))
+
+                materialCardViewPhotoImage.apply {
+                    radius = largeRadius
+                    elevation = defaultElevation4dp
+                }
+            } else {
+                materialCardViewPhotoImageImageview.setImageResource(plant.image!!.iconNormal)
+                materialCardViewPhotoImage.apply {
+                    radius = 0F
+                    elevation = 0F
+                }
+            }
+
+            materialCardViewPhotoImage.layoutParams.apply {
+                height = newHeights
+                width = newHeights
+            }
+            notesCardView.layoutParams.height = newNotesHeights
+        }
     }
 }

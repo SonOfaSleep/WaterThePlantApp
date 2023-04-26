@@ -9,7 +9,7 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="70dp"
+    app:cardCornerRadius="@dimen/material_card_round_corner_radius"
     app:cardElevation="0dp"
     app:checkedIconMargin="20dp"
     app:checkedIconTint="@color/accent_color">
