@@ -89,7 +89,6 @@ class PlantIconAdapter(
                 viewModel.setPlantIcon(null)
                 onCameraClicked()
             } else {
-                viewModel.setImageUri(null)
                 viewModel.setPlantIcon(item)
             }
         }

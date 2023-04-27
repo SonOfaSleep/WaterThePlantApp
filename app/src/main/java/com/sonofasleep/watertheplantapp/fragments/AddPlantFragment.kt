@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -30,6 +31,7 @@ import com.sonofasleep.watertheplantapp.const.NOTIFICATION_REQUEST_CODE
 import com.sonofasleep.watertheplantapp.data.IconSource
 import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
+import com.sonofasleep.watertheplantapp.utilities.FileManager
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
 import java.util.Calendar
@@ -223,35 +225,59 @@ class AddPlantFragment : Fragment() {
 
     private fun updatePlant() {
         if (checkEntry()) {
-            viewModel.updatePlantAndAlarm(
-                id = viewModel.plantId.value!!,
-                image = viewModel.iconDrawable.value,
-                imageUri = viewModel.iconPhotoUri.value,
-                name = viewModel.name.value!!,
-                notes = viewModel.notes.value!!,
-                reminderFrequency = viewModel.sliderValue.value!!,
-                timeHours = viewModel.hour.value!!,
-                timeMinutes = viewModel.minutes.value!!,
-                oldPlant = viewModel.oldPlant.value!!
-            )
+            val iconDrawable: PlantIconItem?
+            val iconPhotoUri: Uri?
+            viewModel.apply {
+                when(chosenPlantIconPosition.value) {
+                    0 -> {
+                        setSaveImage(true)
+                        iconDrawable = null
+                        iconPhotoUri = this.iconPhotoUri.value
+                    }
+                    else -> {
+                        iconDrawable = this.iconDrawable.value
+                        iconPhotoUri = null
+                    }
+                }
+
+                updatePlantAndAlarm(
+                    id = viewModel.plantId.value!!,
+                    image = iconDrawable,
+                    imageUri = iconPhotoUri,
+                    name = viewModel.name.value!!,
+                    notes = viewModel.notes.value!!,
+                    reminderFrequency = viewModel.sliderValue.value!!,
+                    timeHours = viewModel.hour.value!!,
+                    timeMinutes = viewModel.minutes.value!!,
+                    oldPlant = viewModel.oldPlant.value!!
+                )
+            }
+            findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)
         }
-        viewModel.resetFragmentValues()
-        findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)
     }
 
     private fun addPlant() {
         // Checking if plant is valid than adding it to room
         if (checkEntry()) {
-            viewModel.insertPlantStartAlarm(
-                iconDrawable = viewModel.iconDrawable.value,
-                iconPhotoImageUri = viewModel.iconPhotoUri.value,
-                viewModel.name.value!!,
-                viewModel.sliderValue.value!!,
-                viewModel.notes.value!!,
-                viewModel.hour.value!!,
-                viewModel.minutes.value!!
-            )
-            viewModel.resetFragmentValues()
+
+            viewModel.apply {
+                if (chosenPlantIconPosition.value == 0) setSaveImage(true)
+
+                val (iconDrawable: PlantIconItem?, iconPhotoUri: Uri?) =
+                    when (chosenPlantIconPosition.value) {
+                        0 -> Pair(null, iconPhotoUri.value)
+                        else -> Pair(iconDrawable.value, null)
+                    }
+                insertPlantStartAlarm(
+                    iconDrawable = iconDrawable, // null when chosenPosition != 0
+                    iconPhotoImageUri = iconPhotoUri,
+                    viewModel.name.value!!,
+                    viewModel.sliderValue.value!!,
+                    viewModel.notes.value!!,
+                    viewModel.hour.value!!,
+                    viewModel.minutes.value!!
+                )
+            }
             findNavController().navigate(R.id.action_addPlantFragment_to_plantsListFragment)
         }
     }
@@ -294,12 +320,16 @@ class AddPlantFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        // Resetting viewModel values if it's not to camera navigation
-        if (viewModel.goingToCamera.value == false) {
-            viewModel.resetFragmentValues()
+        // Delete image if not meant to be saved
+        if (!viewModel.saveImage.value!!) {
+            FileManager.deleteImageFile(viewModel.iconPhotoUri.value)
         }
 
-        viewModel.deleteImageFile()
+        // Resetting viewModel values if it's not to camera navigation
+        if (viewModel.goingToCamera.value == false) {
+            viewModel.resetViewModelValues()
+        }
+
         _binding = null
     }
 }

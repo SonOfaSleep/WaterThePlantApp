@@ -3,6 +3,7 @@ package com.sonofasleep.watertheplantapp.viewmodels
 import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
 import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
+import com.sonofasleep.watertheplantapp.utilities.FileManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -114,6 +116,10 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
 
     fun deletePlantCancelAlarm(plant: Plant) {
         alarmUtilities.cancelAlarm(plant)
+
+        if (plant.photoImageUri != null) {
+            FileManager.deleteImageFile(Uri.parse(plant.photoImageUri))
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             dao.delete(plant)

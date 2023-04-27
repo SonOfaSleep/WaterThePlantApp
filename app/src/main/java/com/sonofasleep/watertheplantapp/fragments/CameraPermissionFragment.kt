@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.sonofasleep.watertheplantapp.PlantApplication
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.AddNewPlantViewModelFactory
 
@@ -59,7 +57,6 @@ class CameraPermissionFragment : Fragment() {
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
         { permissions ->
-            Log.d(DEBUG_TAG, "Inside activityResultLauncher")
             // Handle Permission granted/rejected
             var permissionGranted = true
             permissions.entries.forEach {

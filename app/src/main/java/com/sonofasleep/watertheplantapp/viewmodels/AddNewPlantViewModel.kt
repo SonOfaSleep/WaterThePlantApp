@@ -4,17 +4,14 @@ import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.*
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
+import com.sonofasleep.watertheplantapp.utilities.FileManager.deleteImageFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.net.URI
 
 class AddNewPlantViewModel(private val dao: PlantDao, private val application: Application) :
     ViewModel() {
@@ -39,6 +36,9 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     private val _iconPhotoUri = MutableLiveData<Uri?>(null)
     val iconPhotoUri: LiveData<Uri?> = _iconPhotoUri
 
+    private val _saveImage = MutableLiveData(false)
+    val saveImage: LiveData<Boolean> = _saveImage
+
     private val _name = MutableLiveData<String?>(null)
     val name: LiveData<String?> = _name
 
@@ -50,11 +50,6 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     private val _chosenPlantIconPosition = MutableLiveData<Int?>(null)
     val chosenPlantIconPosition: LiveData<Int?> = _chosenPlantIconPosition
-
-    // For deleting image before resetting values if user decided not to use it
-    // false = delete image file, true = save to plantUri
-    private val _saveImage = MutableLiveData<Boolean>(false)
-    val saveImage: LiveData<Boolean> = _saveImage
 
     // For knowing when navigating to camera, if false = reset viewModel values
     private val _goingToCamera = MutableLiveData(false)
@@ -82,6 +77,10 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
 
     fun setImageUri(uri: Uri?) {
         _iconPhotoUri.value = uri
+    }
+
+    fun setSaveImage(boolean: Boolean) {
+        _saveImage.value = boolean
     }
 
     fun setOldPlant(plant: Plant) {
@@ -113,25 +112,21 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         _chosenPlantIconPosition.value = position
     }
 
-    fun setSaveImage(boolean: Boolean = true) {
-        _saveImage.value = boolean
-    }
-
     fun setGoingToCamera(boolean: Boolean = true) {
         _goingToCamera.value = boolean
     }
 
-    fun resetFragmentValues() {
+    fun resetViewModelValues() {
         _oldPlant.value = null
         _iconDrawable.value = null
+        _iconPhotoUri.value = null
+        _saveImage.value = false
         _name.value = null
         _notes.value = ""
         _sliderValue.value = 1
         _hour.value = 10
         _minutes.value = 0
-        _iconPhotoUri.value = null
         _chosenPlantIconPosition.value = null
-        _saveImage.value = false
         _init.value =
             true // If not set this here it will be false on init sometimes, have no idea why
     }
@@ -211,27 +206,9 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
             dao.update(newPlant)
         }
 
-        // deleting old image if oldPlant had one
-        if (oldPlant.photoImageUri != null) {
+        // deleting old image if oldPlant had one and it's different from new one
+        if (oldPlant.photoImageUri != null && oldPlant.photoImageUri != newPlant.photoImageUri) {
             deleteImageFile(Uri.parse(oldPlant.photoImageUri))
-        }
-    }
-
-    // Deleting image if it is not saved to plant (saveImage != true)
-    // Also if uri in function != null it will delete it
-    fun deleteImageFile(uri: Uri? = null) {
-        val saveImage: Boolean = saveImage.value ?: false
-        // Deleting only if saveImage = false; when true we need Uri to be saved in plantImageUri
-        if (isImageUriNotNull() && !saveImage || uri != null) {
-            val uriString = uri?.toString() ?: iconPhotoUri.value.toString()
-            val imageFile = File(URI.create(uriString))
-
-            try {
-                imageFile.delete()
-                setImageUri(null)
-            } catch (e: Exception) {
-                Log.e(DEBUG_TAG, "${e.message}")
-            }
         }
     }
 
