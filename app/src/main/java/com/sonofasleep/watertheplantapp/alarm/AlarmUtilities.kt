@@ -4,12 +4,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.core.content.ContextCompat
-import com.sonofasleep.watertheplantapp.const.PLANT_ICON
+import com.sonofasleep.watertheplantapp.const.PLANT_ICON_DRAWABLE
+import com.sonofasleep.watertheplantapp.const.PLANT_ICON_PHOTO
 import com.sonofasleep.watertheplantapp.const.PLANT_ID
 import com.sonofasleep.watertheplantapp.const.PLANT_NAME
 import com.sonofasleep.watertheplantapp.database.Plant
@@ -23,9 +20,12 @@ class AlarmUtilities(private val context: Context, private val alarmManager: Ala
 
     private fun createAlarmIntent(plant: Plant, plantId: Long): PendingIntent {
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
-        alarmIntent.putExtra(PLANT_ICON, plant.image?.iconDry)
-        alarmIntent.putExtra(PLANT_NAME, plant.name)
-        alarmIntent.putExtra(PLANT_ID, plantId)
+        alarmIntent.apply {
+            putExtra(PLANT_ICON_DRAWABLE, plant.image?.iconNormal)
+            putExtra(PLANT_ICON_PHOTO, plant.photoImageUri)
+            putExtra(PLANT_NAME, plant.name)
+            putExtra(PLANT_ID, plantId)
+        }
 
         // We need this data to create unique pending intents. Each plant will have unique ID and
         // unique pendingIntent.

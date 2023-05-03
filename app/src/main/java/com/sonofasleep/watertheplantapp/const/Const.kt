@@ -10,7 +10,8 @@ const val REMINDER_WORKER_TAG = "REMIND_WORKER_TAG"
 const val DEBUG_DIR = "Debug_logs"
 
 // For alarmReceiver
-const val PLANT_ICON = "plantIcon"
+const val PLANT_ICON_DRAWABLE = "plantIconDrawable"
+const val PLANT_ICON_PHOTO = "plantIconPhoto"
 const val PLANT_NAME = "plantName"
 const val PLANT_ID = "plantID"
 
