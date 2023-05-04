@@ -47,5 +47,16 @@
     <string name="edit_plant_toolbar_title">Редагувати рослину</string>
     <string name="long_click_chosen_text">Обрано: %1$d</string>
 
+    <string name="plant_photo_alert_title">Видалити фото квітки?</string>
+    <string name="plant_photo_alert_message">
+        У рослини вже є фото, видалити його і зробити нове чи обрати вже існуюче фото?
+    </string>
+    <string name="plant_photo_alert_dialog_negative_button">
+        Зробити нове фото
+    </string>
+    <string name="plant_photo_alert_dialog_positive_button">
+        Обрати існуюче фото
+    </string>
+
     <string name="image_capture_error">Упс, щось пішло не так…</string>
 </resources>

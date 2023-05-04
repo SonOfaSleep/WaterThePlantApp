@@ -49,5 +49,16 @@
     <string name="edit_plant_toolbar_title">Редактировать цветок</string>
     <string name="long_click_chosen_text">Выбрано: %1$d</string>
 
+    <string name="plant_photo_alert_title">Удалить фото цветка?</string>
+    <string name="plant_photo_alert_message">
+        У цветка уже есть фото, удалить его и сделать новое или выбрать уже существующее фото?
+    </string>
+    <string name="plant_photo_alert_dialog_negative_button">
+        Сделать новое фото
+    </string>
+    <string name="plant_photo_alert_dialog_positive_button">
+        Выбрать существующее фото
+    </string>
+
     <string name="image_capture_error">Упс, что-то пошло не так…</string>
 </resources>

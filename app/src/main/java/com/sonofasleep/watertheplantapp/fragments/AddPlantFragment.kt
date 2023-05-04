@@ -6,11 +6,11 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,7 +26,6 @@ import com.google.android.material.slider.Slider
 import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.adapters.PlantIconAdapter
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.const.NOTIFICATION_REQUEST_CODE
 import com.sonofasleep.watertheplantapp.data.IconSource
 import com.sonofasleep.watertheplantapp.databinding.FragmentAddPlantBinding
@@ -81,11 +80,11 @@ class AddPlantFragment : Fragment() {
             IconSource.imageList,
 
             onCameraClicked = {
-                // Monitoring that we are moving to camera (if not reset viewModel values)
-                viewModel.setGoingToCamera(true)
-                val action =
-                    AddPlantFragmentDirections.actionAddPlantFragmentToCameraPermissionFragment()
-                findNavController().navigate(action)
+                if (viewModel.iconPhotoUri.value != null) {
+                    chosePhotoDialog()
+                } else {
+                    moveToCamera()
+                }
             }
         )
         recyclerView.adapter = adapter
@@ -228,12 +227,13 @@ class AddPlantFragment : Fragment() {
             val iconDrawable: PlantIconItem?
             val iconPhotoUri: Uri?
             viewModel.apply {
-                when(chosenPlantIconPosition.value) {
+                when (chosenPlantIconPosition.value) {
                     0 -> {
                         setSaveImage(true)
                         iconDrawable = null
                         iconPhotoUri = this.iconPhotoUri.value
                     }
+
                     else -> {
                         iconDrawable = this.iconDrawable.value
                         iconPhotoUri = null
@@ -313,8 +313,45 @@ class AddPlantFragment : Fragment() {
         }
     }
 
+    private fun moveToCamera() {
+        // Monitoring that we are moving to camera (if not reset viewModel values)
+        viewModel.setGoingToCamera(true)
+        val action =
+            AddPlantFragmentDirections.actionAddPlantFragmentToCameraPermissionFragment()
+        findNavController().navigate(action)
+    }
+
     private fun makeToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun chosePhotoDialog() {
+        val alertDialog: AlertDialog? = activity?.let {
+
+            val builder = AlertDialog.Builder(it)
+
+            builder.apply {
+
+                setTitle(R.string.plant_photo_alert_title)
+                setMessage(R.string.plant_photo_alert_message)
+
+                setNegativeButton(R.string.plant_photo_alert_dialog_negative_button) { _, _ ->
+                    // make new photo
+                    moveToCamera()
+                }
+
+                setPositiveButton(R.string.plant_photo_alert_dialog_positive_button) { dialogInterface, _ ->
+                    // chose already existing photo
+                    dialogInterface.cancel()
+                }
+            }
+            builder.create()
+            builder.show()
+        }
+        // Setting font only to message in alert dialog. Main fontStyle set in themes (AlertDialogTheme)
+        val textView = alertDialog?.findViewById<TextView>(android.R.id.message)
+        val typeFace = getFont(requireContext(), R.font.montserrat_alternates_regular)
+        textView?.typeface = typeFace
     }
 
     override fun onDestroyView() {
