@@ -360,6 +360,7 @@ class AddPlantFragment : Fragment() {
         // Delete image if not meant to be saved
         if (!viewModel.saveImage.value!!) {
             FileManager.deleteImageFile(viewModel.iconPhotoUri.value)
+            viewModel.setImageUri(null)
         }
 
         // Resetting viewModel values if it's not to camera navigation

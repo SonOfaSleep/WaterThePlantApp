@@ -58,5 +58,7 @@
         Chose this one
     </string>
 
+    <string name="camera_fragment_name">Plant photo</string>
+
     <string name="image_capture_error">Oops, something went wrong…</string>
 </resources>

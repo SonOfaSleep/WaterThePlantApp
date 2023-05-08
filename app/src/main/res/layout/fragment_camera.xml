@@ -32,24 +32,24 @@
 
         <View
             android:id="@+id/make_photo_button_outline"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/ic_baseline_circle_80_outline"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_baseline_circle_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="50dp"/>
 
         <ImageButton
             android:id="@+id/make_photo_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="35dp"
-            android:background="@drawable/ic_baseline_circle_70"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@drawable/ic_baseline_circle"
+            app:layout_constraintBottom_toBottomOf="@id/make_photo_button_outline"
+            app:layout_constraintEnd_toEndOf="@id/make_photo_button_outline"
+            app:layout_constraintStart_toStartOf="@id/make_photo_button_outline"
+            app:layout_constraintTop_toTopOf="@id/make_photo_button_outline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

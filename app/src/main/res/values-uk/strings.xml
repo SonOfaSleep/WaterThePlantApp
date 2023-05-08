@@ -58,5 +58,7 @@
         Обрати існуюче фото
     </string>
 
+    <string name="camera_fragment_name">Фото рослини</string>
+
     <string name="image_capture_error">Упс, щось пішло не так…</string>
 </resources>

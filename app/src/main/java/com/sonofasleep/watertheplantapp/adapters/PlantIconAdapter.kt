@@ -71,7 +71,12 @@ class PlantIconAdapter(
 
         // Single selection logic
         if (checkedPosition == position) {
-            holder.setChecked()
+            if (checkedPosition == 0 && viewModel.iconPhotoUri.value == null) {
+                // if moved to camera and don't made photo so it not be checked
+                holder.setUnChecked()
+            } else {
+                holder.setChecked()
+            }
         } else {
             holder.setUnChecked()
         }

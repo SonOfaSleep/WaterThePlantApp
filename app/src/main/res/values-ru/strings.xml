@@ -60,5 +60,7 @@
         Выбрать существующее фото
     </string>
 
+    <string name="camera_fragment_name">Фото цветка</string>
+
     <string name="image_capture_error">Упс, что-то пошло не так…</string>
 </resources>

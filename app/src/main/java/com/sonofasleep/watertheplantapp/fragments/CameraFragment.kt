@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Rational
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.*
@@ -73,14 +74,21 @@ class CameraFragment : Fragment() {
         view.findViewById<Toolbar>(R.id.plant_list_toolbar)
             .setupWithNavController(navController, appBarConfiguration)
 
-        // Setting status bar to black
-        setStatusBarDark(myView)
+        // Setting status and navigation bars to black (if theme is not dark already)
+        setStatusAndNavigationBarsDark(myView)
+
+        // Animations for shutter button
+        val animationScaleDown = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+        val animationScaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
 
         // Starting camera
         startCamera()
 
         // Camera shutter button
         binding.makePhotoButton.setOnClickListener {
+            it.isClickable = false // To not press second time and create crash
+            it.startAnimation(animationScaleDown)
+            it.startAnimation(animationScaleUp)
             simulateFlash()
             takePhoto()
         }
@@ -93,7 +101,7 @@ class CameraFragment : Fragment() {
 
         viewModel.setGoingToCamera(false)
 
-        resetStatusBarColor(myView)
+        resetStatusAndNavigationBarsColor(myView)
         _binding = null
         imageCapture = null
 
@@ -141,9 +149,6 @@ class CameraFragment : Fragment() {
                     this, cameraSelector, useCaseGroup
                 )
 
-//                cameraProvider.bindToLifecycle(
-//                    this, cameraSelector, preview, imageCapture)
-
             } catch (exc: Exception) {
                 Log.e(DEBUG_TAG, "Use case binding failed", exc)
             }
@@ -178,7 +183,6 @@ class CameraFragment : Fragment() {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-
                     viewModel.setImageUri(outputFileResults.savedUri)
                     navigateToAddPlant()
                 }
@@ -195,24 +199,30 @@ class CameraFragment : Fragment() {
         )
     }
 
-    private fun setStatusBarDark(view: View) {
-        activity?.window?.statusBarColor = requireContext().getColor(R.color.dark_theme_background)
+    private fun setStatusAndNavigationBarsDark(view: View) {
+        activity?.window?.apply {
+            statusBarColor = requireContext().getColor(R.color.dark_theme_background)
+            navigationBarColor = Color.BLACK
+        }
         WindowInsetsControllerCompat(requireActivity().window, view).isAppearanceLightStatusBars =
             false
     }
 
-    private fun resetStatusBarColor(view: View) {
+    private fun resetStatusAndNavigationBarsColor(view: View) {
         when (requireContext().resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 return
             }
 
             Configuration.UI_MODE_NIGHT_NO -> {
-                activity?.window?.statusBarColor = requireContext().getColor(R.color.white)
-                WindowInsetsControllerCompat(
-                    requireActivity().window,
-                    view
-                ).isAppearanceLightStatusBars = true
+                activity?.window?.apply {
+                    statusBarColor = requireContext().getColor(R.color.white)
+                    WindowInsetsControllerCompat(
+                        requireActivity().window,
+                        view
+                    ).isAppearanceLightStatusBars = true
+                    navigationBarColor = Color.WHITE
+                }
             }
 
             Configuration.UI_MODE_NIGHT_UNDEFINED -> {
@@ -220,6 +230,7 @@ class CameraFragment : Fragment() {
             }
         }
     }
+
 
     private fun simulateFlash() {
         // Display flash animation to indicate that photo was captured
