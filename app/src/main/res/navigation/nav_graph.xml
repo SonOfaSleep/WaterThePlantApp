@@ -77,6 +77,10 @@
             app:destination="@id/addPlantFragment"
             app:popUpTo="@id/addPlantFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_cameraFragment_to_cameraPermissionFragment"
+            app:destination="@id/cameraPermissionFragment"
+            app:popUpTo="@id/cameraPermissionFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraPermissionFragment"

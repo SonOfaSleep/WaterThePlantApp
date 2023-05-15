@@ -14,6 +14,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.PERMISSION_DENIED
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.core.content.res.ResourcesCompat.getFont
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -48,6 +50,7 @@ class AddPlantFragment : Fragment() {
 
     private val navArgs: AddPlantFragmentArgs by navArgs()
     private lateinit var recyclerView: RecyclerView
+    private val modalBottomSheet = ModalBottomSheet()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +59,13 @@ class AddPlantFragment : Fragment() {
     ): View {
         _binding = FragmentAddPlantBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // This line is needed to remove bug that shows bottom sheet on resume.
+        // Have no idea why it's not dismissed on default when outside of it is clicked
+        if (modalBottomSheet.isAdded) modalBottomSheet.dismiss()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,14 +89,37 @@ class AddPlantFragment : Fragment() {
             viewModel,
             IconSource.imageList,
 
+            /**
+             * Camera and camera permission
+             */
             onCameraClicked = {
-                if (viewModel.iconPhotoUri.value != null) {
-                    chosePhotoDialog()
-                } else {
-                    moveToCamera()
+                // If camera permission was denied >= 2 times show bottom help screen to guide user to settings
+                // else ask for permissions
+                viewModel.numberOfPermissionTry.observe(this.viewLifecycleOwner) { numberOfTry ->
+                    val checkPermission =
+                        checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+
+                    when {
+                        checkPermission == PERMISSION_DENIED && numberOfTry >= 2 -> {
+                            // show bottom permission helper
+                            modalBottomSheet.show(
+                                requireActivity().supportFragmentManager,
+                                ModalBottomSheet.TAG
+                            )
+                        }
+
+                        viewModel.iconPhotoUri.value != null -> {
+                            chosePhotoDialog()
+                        }
+
+                        else -> {
+                            moveToCamera()
+                        }
+                    }
                 }
             }
         )
+
         recyclerView.adapter = adapter
 
         // Plant id will be > 0 if it's edit not new one (default value is 0L)

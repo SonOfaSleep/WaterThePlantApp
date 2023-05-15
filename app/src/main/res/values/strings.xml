@@ -2,6 +2,7 @@
     <string name="app_name">WaterIt</string>
     <string name="action_settings">Settings</string>
     <string name="search">Search</string>
+    <string name="not_now">Not now</string>
     <string name="sorting_plants_alphabetically">Sort plants by name</string>
 
     <string name="plant_name">Name</string>
@@ -61,4 +62,6 @@
     <string name="camera_fragment_name">Plant photo</string>
 
     <string name="image_capture_error">Oops, something went wrong…</string>
+
+    <string name="camera_permission_text"><b>WaterIt</b> needs camera access to take photo of the plant.\nTap <b>Settings</b> > <b>Permissions</b>, and turn the <b>Camera</b> on.</string>
 </resources>

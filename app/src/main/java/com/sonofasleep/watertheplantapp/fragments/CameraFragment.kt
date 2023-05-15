@@ -82,7 +82,16 @@ class CameraFragment : Fragment() {
         val animationScaleUp = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
 
         // Starting camera
-        startCamera()
+        if (!CameraPermissionFragment.hasPermissions(requireContext())) {
+            // Make sure that all permissions are still present, since the
+            // user could have removed them while the app was in paused state.
+            // Initially camera permission check was onResume, but it caused null pointer exception in binding
+            findNavController().navigate(
+                CameraFragmentDirections.actionCameraFragmentToAddPlantFragment()
+            )
+        } else {
+            startCamera()
+        }
 
         // Camera shutter button
         binding.makePhotoButton.setOnClickListener {

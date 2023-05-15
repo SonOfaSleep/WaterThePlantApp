@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.WaterThePlantApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -23,6 +23,9 @@
         <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
         <item name="actionModeTheme">@style/myActionModeTheme</item>
         <item name="actionModeCloseDrawable">@drawable/ic_baseline_close_24</item>
+
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WaterThePlantApp.BottomSheetDialog
+        </item>
     </style>
 
     <style name="myToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
@@ -50,7 +53,7 @@
         <item name="android:colorControlNormal">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
     </style>
-    
+
     <style name="myActionModeTheme">
         <item name="android:colorControlNormal">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
@@ -160,4 +163,19 @@
         <item name="dialogCornerRadius">@dimen/view_corner_radius</item>
     </style>
 
+
+    <style name="ThemeOverlay.WaterThePlantApp.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
+        <item name="android:navigationBarColor">@color/main_background</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@color/main_background</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.LargeComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.App.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/view_corner_radius</item>
+    </style>
 </resources>

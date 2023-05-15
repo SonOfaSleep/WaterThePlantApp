@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -64,10 +63,12 @@ class CameraPermissionFragment : Fragment() {
                     permissionGranted = false
             }
             if (!permissionGranted) {
-                Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
-
-                viewModel.setGoingToCamera(false)
-
+                viewModel.apply {
+                    setGoingToCamera(false) // Need for deleting image file if there is one
+                    // Counting number of requested permissions
+                    val numberOfTry: Int = viewModel.numberOfPermissionTry.value ?: 0
+                    viewModel.saveNumberOfPermissionTry(numberOfTry + 1)
+                }
                 val action =
                     CameraPermissionFragmentDirections.actionCameraPermissionFragmentToAddPlantFragment()
                 findNavController().navigate(action)

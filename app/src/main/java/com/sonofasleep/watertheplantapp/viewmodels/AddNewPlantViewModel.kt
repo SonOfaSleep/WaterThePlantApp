@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.*
 import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
+import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
@@ -15,6 +16,10 @@ import kotlinx.coroutines.launch
 
 class AddNewPlantViewModel(private val dao: PlantDao, private val application: Application) :
     ViewModel() {
+
+    // DataStore instance
+    private val dataStore = DataStoreRepository(application.applicationContext)
+    val numberOfPermissionTry: LiveData<Int> = dataStore.readNumberOfPermissionTry.asLiveData()
 
     // For setting plantId if it's first entry here from PlantListFragment
     private val _init = MutableLiveData(true)
@@ -209,6 +214,12 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         // deleting old image if oldPlant had one and it's different from new one
         if (oldPlant.photoImageUri != null && oldPlant.photoImageUri != newPlant.photoImageUri) {
             deleteImageFile(Uri.parse(oldPlant.photoImageUri))
+        }
+    }
+
+    fun saveNumberOfPermissionTry(numberOfTry: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStore.saveNumberOfPermissionTry(numberOfTry, application.applicationContext)
         }
     }
 
