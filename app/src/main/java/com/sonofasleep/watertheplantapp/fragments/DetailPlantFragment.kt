@@ -52,8 +52,10 @@ class DetailPlantFragment : Fragment() {
         // Hiding buttons
         val searchButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
         val sortButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
+        val settingsButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_settings)
         searchButton.isVisible = false
         sortButton.isVisible = false
+        settingsButton.isVisible = false
 
         // Setting navigation
         val navController = findNavController()

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SettingsFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/main_toolbar" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/language_menu"
+            style="@style/ExposedDropdownMenuStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/sixteen_dp_margin"
+            android:hint="@string/language">
+
+            <AutoCompleteTextView
+                android:id="@+id/language_menu_auto_complete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dropDownSelector="@drawable/language_dropdown_bg"
+                android:inputType="none"
+                android:paddingStart="24dp"
+                android:paddingTop="@dimen/sixteen_dp_margin"
+                android:paddingBottom="@dimen/sixteen_dp_margin" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/sixteen_dp_margin"
+            android:layout_marginEnd="@dimen/sixteen_dp_margin"
+            android:backgroundTint="@color/main_background"
+            app:cardCornerRadius="@dimen/view_corner_radius"
+            app:cardElevation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/theme_text"
+                    style="@style/myCaptionTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="@dimen/sixteen_dp_margin"
+                    android:text="@string/theme_style_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/theme_text">
+
+                    <RadioButton
+                        android:id="@+id/button_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_light_mode_24"
+                        android:layoutDirection="rtl"
+                        android:text="@string/light_mode"
+                        android:textAppearance="@style/myRegularText" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorControlNormal"/>
+
+                    <RadioButton
+                        android:id="@+id/button_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_mode_night_24"
+                        android:layoutDirection="rtl"
+                        android:text="@string/night_mode"
+                        android:textAppearance="@style/myRegularText" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorControlNormal"/>
+
+                    <RadioButton
+                        android:id="@+id/button_tree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_auto_awesome_24"
+                        android:layoutDirection="rtl"
+                        android:text="@string/auto_mode"
+                        android:textAppearance="@style/myRegularText" />
+
+                </RadioGroup>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/sixteen_dp_margin"
+            android:layout_marginTop="@dimen/sixteen_dp_margin"
+            android:layout_marginEnd="@dimen/sixteen_dp_margin"
+            android:backgroundTint="@color/main_background"
+            app:cardCornerRadius="@dimen/view_corner_radius"
+            app:cardElevation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/notification_sound_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="@dimen/sixteen_dp_margin"
+                    android:text="@string/notifications_sound_text"
+                    android:textAppearance="@style/myCaptionTextStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/notification_sound_text">
+
+                    <RadioButton
+                        android:id="@+id/sound_button_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layoutDirection="rtl"
+                        android:textAppearance="@style/myRegularText"
+                        android:text="@string/device_default_sound"
+                        android:layout_marginStart="@dimen/sixteen_dp_margin"
+                        android:layout_weight="1"/>
+
+                    <RadioButton
+                        android:id="@+id/sound_button_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/myRegularText"
+                        android:layout_marginEnd="@dimen/sixteen_dp_margin"
+                        android:text="@string/app_s_custom_sound"
+                        android:layoutDirection="rtl"
+                        android:layout_weight="1"/>
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,4 +66,14 @@
     <string name="image_capture_error">Упс, что-то пошло не так…</string>
 
     <string name="camera_permission_text"><b>WaterIt</b> требуется доступ к камере, чтобы сделать фото растения.\nНажмите <b>Настройки</b> > <b>Разрешения</b> и включите <b>Камеру</b>.</string>
+
+    <string name="settings">Настройки</string>
+    <string name="language">Язык</string>
+    <string name="theme_style_text">Цветовая схема</string>
+    <string name="light_mode">\tСветлая</string>
+    <string name="night_mode">\tТемная</string>
+    <string name="auto_mode">\tАвто</string>
+    <string name="notifications_sound_text">Звук уведомлений</string>
+    <string name="device_default_sound">По умолчанию</string>
+    <string name="app_s_custom_sound">Пш-пш</string>
 </resources>

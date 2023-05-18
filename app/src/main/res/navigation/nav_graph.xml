@@ -23,6 +23,9 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_to_rigth" />
+        <action
+            android:id="@+id/action_plantsListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPlantFragment"
@@ -95,6 +98,17 @@
             android:id="@+id/action_cameraPermissionFragment_to_addPlantFragment"
             app:destination="@id/addPlantFragment"
             app:popUpTo="@id/addPlantFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.sonofasleep.watertheplantapp.fragments.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_plantsListFragment"
+            app:destination="@id/plantsListFragment"
+            app:popUpTo="@id/plantsListFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

@@ -63,6 +63,15 @@
 
     <string name="image_capture_error">Упс, щось пішло не так…</string>
 
-    <string name="camera_permission_text"><b>WaterIt</b> потрібен доступ до камери, щоб зробити фото рослини.\nОберіть <b>Налаштування</b> > <b>Дозволи</b> та ввімкніть <b>Камеру</b>.
-    </string>
+    <string name="camera_permission_text"><b>WaterIt</b> потрібен доступ до камери, щоб зробити фото рослини.\nОберіть <b>Налаштування</b> > <b>Дозволи</b> та ввімкніть <b>Камеру</b>.</string>
+
+    <string name="settings">Налаштування</string>
+    <string name="language">Мова</string>
+    <string name="theme_style_text">Колірна схема</string>
+    <string name="light_mode">\tСвітла</string>
+    <string name="night_mode">\tТемна</string>
+    <string name="auto_mode">\tАвто</string>
+    <string name="notifications_sound_text">Звук сповіщень</string>
+    <string name="device_default_sound">За замовчуванням</string>
+    <string name="app_s_custom_sound">Пш-пш</string>
 </resources>

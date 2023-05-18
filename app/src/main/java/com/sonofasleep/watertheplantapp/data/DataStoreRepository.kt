@@ -23,6 +23,7 @@ class DataStoreRepository(context: Context) {
 
     private val isSortASC = booleanPreferencesKey("is_sort_asc")
     private val numberOfPermissionTry = intPreferencesKey("number_of_try")
+    private val language = intPreferencesKey("selected_language")
 
     val readSortType: Flow<Boolean> = context.dataStore.data
         .catch {
@@ -48,6 +49,17 @@ class DataStoreRepository(context: Context) {
         }
         .map { preferences -> preferences[numberOfPermissionTry] ?: 0 }
 
+    val readLanguage: Flow<Int> = context.dataStore.data
+        .catch {
+            if (it is IOException) {
+                it.printStackTrace()
+                emit(emptyPreferences())
+            } else {
+                throw it
+            }
+        }
+        .map { preferences -> preferences[language] ?: 0 }
+
     suspend fun saveSortType(isSortASC: Boolean, context: Context) {
         context.dataStore.edit { preference ->
             preference[this.isSortASC] = isSortASC
@@ -57,6 +69,12 @@ class DataStoreRepository(context: Context) {
     suspend fun saveNumberOfPermissionTry(permissionTryNumber: Int, context: Context) {
         context.dataStore.edit { preference ->
             preference[this.numberOfPermissionTry] = permissionTryNumber
+        }
+    }
+
+    suspend fun saveLanguageType(language: Int, context: Context) {
+        context.dataStore.edit { preference ->
+            preference[this.language] = language
         }
     }
 }

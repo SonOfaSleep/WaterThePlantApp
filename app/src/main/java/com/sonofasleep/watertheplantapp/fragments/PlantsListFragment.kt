@@ -127,6 +127,7 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
                         deleteAlertDialog(mode, viewModel.longClickChosenPlants.value?.size ?: 1)
                         true
                     }
+
                     else -> false
                 }
             }
@@ -169,6 +170,14 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
 
                     true
                 }
+
+                R.id.app_bar_settings -> {
+                    findNavController().navigate(
+                        PlantsListFragmentDirections.actionPlantsListFragmentToSettingsFragment()
+                    )
+                    true
+                }
+
                 else -> false
             }
         }
