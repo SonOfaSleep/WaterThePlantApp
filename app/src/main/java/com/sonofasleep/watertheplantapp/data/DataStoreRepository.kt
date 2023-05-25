@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -24,7 +23,7 @@ class DataStoreRepository(context: Context) {
 
     private val isSortASC = booleanPreferencesKey("is_sort_asc")
     private val numberOfPermissionTry = intPreferencesKey("number_of_try")
-    private val language = stringPreferencesKey("selected_language")
+    private val dayNightMode = intPreferencesKey("day_night_mode")
 
     val readSortType: Flow<Boolean> = context.dataStore.data
         .catch {
@@ -50,7 +49,7 @@ class DataStoreRepository(context: Context) {
         }
         .map { preferences -> preferences[numberOfPermissionTry] ?: 0 }
 
-    val readLanguage: Flow<String> = context.dataStore.data
+    val readDayNightMode: Flow<Int> = context.dataStore.data
         .catch {
             if (it is IOException) {
                 it.printStackTrace()
@@ -59,7 +58,8 @@ class DataStoreRepository(context: Context) {
                 throw it
             }
         }
-        .map { preferences -> preferences[language] ?: "en" }
+        .map { preferences -> preferences[dayNightMode] ?: 2 } // 2 = system default
+
 
     suspend fun saveSortType(isSortASC: Boolean, context: Context) {
         context.dataStore.edit { preference ->
@@ -73,9 +73,10 @@ class DataStoreRepository(context: Context) {
         }
     }
 
-    suspend fun saveLanguageType(language: String, context: Context) {
+    suspend fun saveDayNightMode(dayNightType: Int, context: Context) {
+        // 0 = day, 1 = night, 2 = system default
         context.dataStore.edit { preference ->
-            preference[this.language] = language
+            preference[this.dayNightMode] = dayNightType
         }
     }
 }
