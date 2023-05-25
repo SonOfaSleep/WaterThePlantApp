@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,7 +24,7 @@ class DataStoreRepository(context: Context) {
 
     private val isSortASC = booleanPreferencesKey("is_sort_asc")
     private val numberOfPermissionTry = intPreferencesKey("number_of_try")
-    private val language = intPreferencesKey("selected_language")
+    private val language = stringPreferencesKey("selected_language")
 
     val readSortType: Flow<Boolean> = context.dataStore.data
         .catch {
@@ -49,7 +50,7 @@ class DataStoreRepository(context: Context) {
         }
         .map { preferences -> preferences[numberOfPermissionTry] ?: 0 }
 
-    val readLanguage: Flow<Int> = context.dataStore.data
+    val readLanguage: Flow<String> = context.dataStore.data
         .catch {
             if (it is IOException) {
                 it.printStackTrace()
@@ -58,7 +59,7 @@ class DataStoreRepository(context: Context) {
                 throw it
             }
         }
-        .map { preferences -> preferences[language] ?: 0 }
+        .map { preferences -> preferences[language] ?: "en" }
 
     suspend fun saveSortType(isSortASC: Boolean, context: Context) {
         context.dataStore.edit { preference ->
@@ -72,7 +73,7 @@ class DataStoreRepository(context: Context) {
         }
     }
 
-    suspend fun saveLanguageType(language: Int, context: Context) {
+    suspend fun saveLanguageType(language: String, context: Context) {
         context.dataStore.edit { preference ->
             preference[this.language] = language
         }
