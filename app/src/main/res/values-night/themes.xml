@@ -92,6 +92,18 @@
         <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <style name="ExposedDropdownMenuStyle"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/main_background</item>
+        <item name="boxCornerRadiusTopStart">@dimen/view_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/view_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/view_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/view_corner_radius</item>
+        <item name="boxStrokeColor">@color/accent_color</item>
+        <item name="hintTextColor">@color/accent_color</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
     <style name="Theme.WaterThePlantApp.Slider" parent="Widget.MaterialComponents.Slider">
         <item name="labelStyle">@style/Widget.WaterThePlantApp.Tooltip</item>
     </style>

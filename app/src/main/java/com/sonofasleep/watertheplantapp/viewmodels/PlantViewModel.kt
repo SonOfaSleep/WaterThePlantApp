@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModel
@@ -14,6 +13,7 @@ import com.sonofasleep.watertheplantapp.alarm.AlarmUtilities
 import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
+import com.sonofasleep.watertheplantapp.utilities.DayNightThemePreference
 import com.sonofasleep.watertheplantapp.utilities.FileManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +27,9 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
     // DataStore instance
     private val dataStore = DataStoreRepository(application.applicationContext)
     val sortTypeIsASC: LiveData<Boolean> = dataStore.readSortType.asLiveData()
+
+    // Preferences
+    private val dayNightPreferences = DayNightThemePreference(application.applicationContext)
 
     // List of all plants (observing isSortASC preference in data store)
     val allPlants: LiveData<List<Plant>> = sortTypeIsASC.switchMap {
@@ -145,6 +148,9 @@ class PlantViewModel(private val dao: PlantDao, private val application: Applica
             dataStore.saveSortType(isASC, application.applicationContext)
         }
     }
+
+    fun readDayNightPreference(): Int = dayNightPreferences.readDayNightPreference()
+    fun savaDayNightPreference(dayNight: Int) = dayNightPreferences.saveDayNightState(dayNight)
 
     fun timeFormat(hour: Int, min: Int): String {
         return String.format("%02d:%02d", hour, min)

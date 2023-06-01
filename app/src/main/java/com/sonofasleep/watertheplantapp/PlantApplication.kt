@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import com.sonofasleep.watertheplantapp.data.DataStoreRepository
 import com.sonofasleep.watertheplantapp.database.PlantDatabase
 
 class PlantApplication : Application() {

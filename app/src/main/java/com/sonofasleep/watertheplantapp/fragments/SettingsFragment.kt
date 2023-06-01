@@ -6,12 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.NOT_FOCUSABLE
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
@@ -24,6 +19,7 @@ import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.databinding.FragmentSettingsBinding
+import com.sonofasleep.watertheplantapp.utilities.DayNightTheme
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 import java.util.Locale
@@ -33,6 +29,13 @@ class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: PlantViewModel by activityViewModels {
+        PlantViewModelFactory(
+            (activity?.application as PlantApplication).database.plantDao(),
+            activity?.application as PlantApplication
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +91,13 @@ class SettingsFragment : Fragment() {
             .setupWithNavController(navController, appBarConfiguration)
 
         /**
+         * Setting different fonts for the language hint.
+         * Changing it in xml don't work ¯\_(ツ)_/¯
+         */
+        val typeface = ResourcesCompat.getFont(requireContext(), R.font.montserrat_alternates_bold)
+        binding.languageMenu.typeface = typeface
+
+        /**
          * Language picker block
          */
         binding.languageMenuAutoComplete.apply {
@@ -115,8 +125,37 @@ class SettingsFragment : Fragment() {
         /**
          * Language picker block
          */
+
+
+        // Setting day/night preference
+        setDayNightButtonChecked()
+        binding.apply {
+            dayNightButtonGroup.setOnCheckedChangeListener { _, _ ->
+                when (true) {
+                    buttonOne.isChecked -> setDayNightTheme(0)
+                    buttonTwo.isChecked -> setDayNightTheme(1)
+                    buttonTree.isChecked -> setDayNightTheme(2)
+                    else -> Log.w(DEBUG_TAG, "Impossible choice in day/knight scheme")
+                }
+            }
+        }
     }
 
+    private fun setDayNightButtonChecked() {
+        val dayNight = viewModel.readDayNightPreference()
+        binding.apply {
+            when (dayNight) {
+                0 -> buttonOne.isChecked = true
+                1 -> buttonTwo.isChecked = true
+                2 -> buttonTree.isChecked = true
+            }
+        }
+    }
+
+    private fun setDayNightTheme(dayNight: Int) {
+        viewModel.savaDayNightPreference(dayNight)
+        DayNightTheme.setDayKnightTheme(dayNight, requireContext())
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -61,6 +61,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <RadioGroup
+                    android:id="@+id/day_night_button_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"

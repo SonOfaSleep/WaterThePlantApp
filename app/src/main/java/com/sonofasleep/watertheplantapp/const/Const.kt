@@ -27,3 +27,7 @@ const val CAMERA_IMAGE_FOLDER = "WaterIt_images"
 
 // CameraX const
 const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+
+// Day/night preferences names
+const val SHARED_PREFERENCES = "Shared_preferences"
+const val DAY_NIGHT_PREFERENCE = "day_night_pref"

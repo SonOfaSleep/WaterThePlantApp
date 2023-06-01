@@ -1,25 +1,26 @@
 package com.sonofasleep.watertheplantapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.asLiveData
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
-import com.sonofasleep.watertheplantapp.data.DataStoreRepository
-import com.sonofasleep.watertheplantapp.data.dataStore
 import com.sonofasleep.watertheplantapp.databinding.ActivityMainBinding
+import com.sonofasleep.watertheplantapp.utilities.DayNightTheme
+import com.sonofasleep.watertheplantapp.utilities.DayNightThemePreference
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var dayNightPreferences: DayNightThemePreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val dataStore = DataStoreRepository(applicationContext)
-        val dayNight = dataStore.readDayNightMode.asLiveData()
-        Log.d(DEBUG_TAG, "dayNight = ${dayNight.value}")
+        // Setting day/night theme according to preference chosen in settings
+        dayNightPreferences = DayNightThemePreference(applicationContext)
+        DayNightTheme.setDayKnightTheme(
+            dayNightPreferences.readDayNightPreference(),
+            applicationContext
+        )
 
         installSplashScreen()
 
