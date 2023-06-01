@@ -40,12 +40,13 @@
                 android:layout_marginStart="@dimen/eight_dp_margin"
                 android:layout_marginTop="@dimen/eight_dp_margin"
                 android:layout_marginEnd="@dimen/sixteen_dp_margin"
+                android:ellipsize="end"
                 android:maxLines="1"
                 app:layout_constraintBottom_toTopOf="@id/calender_icon"
                 app:layout_constraintEnd_toStartOf="@+id/water_check_button"
                 app:layout_constraintStart_toEndOf="@id/card_image"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Степан Бандера довгий" />
+                tools:text="Степан Бандера довгий дуже довгий" />
 
             <ImageView
                 android:id="@+id/calender_icon"
