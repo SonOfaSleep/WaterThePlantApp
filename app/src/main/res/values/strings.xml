@@ -38,8 +38,8 @@
     <string name="alert_dialog_button_cancel">Cancel</string>
 
     <string name="reminder_text">It\'s time to water me</string>
-    <string name="channel_name" translatable="false">Plant reminder channel</string>
-    <string name="channel_description" translatable="false">Plant reminder</string>
+    <string name="channel_name">Plants notifications</string>
+    <string name="channel_description">Notification settings of your plants leve here</string>
     <string name="default_time" translatable="false">10:00</string>
     <string name="choose_time">Set notification time:</string>
     <string name="welcome_text_1">Hello!</string>

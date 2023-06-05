@@ -42,6 +42,8 @@
     <string name="alert_dialog_button_ok">Удалить</string>
     <string name="alert_dialog_button_cancel">Отмена</string>
 
+    <string name="channel_name">Уведомления цветков</string>
+    <string name="channel_description">Тут живут настройки уведомлений твоих цветков</string>
     <string name="reminder_text">Уже время меня полить</string>
     <string name="choose_time">Выберите время напоминания:</string>
     <string name="welcome_text_1">Привет!</string>

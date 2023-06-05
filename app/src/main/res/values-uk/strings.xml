@@ -41,6 +41,8 @@
     <string name="alert_dialog_button_cancel">Скасувати</string>
 
     <string name="reminder_text">Вже час мене полити</string>
+    <string name="channel_name">Повідомлення рослин</string>
+    <string name="channel_description">Тут живуть налаштування повідомлень твоїх квіток</string>
     <string name="choose_time">Оберіть час нагадування:</string>
     <string name="welcome_text_1">Привіт!</string>
     <string name="welcome_text_2">Додай свою першу\nрослину</string>

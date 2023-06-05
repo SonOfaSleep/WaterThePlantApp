@@ -25,7 +25,11 @@
             app:popExitAnim="@anim/slide_to_rigth" />
         <action
             android:id="@+id/action_plantsListFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_to_rigth" />
     </fragment>
     <fragment
         android:id="@+id/addPlantFragment"
