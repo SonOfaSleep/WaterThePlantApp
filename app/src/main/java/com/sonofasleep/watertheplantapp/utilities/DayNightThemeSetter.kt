@@ -1,12 +1,9 @@
 package com.sonofasleep.watertheplantapp.utilities
 
-import android.app.UiModeManager
 import android.content.Context
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 
-object DayNightTheme {
+object DayNightThemeSetter {
 
     fun setDayKnightTheme(dayNightMode: Int = 2, context: Context) {
         // 0 = day, 1 = night, 2 = system default

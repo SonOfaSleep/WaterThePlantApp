@@ -31,3 +31,4 @@ const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 // Day/night preferences names
 const val SHARED_PREFERENCES = "Shared_preferences"
 const val DAY_NIGHT_PREFERENCE = "day_night_pref"
+const val FIRST_LAUNCH = "First_launch"

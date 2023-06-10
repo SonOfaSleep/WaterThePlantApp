@@ -85,6 +85,25 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
         }
 
         /**
+         * Showing welcome image, only if no plants where added before.
+         */
+        if (viewModel.appsFirstLaunch()) {
+            // Hiding buttons
+            val searchButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_search)
+            val sortButton = binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_sorting)
+            val settingsButton =
+                binding.toolbar.plantListToolbar.menu.findItem(R.id.app_bar_settings)
+            searchButton.isVisible = false
+            sortButton.isVisible = false
+            settingsButton.isVisible = false
+            binding.apply {
+                addPlantWelcomeImage.visibility = View.VISIBLE
+                addPlantWelcomeText1.visibility = View.VISIBLE
+                addPlantWelcomeText2.visibility = View.VISIBLE
+            }
+        }
+
+        /**
          *  Handling scroll behavior
          */
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -272,13 +291,12 @@ class PlantsListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun addAllPlantsObserver() {
         if (!viewModel.allPlants.hasObservers()) {
             viewModel.allPlants.observe(this.viewLifecycleOwner) {
-                // Setting welcome image and text visibility
-                val visibility: Int = if (it.isNullOrEmpty()) View.VISIBLE else View.INVISIBLE
+                // Setting "No plants" image and text visibility
+                val visibility: Int =
+                    if (it.isNullOrEmpty() && !viewModel.appsFirstLaunch()) View.VISIBLE else View.INVISIBLE
                 binding.apply {
-                    addPlantWelcomeImage.visibility = visibility
-                    addPlantWelcomeText1.visibility = visibility
-                    addPlantWelcomeText2.visibility = visibility
-                    addPlantWelcomeImageBackground.visibility = visibility
+                    noPlantsImage.visibility = visibility
+                    noPlantsText.visibility = visibility
                 }
                 adapter.submitList(it)
                 setIcon()

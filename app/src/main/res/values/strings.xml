@@ -74,6 +74,7 @@
     <string name="notifications_sound_text">Notifications sound</string>
     <string name="device_default_sound">Default sound</string>
     <string name="app_s_custom_sound">App\'s custom</string>
+    <string name="no_plants_yet">No plants yet</string>
     <string-array name="app_languages">
         <item>English</item>
         <item>Українська</item>

@@ -24,7 +24,7 @@ class PlantApplication : Application() {
         val descriptionText = getString(R.string.channel_description)
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val soundUri =
-            Uri.parse("android.resource://" + applicationContext.packageName + "/" + R.raw.test_notification_sound)
+            Uri.parse("android.resource://" + applicationContext.packageName + "/" + R.raw.psh_psh_v4)
         val audioAttributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_ALARM)

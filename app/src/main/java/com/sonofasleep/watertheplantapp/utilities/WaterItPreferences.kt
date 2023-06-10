@@ -2,19 +2,31 @@ package com.sonofasleep.watertheplantapp.utilities
 
 import android.content.Context
 import com.sonofasleep.watertheplantapp.const.DAY_NIGHT_PREFERENCE
+import com.sonofasleep.watertheplantapp.const.FIRST_LAUNCH
 import com.sonofasleep.watertheplantapp.const.SHARED_PREFERENCES
 
-
-class DayNightThemePreference(context: Context) {
+class WaterItPreferences(context: Context) {
     private val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
-    fun saveDayNightState(dayNight: Int) {
+    fun saveFirstLaunch() {
+        val editor = sharedPreferences.edit()
+        editor.apply {
+            putBoolean(FIRST_LAUNCH, false)
+            apply()
+        }
+    }
+
+    fun saveDayNighPreference(dayNight: Int) {
         val editor = sharedPreferences.edit()
         editor.apply {
             putInt(DAY_NIGHT_PREFERENCE, dayNight)
             apply()
         }
+    }
+
+    fun readFirstLaunch(): Boolean {
+        return sharedPreferences.getBoolean(FIRST_LAUNCH, true)
     }
 
     fun readDayNightPreference(): Int {

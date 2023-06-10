@@ -11,6 +11,7 @@ import com.sonofasleep.watertheplantapp.database.Plant
 import com.sonofasleep.watertheplantapp.database.PlantDao
 import com.sonofasleep.watertheplantapp.model.PlantIconItem
 import com.sonofasleep.watertheplantapp.utilities.FileManager.deleteImageFile
+import com.sonofasleep.watertheplantapp.utilities.WaterItPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,6 +21,9 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
     // DataStore instance
     private val dataStore = DataStoreRepository(application.applicationContext)
     val numberOfPermissionTry: LiveData<Int> = dataStore.readNumberOfPermissionTry.asLiveData()
+
+    // Preferences
+    private val appPreferences = WaterItPreferences(application.applicationContext)
 
     // For setting plantId if it's first entry here from PlantListFragment
     private val _init = MutableLiveData(true)
@@ -223,6 +227,8 @@ class AddNewPlantViewModel(private val dao: PlantDao, private val application: A
         }
     }
 
+    fun appsFirstLaunch(): Boolean = appPreferences.readFirstLaunch()
+    fun changeFirstLaunch() = appPreferences.saveFirstLaunch()
     fun timeFormat(hour: Int, min: Int): String = String.format("%02d:%02d", hour, min)
     fun getTime(): String = timeFormat(hour.value!!, minutes.value!!)
 }

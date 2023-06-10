@@ -19,7 +19,7 @@ import com.sonofasleep.watertheplantapp.PlantApplication
 import com.sonofasleep.watertheplantapp.R
 import com.sonofasleep.watertheplantapp.const.DEBUG_TAG
 import com.sonofasleep.watertheplantapp.databinding.FragmentSettingsBinding
-import com.sonofasleep.watertheplantapp.utilities.DayNightTheme
+import com.sonofasleep.watertheplantapp.utilities.DayNightThemeSetter
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModel
 import com.sonofasleep.watertheplantapp.viewmodels.PlantViewModelFactory
 import java.util.Locale
@@ -154,7 +154,7 @@ class SettingsFragment : Fragment() {
 
     private fun setDayNightTheme(dayNight: Int) {
         viewModel.savaDayNightPreference(dayNight)
-        DayNightTheme.setDayKnightTheme(dayNight, requireContext())
+        DayNightThemeSetter.setDayKnightTheme(dayNight, requireContext())
     }
 
     override fun onDestroyView() {

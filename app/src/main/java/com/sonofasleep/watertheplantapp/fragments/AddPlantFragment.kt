@@ -215,6 +215,10 @@ class AddPlantFragment : Fragment() {
 
         binding.saveButton.setOnClickListener {
 
+            // Setting firstLaunch pref to false.
+            // From this time, welcome image will not be shown on the main screen.
+            if (viewModel.appsFirstLaunch()) viewModel.changeFirstLaunch()
+
             if (Build.VERSION.SDK_INT >= 33) {
                 if (!checkForNotificationPermission()) {
                     askForNotificationPermission()

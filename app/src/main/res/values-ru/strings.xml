@@ -78,4 +78,5 @@
     <string name="notifications_sound_text">Звук уведомлений</string>
     <string name="device_default_sound">По умолчанию</string>
     <string name="app_s_custom_sound">Пш-пш</string>
+    <string name="no_plants_yet">Растений еще нет</string>
 </resources>

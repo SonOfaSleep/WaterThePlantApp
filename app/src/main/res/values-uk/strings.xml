@@ -76,4 +76,5 @@
     <string name="notifications_sound_text">Звук сповіщень</string>
     <string name="device_default_sound">За замовчуванням</string>
     <string name="app_s_custom_sound">Пш-пш</string>
+    <string name="no_plants_yet">Рослин ще немає</string>
 </resources>
