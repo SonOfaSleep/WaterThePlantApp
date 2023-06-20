@@ -158,6 +158,7 @@ class AddPlantFragment : Fragment() {
                     if (plant.photoImageUri != null) {
                         setChosenPlantPosition(0)
                         setImageUri(Uri.parse(plant.photoImageUri))
+                        setSaveImage(true)
                         adapter.notifyItemChanged(0)
                     }
                     if (plant.image != null) {
@@ -274,6 +275,7 @@ class AddPlantFragment : Fragment() {
                     }
 
                     else -> {
+                        setSaveImage(false)
                         iconDrawable = this.iconDrawable.value
                         iconPhotoUri = null
                     }
